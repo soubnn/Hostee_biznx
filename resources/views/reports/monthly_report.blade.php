@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monthly Report - Techsoul Cyber Solutions</title>
+</head>
+<style type="text/css">
+    body{
+        font-family: 'Roboto Condensed', sans-serif;
+    }
+    .m-0{
+        margin: 0px;
+    }
+    .p-0{
+        padding: 0px;
+    }
+    .pt-5{
+        padding-top:5px;
+    }
+    .mt-10{
+        margin-top:10px;
+    }
+    .mt-25{
+        margin-top:25px;
+    }
+    .text-center{
+        text-align:center !important;
+    }
+    .w-100{
+        width: 100%;
+    }
+    .w-50{
+        width:50%;
+    }
+    .w-85{
+        width:85%;
+    }
+    .w-15{
+        width:15%;
+    }
+    .logo img{
+        width:45px;
+        height:45px;
+        padding-top:30px;
+    }
+    .logo span{
+        margin-left:8px;
+        top:19px;
+        position: absolute;
+        font-weight: bold;
+        font-size:25px;
+    }
+    .gray-color{
+        color:#5D5D5D;
+    }
+    .text-bold{
+        font-weight: bold;
+    }
+    .border{
+        border:1px solid black;
+    }
+    table tr,th,td{
+        border: 1px solid #d2d2d2;
+        border-collapse:collapse;
+        padding:7px 8px;
+    }
+    table tr th{
+        background: #F4F4F4;
+        font-size:15px;
+    }
+    table tr td{
+        font-size:13px;
+    }
+    table{
+        border-collapse:collapse;
+    }
+    .box-text p{
+        line-height:10px;
+    }
+    .float-left{
+        float:left;
+    }
+    .total-part{
+        font-size:16px;
+        line-height:12px;
+    }
+    .total-right p{
+        padding-right:20px;
+    }
+    .page-break {
+        page-break-after: always;
+    }
+    .footer {
+        position: fixed;
+        bottom: 0px;
+    }
+</style>
+<body>
+<div class="head-title">
+    <h2 class="text-center m-0 p-0">TECHSOUL CYBER SOLUTIONS</h2>
+    <h5 class="text-center m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5>
+    <h5 class="text-center m-0 p-0">OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO</h5>
+    <h1 class="text-center m-0 p-0 mt-10">Monthly Report - {{ $searchDate }}</h1>
+</div>
+<div class="head-title">
+    <h2 class="mt-25 p-0">Income</h2>
+</div>
+<div class="table-section bill-tbl w-100">
+    <p class="m-0 pt-5 text-bold w-100">Invoice Amount By Sale : <span class="gray-color">{{ round($totalSalesAmount,2) }}</span></p>
+    <p class="m-0 pt-5 text-bold w-100">Invoice Amount By Jobcard  : <span class="gray-color">{{ round($totalJobAmount,2) }}</span></p>
+    <p class="m-0 pt-5 text-bold w-100">Total Amount  : <span class="gray-color">{{ round(($totalSalesAmount+$totalJobAmount),2) }}</span></p>
+</div>
+<br>
+<div class="table-section bill-tbl w-100">
+  <p class="m-0 pt-5 text-bold w-100">Recieved Against Sales : <span class="gray-color">{{ round($salesAmount,2) }}</span></p>
+  <p class="m-0 pt-5 text-bold w-100">Recieved Against JobCard  : <span class="gray-color">{{ round($jobAmount,2) }}</span></p>
+  <p class="m-0 pt-5 text-bold w-100">Total Amount  : <span class="gray-color">{{ round(($salesAmount+$jobAmount),2) }}</span></p>
+</div>
+<div class="head-title">
+    <h2 class="mt-25 p-0">Expense</h2>
+</div>
+<div class="table-section bill-tbl w-100">
+    <p class="m-0 pt-5 text-bold w-100">Total Expense  : <span class="gray-color">{{ round($totalExpenseInPeriod,2) }}</span></p>
+    @if(count($topExpenses) != 0)
+        <table class="table w-100 mt-10">
+            <thead>
+                <tr>
+                    <th class="w-50">Category</th>
+                    <th class="w-50">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($topExpenses as $expense)
+                    <tr style="text-align:center">
+                        <td>{{ $expense['expense'] }}</td>
+                        <td>{{ round($expense['amount'],2) }}</td>
+                    </tr>
+                @endforeach
+                <tr style="text-align:center">
+                    <th>Grand Total</th>
+                    <th>{{ round($total5ExpenseAmount,2) }}</th>
+                </tr>
+            </tbody>
+        </table>
+    @endif
+</div>
+<div class="head-title">
+    <h2 class="mt-25 p-0">Job Cards</h2>
+</div>
+<div class="table-section bill-tbl w-100">
+    <p class="m-0 pt-5 text-bold w-100">No. of Jobcards : <span class="gray-color">{{ $numberOfJobs }}</span></p>
+    <p class="m-0 pt-5 text-bold w-100">Invoice Amount from Jobcards  : <span class="gray-color">{{ round($totalJobAmount,2) }}</span></p>
+    <p class="m-0 pt-5 text-bold w-100">Income from Jobcards  : <span class="gray-color">{{ round($jobAmount,2) }}</span></p>
+    <p class="m-0 pt-5 text-bold w-100 mt-25">Total Income : <span class="gray-color">{{ round($totalIncomeInPeriod,2) }}</span></p>
+    <p class="m-0 pt-5 text-bold w-100">Total Expense  : <span class="gray-color">{{ round($totalExpenseInPeriod,2) }}</span></p>
+</div>
+<div class="footer">
+    @php
+        $printed_by = Auth::user()->name;
+        $printed_on = Carbon\carbon::now();
+    @endphp
+    <p style="font-size:10px;">generated by {{ $printed_by }} on {{ $printed_on }}</p>
+</div>
+</body>
+</html>
