@@ -2,10 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <title>Login | Techsoul Cyber Solutions</title>
+        <title>Login | Hostee the Planner</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Inventory for Techsoul Cyber Solutions" name="description" />
-        <meta content="Techsoul" name="author" />
+        <meta content="Inventory for Hostee the Planner" name="description" />
+        <meta content="Hostee the Planner" name="author" />
         <!-- PWA  -->
         <meta name="theme-color" content="#6777ef"/>
         <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">

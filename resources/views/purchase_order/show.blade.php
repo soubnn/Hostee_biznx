@@ -56,7 +56,7 @@ function change_total(id){
                                         </div>
                                         <div class="col-md-6">
                                             @php
-                                                $message = "Dear " . $purchase_order->customer_name . ",Please proceed with your purchase using this link: https://techsoul.biznx.in/userPurchaseOrder/" . $purchase_order->id."";
+                                                $message = "Dear " . $purchase_order->customer_name . ",Please proceed with your purchase using this link: https://hostee.biznx.in/userPurchaseOrder/" . $purchase_order->id."";
                                                 $message = urlencode($message);
                                                 $url = "https://api.whatsapp.com/send/?phone=91$purchase_order->seller_mobile&text=$message";
                                             @endphp

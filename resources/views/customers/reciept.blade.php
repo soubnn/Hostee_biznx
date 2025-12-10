@@ -65,7 +65,7 @@
                                             <br><strong>{{ $amountInWords }} Rupees</strong>
                                         </div>
                                         <div class="col-md-12 text-end">
-                                            Authorised Signature<br>(for Techsoul Cyber Solutions)
+                                            Authorised Signature<br>(for Hostee the Planner)
                                         </div>
                                     </div>
                                 </div>

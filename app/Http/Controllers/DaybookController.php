@@ -1085,13 +1085,13 @@ class DaybookController extends Controller
             $dateDisplay = Carbon::parse($data['date'])->format('d-m-Y');
             $dateParam   = Carbon::parse($data['date'])->format('Y-m-d');
 
-            $params = urlencode("{$dateDisplay}, techsoul.biznx.in/dailyReport/{$dateParam}");
+            $params = urlencode("{$dateDisplay}, hostee.biznx.in/dailyReport/{$dateParam}");
 
             $user   = urlencode('Techsoul_BW');
             $pass   = urlencode('123456');
             $sender = urlencode('BUZWAP');
 
-            $numbers = '919526989842';
+            $numbers = '';
 
             $url = "https://bhashsms.com/api/sendmsgutil.php?user={$user}&pass={$pass}&sender={$sender}&phone={$numbers}&text=dialy_repport&priority=wa&stype=normal&Params={$params}";
 
@@ -1498,7 +1498,7 @@ class DaybookController extends Controller
         if (Auth::user()) {
             $printed_by = Auth::user()->name;
         } else {
-            $printed_by = 'RAMIS ABDUL HAKEEM O';
+            $printed_by = 'ADMIN';
         }
         $printed_on = Carbon::now();
 

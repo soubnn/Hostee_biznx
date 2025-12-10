@@ -18,37 +18,14 @@
                 <i class="fa fa-fw fa-bars"></i>
             </button>
 
-            <div class="dropdown dropdown-mega d-none d-lg-block ms-2">
+            {{-- <div class="dropdown dropdown-mega d-none d-lg-block ms-2">
                 <button type="button" class="btn header-item waves-effect" data-bs-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
                     <i class="mdi mdi-dots-grid" style="font-size:24px;"></i>
                 </button>
                 <div class="dropdown-menu dropdown-megamenu">
                     <div class="row">
                         @if(Auth::user()->role == 'intern')
-                        <div class="col-md-3">
-                            <a href="{{ route('consignment.create') }}">
-                                <div class="social-source text-center mt-3">
-                                    <div class="avatar-xs mx-auto mb-3">
-                                        <span class="avatar-title rounded-circle font-size-16" style="background-color: rgb(81, 98, 134)">
-                                            <i class="mdi mdi-cards text-white"></i>
-                                        </span>
-                                    </div>
-                                    <h5 style="font-size: 13px;">Jobcard</h5>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="{{ route('field.index') }}">
-                                <div class="social-source text-center mt-3">
-                                    <div class="avatar-xs mx-auto mb-3">
-                                        <span class="avatar-title rounded-circle font-size-16" style="background-color: rgb(81, 98, 134)">
-                                            <i class="bx bx-map text-white"></i>
-                                        </span>
-                                    </div>
-                                    <h5 style="font-size: 13px;">Field Work</h5>
-                                </div>
-                            </a>
-                        </div>
+
                         <div class="col-md-3">
                             <a href="{{ route('profile') }}">
                                 <div class="social-source text-center mt-3">
@@ -312,7 +289,7 @@
                     </div>
                 </div>
 
-            </div>
+            </div> --}}
         </div>
 
         <div class="d-flex">

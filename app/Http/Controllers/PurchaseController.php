@@ -67,7 +67,7 @@ class PurchaseController extends Controller
         $data['grand_total'] = strtoupper($request->get('grand_total'));
         $data['date']        = Carbon::now();
         $data['add_by']      = Auth::user()->name;
-        
+
         $status = Purchase::create($data);
         if($status)
         {
@@ -183,11 +183,11 @@ class PurchaseController extends Controller
             'invoice_no' => 'required|unique:purchases,invoice_no,'.$id,
             'invoice_date' => 'required|date',
         ]);
-        
+
         $purchase = Purchase::findOrFail($id);
         $purchase->invoice_no = $request->invoice_no;
         $purchase->invoice_date = $request->invoice_date;
-        
+
         if($request->purchase_bill){
             $purchase_bill= $request->file('purchase_bill');
             $bill_name = time().'.'.$request->file('purchase_bill')->getClientOriginalName();
@@ -343,11 +343,11 @@ class PurchaseController extends Controller
         if($output == "PDF")
         {
             $pdf = Pdf::loadView('purchase.report',compact('tableData','fromDate','toDate'));
-            return $pdf->setPaper('A4','landscape')->stream("Techsoul - Purchase GST Report.pdf",array("Attachment"=>false));
+            return $pdf->setPaper('A4','landscape')->stream("Hostee - Purchase GST Report.pdf",array("Attachment"=>false));
         }
         if($output == "EXCEL")
         {
-            return Excel::download(new PurchaseReportExport($tableData), 'Techsoul - Purchase Report.csv');
+            return Excel::download(new PurchaseReportExport($tableData), 'Hostee - Purchase Report.csv');
         }
     }
     public function add_purchase_bill(Request $request, $id ){

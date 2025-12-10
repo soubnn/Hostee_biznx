@@ -631,8 +631,8 @@ class DirectSalesController extends Controller
                         "Dear " . $customer->name .
                         ", your invoice # " . $salesDetails->invoice_number .
                         " dated " . Carbon::parse($salesDetails->sales_date)->format('d-m-Y') .
-                        " has been generated. View now: techsoul.biznx.in/userInvoice/" .
-                        $salesDetails->id . " - Team Techsoul 8891989842"
+                        " has been generated. View now: hostee.biznx.in/userInvoice/" .
+                        $salesDetails->id . " - Hostee the Planner 8891989842"
                     );
 
                     $url = "http://bhashsms.com/api/sendmsg.php?user=$username&pass=$password&sender=$sender&phone=$numbers&text=$message&priority=ndnd&stype=normal";
@@ -842,6 +842,7 @@ class DirectSalesController extends Controller
         $getSoldItems = DB::table('sales_items')->where('sales_id',$id)->get();
         $gst_amount = 0.00;
         $netTotal = 0.00;
+
         foreach($getSoldItems as $item)
         {
             $unitPrice = number_format((float) $item->unit_price, 2, '.', '');
@@ -852,6 +853,7 @@ class DirectSalesController extends Controller
             $gst_amount += $gst;
             $netTotal += $total;
         }
+
         $completeReportDetails['net_total'] = number_format((float)$netTotal, 2, '.', '');
         $discount = number_format((float) $salesDetails->discount, 2, '.', '');
         $grandTotal = number_format((float) $salesDetails->grand_total, 2, '.', '');
@@ -866,12 +868,12 @@ class DirectSalesController extends Controller
         $get_sales_staff = DB::table('staffs')->where('id',$salesDetails->sales_staff)->first();
         $completeReportDetails['sales_staff'] = $get_sales_staff->staff_name;
         $invoice_details = DB::table('invoices')->where('sales_id',$id)->first();
+
         if($invoice_details->bill_generated == Null){
             $data['bill_generated'] = strtoupper(Auth::user()->name);
             $status = DB::table('invoices')->where('id',$invoice_details->id)->update($data);
             $bill_generated = strtoupper(Auth::user()->name);
-        }
-        else{
+        } else {
             $bill_generated = $invoice_details->bill_generated;
         }
         $completeReportDetails['bill_generated_staff'] = $bill_generated;
@@ -886,7 +888,7 @@ class DirectSalesController extends Controller
         }
         $pdf = Pdf::loadView('invoices.invoice',compact('completeReportDetails'));
 
-        return $pdf->stream($salesDetails->invoice_number.'-Techsoul Cyber Solution.pdf',array("Attachment"=>false));
+        return $pdf->stream($salesDetails->invoice_number.'-Hostee the Planner.pdf',array("Attachment"=>false));
     }
 
     public function generateCustomerReport(Request $request)
@@ -1253,7 +1255,7 @@ class DirectSalesController extends Controller
     //         $completeReportDetails['bill_generated_staff'] = $get_sales_staff->staff_name;
     //     }
     //     $completeReportDetails['sales_id'] = $id;
-    //     $fileName = "Techsoul Cyber Solutions - #" . $salesDetails->invoice_number. ".pdf";
+    //     $fileName = "Hostee the Planner - #" . $salesDetails->invoice_number. ".pdf";
     //     $pdf = Pdf::loadView('invoices.userInvoice',compact('completeReportDetails'));
     //     return $pdf->download($fileName,array("Attachment"=>false));
     // }
@@ -1340,21 +1342,23 @@ class DirectSalesController extends Controller
             'bill_generated_staff'=> Auth::user()->name ?? 'SYSTEM',
         ];
 
-        $fileName = "Techsoul_Cyber_Solutions_" . $sales->invoice_number . ".pdf";
-        $filePath = storage_path("app/public/invoices/" . $fileName);
-        if (!file_exists(dirname($filePath))) {
-            mkdir(dirname($filePath), 0777, true);
-        }
+        // $fileName = "Hostee_" . $sales->invoice_number . ".pdf";
+        // $filePath = storage_path("app/public/invoices/" . $fileName);
+        // if (!file_exists(dirname($filePath))) {
+        //     mkdir(dirname($filePath), 0777, true);
+        // }
 
-        $pdf = Pdf::loadView('invoices.userInvoice', compact('completeReportDetails'));
-        $pdf->save($filePath);
-        $publicUrl = asset('storage/invoices/' . $fileName);
+        // $pdf = Pdf::loadView('invoices.userInvoice', compact('completeReportDetails'));
+        // $pdf->save($filePath);
+        // $publicUrl = asset('storage/invoices/' . $fileName);
 
         $phone    = $customer->mobile;
 
         $param1 = urlencode($customer->name);
         $param2 = $sales->invoice_number;
         $param3 = Carbon::parse($sales->sales_date)->format('d-m-Y');
+
+        $publicUrl = route('userInvoice', ['id' => $id]);
 
         $apiUrl = "https://bhashsms.com/api/sendmsgutil.php?user=Techsoul_BW&pass=123456&sender=BUZWAP&phone=$phone&text=inv_pdf_1711&priority=wa&stype=normal&Params=$param1,$param2,$param3&htype=document&url=$publicUrl";
 
@@ -1370,7 +1374,7 @@ class DirectSalesController extends Controller
 
         Toastr::success('Invoice generated and WhatsApp message sent successfully.', 'Success', ["positionClass" => "toast-bottom-right"]);
         session()->flash('whatsapp_sent', true);
-        
+
         return redirect()->back();
     }
 
@@ -1484,7 +1488,7 @@ class DirectSalesController extends Controller
             $completeReportDetails['bill_generated_staff'] = $get_sales_staff->staff_name;
         }
         $completeReportDetails['sales_id'] = $id;
-        $fileName = "Techsoul Cyber Solutions - #" . $salesDetails->invoice_number. ".pdf";
+        $fileName = "Hostee the Planner - #" . $salesDetails->invoice_number. ".pdf";
         $pdf = Pdf::loadView('invoices.userInvoice',compact('completeReportDetails'));
         return $pdf->stream($fileName,array("Attachment"=>false));
     }
@@ -1587,7 +1591,7 @@ class DirectSalesController extends Controller
         }
         if($output == "EXCEL")
         {
-            return Excel::download(new SalesReportExport($tableData), 'Techsoul - Sales Report.csv');
+            return Excel::download(new SalesReportExport($tableData), 'Hostee - Sales Report.csv');
         }
     }
 
@@ -1605,8 +1609,8 @@ class DirectSalesController extends Controller
                 "Dear " . $customer->name .
                 ", your invoice # " . $salesDetails->invoice_number .
                 " dated " . Carbon::parse($salesDetails->sales_date)->format('d-m-Y') .
-                " has been generated. View now: techsoul.biznx.in/userInvoice/" .
-                $salesDetails->id . " - Team Techsoul 8891989842"
+                " has been generated. View now: hostee.biznx.in/userInvoice/" .
+                $salesDetails->id . " - Hostee the Planner 8891989842"
             );
 
             $url = "http://bhashsms.com/api/sendmsg.php?user=$username&pass=$password&sender=$sender&phone=$numbers&text=$message&priority=ndnd&stype=normal";

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2b440868ed4cfc462972a4e8124e0496",
+    "content-hash": "655b45df5a81800ca10dc831029413a7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -9871,9 +9871,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "fruitcake/laravel-cors": 20
-    },
+    "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -8,7 +8,7 @@ $(document).ready(function() {
             success: function(response) {
                 // Update the chart data dynamically
                 chart.updateSeries([
-                    { name: "Consignment", data: response.consignmentData },
+                    // { name: "Consignment", data: response.consignmentData },
                     { name: "Sales", data: response.directSalesData }
                 ]);
             },
@@ -36,7 +36,7 @@ $(document).ready(function() {
         },
         dataLabels: { enabled: false },
         series: [
-            { name: "Consignment", data: consignmentData },
+            // { name: "Consignment", data: consignmentData },
             { name: "Direct Sales", data: directSalesData }
         ],
         xaxis: {

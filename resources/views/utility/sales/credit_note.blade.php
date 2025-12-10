@@ -72,12 +72,15 @@
                                         <thead>
                                             <tr>
                                                 <td align="center" width="60%" style="padding: 0;">
-                                                    <img src="assets/images/invoice/logo.png" width="320" style="width: 320px;margin: auto;">
-                                                    <p style="font-size: 11px;font-weight: 600;margin: 0;font-family: Arial, Helvetica, sans-serif;">
-                                                      GSTIN : 32ADNPO8730B1ZO<br/>
-                                                      OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO<br/>
-                                                      MALAPPURAM-KERALA Tel: +918891989842<br/>
-                                                      email: service@teamtechsoul.com
+                                                    <img src="{{ public_path('assets/images/invoice/logo.png') }}" width="320"
+                                                        style="width: 290px; margin: auto;">
+                                                    <p
+                                                        style="font-size: 11px; font-weight: 600; margin: 10px 0 0 0; font-family: Arial, Helvetica, sans-serif;">
+                                                        {{-- GSTIN : 32ADNPO8730B1ZO<br /> --}}
+                                                        NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD<br />
+                                                        MALAPPURAM-KERALA Pin : 676503 Tel: +91 85929 24592 /<br /> +91 85929 24692
+                                                        email: hosteetheplanner@gmail.com<br />
+                                                        www.hosteetheplanner.in
                                                     </p>
                                                 </td>
                                                 <td width="40%" valign="top" style="padding: 0;">
@@ -98,7 +101,7 @@
                                                             <tr>
                                                                 <td colspan="2" style="font-size: 12px;padding-bottom: 10px;">
                                                                     <span style="display: block;">Customer</span>
-                                                                    <strong style="display: block;">{{ $invoice_details['name'] }},{{ $invoice_details['customer_contact'] }}</strong>
+                                                                    <strong style="display: block;">{{ $invoice_details['name'] }}, {{ $invoice_details['customer_contact'] }}</strong>
                                                                 </td>
                                                             </tr>
                                                         </thead>
@@ -229,7 +232,7 @@
                                                   invoice are true and correct and Recived the item(s) in Good condition
                                                 </td>
                                                 <td style="text-align: right;">
-                                                    For <b>TECHSOUL CYBER SOLUTIONS</b><br/>Authorised Signatory
+                                                    For <b>HOSTEE THE PLANNER</b><br/>Authorised Signatory
                                                 </td>
                                             </tr>
                                         </thead>

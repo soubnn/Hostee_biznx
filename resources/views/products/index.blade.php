@@ -7,7 +7,7 @@
         let product_warrenty = document.getElementById('product_warrenty').value;
         let contact = document.getElementById('contact_1').value;
         console.log('contact is '+contact);
-        let message = "PRODUCT DETAILS \n----------------------\nPRODUCT NAME : "+product_name+"\n"+"PRICE : "+product_price+"\n"+"WARRANTY : "+product_warrenty+"\n\n -Team Techsoul";
+        let message = "PRODUCT DETAILS \n----------------------\nPRODUCT NAME : "+product_name+"\n"+"PRICE : "+product_price+"\n"+"WARRANTY : "+product_warrenty+"\n\n -Hostee";
         message = encodeURI(message);
         window.open('https://api.whatsapp.com/send/?phone=91'+contact+'&text='+message, '_blank');
     }

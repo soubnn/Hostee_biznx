@@ -75,7 +75,7 @@ class EstimateController extends Controller
 
 
         $estimate_product   =   $request->get('estimate_product');
-        $warrenty           =   $request->get('warrenty');
+        // $warrenty           =   $request->get('warrenty');
         $unit_price         =   $request->get('unitPrice');
         $qty                =   $request->get('qty');
         $product_tax        =   $request->get('product_tax');
@@ -92,7 +92,7 @@ class EstimateController extends Controller
                 $datasave = [
                     'estimate_id'       =>  $estimate_id,
                     'product_name'      =>  $estimate_product[$i],
-                    'warrenty'          =>  $warrenty[$i],
+                    // 'warrenty'          =>  $warrenty[$i],
                     'unit_price'        =>  $unit_price[$i],
                     'product_tax'       =>  $product_tax[$i],
                     'qty'               =>  $qty[$i],
@@ -446,7 +446,7 @@ class EstimateController extends Controller
         $grand_total_in_words = strtoupper(number_to_word($estimate->grand_total));
 
         $pdf = Pdf::loadView('invoices.estimate',compact('estimate_details','estimate','total_unit_price','total_qty','generated_by','grand_total_in_words','gst_count'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul Cyber Solutions - Estimate.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the Planner - Estimate.pdf',array("Attachment"=>false));
     }
     public function view_request(){
         $estimate_requests = DB::table('estimate_request')->get();
@@ -523,7 +523,7 @@ class EstimateController extends Controller
         $grand_total_in_words = strtoupper(number_to_word1($estimate->grand_total));
 
         $pdf = Pdf::loadView('invoices.estimate',compact('estimate_details','estimate','total_unit_price','gst_count','total_qty','generated_by','grand_total_in_words'))->setPaper('a4', 'portrait');
-        return $pdf->download('Techsoul Cyber Solutions - Estimate.pdf',array("Attachment"=>false));
+        return $pdf->download('Hostee the Planner - Estimate.pdf',array("Attachment"=>false));
     }
 
     public function userEstimate($id){
@@ -595,11 +595,11 @@ class EstimateController extends Controller
         }
         else
         {
-            $generated_by = "ABDUL HASEEB P";
+            $generated_by = "";
         }
         $grand_total_in_words = strtoupper(number_to_word2($estimate->grand_total));
 
         $pdf = Pdf::loadView('invoices.estimate',compact('estimate_details','estimate','total_unit_price','gst_count','total_qty','generated_by','grand_total_in_words'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul Cyber Solutions - Estimate.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the Planner - Estimate.pdf',array("Attachment"=>false));
     }
 }

@@ -180,19 +180,17 @@
                                 <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-bottom: 1px solid #d3d3d3">
                                     <thead>
                                         <tr>
-                                            <td align="center" width="60%" style="padding: 0; padding-bottom: 10px;">
-                                                <img src="https://techsoul.biznx.in/assets/images/invoice/logo.png" width="320"
-                                                    style="width: 320px;margin: auto;">
-                                                {{-- <img src="{{ asset('assets/images/invoice/logo.png') }}" width="320"
-                                                    style="width: 320px;margin: auto;"> --}}
-                                                <p style="font-size: 11px;font-weight: 600;margin: 0;font-family: Arial, Helvetica, sans-serif;">
-                                                    GSTIN : 32ADNPO8730B1ZO<br />
-                                                    OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO<br />
-                                                    MALAPPURAM-KERALA Pin : 676510 Tel: +918891989842<br />
-                                                    email: service@teamtechsoul.com<br />
-                                                    www.teamtechsoul.com
+                                            <td align="center" width="60%" style="padding: 0;">
+                                                <img src="{{ public_path('assets/images/invoice/logo.png') }}" width="320"
+                                                    style="width: 290px; margin: auto;">
+                                                <p
+                                                    style="font-size: 11px; font-weight: 600; margin: 10px 0 0 0; font-family: Arial, Helvetica, sans-serif;">
+                                                    {{-- GSTIN : 32ADNPO8730B1ZO<br /> --}}
+                                                    NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD<br />
+                                                    MALAPPURAM-KERALA Pin : 676503 Tel: +91 85929 24592 /<br /> +91 85929 24692
+                                                    email: hosteetheplanner@gmail.com<br />
+                                                    www.hosteetheplanner.in
                                                 </p>
-
                                             </td>
                                             <td width="30%" valign="top" style="padding: 0;">
                                                 <table width="100%" border="0" cellpadding="0" cellspacing="0">

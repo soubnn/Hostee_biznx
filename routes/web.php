@@ -204,6 +204,24 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('/util_convert_invoice',[App\Http\Controllers\UtilityController::class,'util_convert_invoice'])->name('util_convert_invoice');
     Route::get('/util_convert_data',[App\Http\Controllers\UtilityController::class,'util_convert_data'])->name('util_convert_data');
 
+    // project
+    Route::resource('/project', App\Http\Controllers\ProjectController::class);
+    Route::get('/projects/delivered',[App\Http\Controllers\ProjectController::class, 'view_delivered'])->name('project.delivered');
+    Route::get('/projects/rejected',[App\Http\Controllers\ProjectController::class, 'view_rejected'])->name('project.rejected');
+    Route::post('/projects/{id}/deliver',[App\Http\Controllers\ProjectController::class, 'deliver'])->name('project.deliver');
+    Route::post('/projects/{id}/reject',[App\Http\Controllers\ProjectController::class, 'reject'])->name('project.reject');
+    Route::get('/projects/{id}/view_works',[App\Http\Controllers\ProjectController::class, 'view_works'])->name('project.view_works');
+
+    // news and events
+    Route::resource('news_events', App\Http\Controllers\NewsAndEventsController::class);
+
+    // upcoming events
+    Route::resource('upcoming_events', App\Http\Controllers\UpcomingEventController::class);
+
+    // Event booking
+    Route::post('/event-booking/store', [App\Http\Controllers\EventBookingController::class, 'store'])->name('event_booking.store');
+    Route::get('/upcoming-events/{id}/bookings/download', [App\Http\Controllers\UpcomingEventController::class, 'downloadBookings'])->name('upcoming_events.download');
+
     // consolidate
     Route::resource('consolidate', App\Http\Controllers\ConsoulidateController::class);
     Route::any('/direct_sales/consolidate/{id}', [App\Http\Controllers\ConsoulidateController::class, 'consolidates_create'])->name('direct_sales.consolidate');

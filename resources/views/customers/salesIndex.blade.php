@@ -110,7 +110,7 @@
                                                             <button class="btn btn-warning" type="button" href="#" id="payMonet" data-id="#uptask-1" data-bs-toggle="modal" data-bs-target="#payModal{{$sale->id}}" @if( $sale->balance == 0) disabled @endif title="Pay">
                                                                 <i class="bx bx-rupee font-size-18"></i>
                                                             </button>
-                                                            <input type="hidden" id="hiddenURL_{{ $sale->id }}" value="https://api.whatsapp.com/send/?phone=91{{ $sale->mobile_no }}&text={{ $sale->message }}">
+                                                            {{-- <input type="hidden" id="hiddenURL_{{ $sale->id }}" value="https://api.whatsapp.com/send/?phone=91{{ $sale->mobile_no }}&text={{ $sale->message }}"> --}}
                                                             @if (isset($sale->consolidate_bill))
                                                                 <form action="{{ route('WhatsappConsolidateInvoice',$sale->id) }}" id="downloadInvoiceForm_{{ $sale->id }}">
                                                                 </form>

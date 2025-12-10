@@ -138,15 +138,15 @@
             </p>
             <p style="text-indent: 0pt; text-align: left"><br /></p>
             <p style="padding-left: 5pt;text-indent: 0pt;line-height: 108%;text-align: left;">
-                <a href="mailto:accounts@teamtechsoul.com" class="a" target="_blank">Attached, you will find your salary
+                <a href="mailto:hosteetheplanner@gmail.com" class="a" target="_blank">Attached, you will find your salary
                     statement for this month. Please
                     review the details, and if you have any questions or concerns regarding
                     your salary, do not hesitate to contact the HR department at
                 </a>
-                <a href="mailto:accounts@teamtechsoul.com" target="_blank">accounts@teamtechsoul.com.</a>
+                <a href="mailto:hosteetheplanner@gmail.com" target="_blank">hosteetheplanner@gmail.com.</a>
             </p>
             <p style="padding-top: 7pt;padding-left: 5pt;text-indent: 0pt;line-height: 109%;text-align: left;">
-                We appreciate your hard work and dedication to Techsoul Cyber Solutions.
+                We appreciate your hard work and dedication to Hostee the Planner.
                 Your efforts contribute significantly to the success of our organization,
                 and we value your commitment.
             </p>
@@ -364,16 +364,16 @@
             </p>
             <p style="text-indent: 0pt; text-align: left"><br /></p>
             <h1 style="padding-left: 5pt; text-indent: 0pt; text-align: left">
-                Fathima Shalu M.K
+                {{-- Fathima Shalu M.K --}}
             </h1>
             <p style="padding-top: 1pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
                 Finance Manager
             </p>
             <p style="padding-left: 5pt; text-indent: 0pt; text-align: left">
-                Techsoul Cyber Solutions
+                Hostee the Planner
             </p>
             <p style="padding-left: 5pt; text-indent: 0pt; text-align: left">
-                <a href="mailto:accounts@teamtechsoul.com" class="s3">accounts@teamtechsoul.com</a>
+                <a href="mailto:hosteetheplanner@gmail.com" class="s3">hosteetheplanner@gmail.com</a>
             </p>
         </div>
     </page>

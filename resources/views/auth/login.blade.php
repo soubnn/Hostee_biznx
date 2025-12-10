@@ -1,16 +1,14 @@
 <!doctype html>
 <html lang="en">
 
-
 <head>
-
         <meta charset="utf-8" />
-        <title>Login | Techsoul Cyber Solutions</title>
+        <title>Login | Hostee</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Inventory for Techsoul Cyber Solutions" name="description" />
-        <meta content="Techsoul" name="author" />
+        <meta content="Hostee" name="description" />
+        <meta content="Hostee" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
+        {{-- <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}"> --}}
         <!-- PWA  -->
         <meta name="theme-color" content="#6777ef"/>
         <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
@@ -24,10 +22,10 @@
         {{-- <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css"> --}}
         <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}">
 
-
     </head>
 
-    <body style="background-image: url('{{ asset("assets/images/bg_one.jpg") }}'); background-repeat: 'no-repeat';background-size: cover;">
+    {{-- <body style="background-image: url('{{ asset("assets/images/bg_one.jpg") }}'); background-repeat: 'no-repeat';background-size: cover;"> --}}
+    <body>
         <div class="account-pages my-5 pt-sm-5">
             <div class="container">
                 <div class="row justify-content-center">
@@ -38,7 +36,7 @@
                                     <div class="col-7">
                                         <div class="text-primary p-4">
                                             <h5 class="text-primary">Welcome Back !</h5>
-                                            <p>Sign in to techsoul inventory.</p>
+                                            <p>Sign in to Hostee.</p>
                                         </div>
                                     </div>
                                     <div class="col-5 align-self-end">
@@ -109,7 +107,7 @@
             </div>
         </div>
         <!-- end account-pages -->
-        <script src="{{ asset('/sw.js') }}"></script>
+        {{-- <script src="{{ asset('/sw.js') }}"></script> --}}
         {{-- <script>
         if ("serviceWorker" in navigator) {
             navigator.serviceWorker.register("/sw.js").then(
@@ -137,6 +135,14 @@
         {{-- <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script> --}}
         <script src="{{ asset('js/toastr.min.js') }}"></script>
         {!! Toastr::message() !!}
+
+        <script>
+            if ("serviceWorker" in navigator) {
+                navigator.serviceWorker.register("/sw.js")
+                    .then(reg => console.log("Service Worker registered:", reg))
+                    .catch(err => console.log("SW registration failed:", err));
+            }
+        </script>
 
     </body>
 

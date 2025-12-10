@@ -182,13 +182,15 @@
                                     <thead>
                                         <tr>
                                             <td align="center" width="60%" style="padding: 0;">
-                                                <img src="{{ asset('assets/images/invoice/logo.png') }}" width="320" style="width: 320px;margin: auto;">
-                                                <p style="font-size: 11px;font-weight: 600;margin: 0;font-family: Arial, Helvetica, sans-serif;">
-                                                    GSTIN : 32ADNPO8730B1ZO<br />
-                                                    OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO<br />
-                                                    MALAPPURAM-KERALA Pin : 676510 Tel: +918891989842<br />
-                                                    email: service@teamtechsoul.com<br />
-                                                    www.teamtechsoul.com
+                                                <img src="{{ public_path('assets/images/invoice/logo.png') }}" width="320"
+                                                    style="width: 290px; margin: auto;">
+                                                <p
+                                                    style="font-size: 11px; font-weight: 600; margin: 10px 0 0 0; font-family: Arial, Helvetica, sans-serif;">
+                                                    {{-- GSTIN : 32ADNPO8730B1ZO<br /> --}}
+                                                    NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD<br />
+                                                    MALAPPURAM-KERALA Pin : 676503 Tel: +91 85929 24592 /<br /> +91 85929 24692
+                                                    email: hosteetheplanner@gmail.com<br />
+                                                    www.hosteetheplanner.in
                                                 </p>
                                             </td>
                                             <td width="40%" valign="top" style="padding: 0;">
@@ -253,7 +255,7 @@
                                             <tr style="height: 30px;">
                                                 <th rowspan="2" width="15" style="border: 1px solid;text-align: center;">SL.<br/>NO</th>
                                                 <th rowspan="2"  width="135" style="border: 1px solid;">Description of Goods</th>
-                                                <th rowspan="2"  width="35" style="border: 1px solid;">Warrenty</th>
+                                                {{-- <th rowspan="2"  width="35" style="border: 1px solid;">Warrenty</th> --}}
                                                 <th rowspan="2"  width="35" style="border: 1px solid;">Unit Price</th>
                                                 <th rowspan="2"  width="15" style="border: 1px solid;">Qty</th>
                                                 <th rowspan="2"  width="35" style="border: 1px solid;">Amount</th>
@@ -430,7 +432,7 @@
                                                                 @endphp
                                                             @endif
                                                         @endif
-                                                        <td>{{ $estimate_details->warrenty }}</td>
+                                                        {{-- <td>{{ $estimate_details->warrenty }}</td> --}}
                                                         @php
                                                             $unit_price = number_format((float)$estimate_details->unit_price, 2, '.', '');
                                                         @endphp
@@ -471,7 +473,7 @@
                                                 <td style="height:{{ $row_limit }} !important;"></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
+                                                {{-- <td></td> --}}
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -485,7 +487,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td style="border: 1px solid"></td>
-                                                <td colspan="2" style="text-align: right;border: 1px solid">
+                                                <td colspan="1" style="text-align: right;border: 1px solid">
                                                     <b>TOTAL</b>
                                                 </td>
                                                 <td style="border: 1px solid">{{ number_format((float) $total_unit_price, 2, '.', '') }}</td>
@@ -510,7 +512,7 @@
                                             <tr style="height: 30px;">
                                                 <th colspan="2" style="border: 1px solid;text-align: center;">SL. NO</th>
                                                 <th width="135" colspan="3" style="border: 1px solid;">Description of Goods</th>
-                                                <th width="35" colspan="2" style="border: 1px solid;">Warrenty</th>
+                                                {{-- <th width="35" colspan="2" style="border: 1px solid;">Warrenty</th> --}}
                                                 <th width="35" colspan="2" style="border: 1px solid;">Unit Price</th>
                                                 <th width="35" style="border: 1px solid;">Qty</th>
                                                 <th width="50" colspan="2" style="border: 1px solid;">Total</th>
@@ -703,7 +705,7 @@
                                                                 @endphp
                                                             @endif
                                                         @endif
-                                                        <td colspan="2">{{ $estimate_details->warrenty }}</td>
+                                                        {{-- <td colspan="2">{{ $estimate_details->warrenty }}</td> --}}
                                                         <td colspan="2">{{ number_format((float) $estimate_details->unit_price, 2, '.', '') }}</td>
                                                         <td>{{ $estimate_details->qty }}</td>
                                                         <td colspan="2">{{ $estimate_details->total }}</td>
@@ -719,7 +721,7 @@
                                             <tr>
                                                 <td colspan="2" style="height:{{ $row_limit }} !important;"></td>
                                                 <td colspan="3"></td>
-                                                <td colspan="2"></td>
+                                                {{-- <td colspan="2"></td> --}}
                                                 <td colspan="2"></td>
                                                 <td></td>
                                                 <td colspan="2"></td>
@@ -728,7 +730,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="2" style="border: 1px solid"></td>
-                                                <td colspan="5" style="text-align: right;border: 1px solid">
+                                                <td colspan="3" style="text-align: right;border: 1px solid">
                                                     <b>TOTAL</b>
                                                 </td>
                                                 <td  colspan="2" style="border: 1px solid">{{ number_format((float) $total_unit_price, 2, '.', '') }}</td>
@@ -759,10 +761,8 @@
                                         <tr>
                                             <td style="border: 1px solid">BANK DETAILS</td>
                                             <td style="border: 1px solid">
-                                                <b>BANK</b> : FEDERAL BANK &nbsp;&nbsp;<b>BRANCH</b> :
-                                                PUTHANATHANI<br />
-                                                <b>ACCOUNT NUMBER</b> : 15430200007260 &nbsp;&nbsp;<b>IFSC</b> :
-                                                FDRL0001543
+                                                <b>BANK</b> : ESAF &nbsp;&nbsp;<b>BRANCH</b> : KOTTAKKAL<br />
+                                                <b>ACCOUNT NUMBER</b> : 53250001177379 &nbsp;&nbsp;<b>IFSC</b> : ESMF0001127
                                             </td>
                                             <td
                                                 style="text-align: right;border: 1px solid;font-size: 14px;font-weight: bold">
@@ -783,20 +783,7 @@
                         </tr>
                         <tr>
                             <td style="font-size: 11px;padding: 8px 0;">
-                                <b>TERMS AND CONDITIONS : (1)</b> There will be no warranty or replacement for physical
-                                or external damages like:- lightning, mishandling, electric short circuit, warranty seal
-                                broken,
-                                cover broken or damages caused by courier service. or Without proper Invoice <b>(2)</b>
-                                After the payment due date, fine at 24% per month will be charged on the amount overdue.
-                                <b>(3)</b>
-                                RS 500 will be charged per cheque, if it bounced. <b>(4)</b> The cheque has to be given
-                                within 5 days of purchase. If the cheque is not given, the account will be blocked by
-                                the account
-                                section. <b>(5)</b> Items sold will not be taken back or exchanged. <b>(6)</b> It is the
-                                responsibility of the customer to check whether the items are damaged or not. <b>(7)</b>
-                                Only the warranty as per
-                                manufactures warranty policy will be applicable for the items sold. <b>(8)</b> There is
-                                no guarantee for Data
+                                <b>TERMS AND CONDITIONS : (A)</b> The advance payment will be 50% of total development cost. <b>(B)</b>Unless otherwise specified, payments are due thirty (30) days after the date of invoice.<b>(C)</b> Any unpaid due amounts will be subject to penalty charges at 1.5% per month, or, if less, the maximum rate allowed by law. <b>(D)</b> Seller shall not be liable under any warranty stated herein if the purchase price has not been paid in full. <b>(E)</b> Seller may offset amounts Seller owes to Buyer against amounts Buyer owes to Seller, whether under the same or a different Purchase Order.
                             </td>
                         </tr>
                         <tr>
@@ -807,18 +794,18 @@
                                         <tr>
                                             <td width="50%"></td>
                                             <td style="text-align: right;">
-                                                For <b>TECHSOUL CYBER SOLUTIONS</b><br />Authorised Signatory
+                                                For <b>HOSTEE THE PLANNER</b><br />Authorised Signatory
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2">
+                                            {{-- <td colspan="2">
                                                 <img src="" width="60" height="60" style="width:60px;height:60px;margin: 0;">
                                                 @php
                                                     $printed_by = Auth::user()->name;
                                                     $printed_on = Carbon\carbon::now();
                                                 @endphp
                                                 <p style="font-size:10px;">generated by {{ $printed_by }} on {{ $printed_on }}</p>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     </thead>
                                 </table>
@@ -828,7 +815,7 @@
                 </table>
             </div>
         </div>
-        
+
     </div>
 </body>
 

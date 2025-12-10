@@ -36,7 +36,7 @@ class UtilityController extends Controller
 
     public function utility_check(Request $request)
     {
-        if (md5($request->utility_pass) == md5("techsouladmin")) {
+        if (md5($request->utility_pass) == md5("hosteeadmin")) {
             $login_user = new UtilityLog();
             $login_user->login_user = Auth::user()->name;
             $login_user->add_date   = Carbon::now();
@@ -734,7 +734,7 @@ class UtilityController extends Controller
         $invoice_details['purchase_id'] = $id;
 
         $pdf = Pdf::loadView('utility.sales.credit_note',compact('invoice_details'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul - Crdit Note.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee - Crdit Note.pdf',array("Attachment"=>false));
     }
     //purchase return
     function purchase_return(){
@@ -943,6 +943,6 @@ class UtilityController extends Controller
         $invoice_details['purchase_id'] = $id;
 
         $pdf = Pdf::loadView('utility.purchases.debit_note',compact('invoice_details'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul - Debit Note.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee - Debit Note.pdf',array("Attachment"=>false));
     }
 }

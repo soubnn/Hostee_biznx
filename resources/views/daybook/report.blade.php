@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Income Expense Report - Techsoul Cyber Solution</title>
+    <title>Income Expense Report - Hostee the Planner</title>
 </head>
 <style type="text/css">
     body{
@@ -96,9 +96,9 @@
 </style>
 <body>
 <div class="head-title">
-    <h2 class="text-center m-0 p-0">TECHSOUL CYBER SOLUTIONS</h2>
-    <h5 class="text-center m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5>
-    <h5 class="text-center m-0 p-0">OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO</h5>
+    <h2 class="text-center m-0 p-0">HOSTEE THE PLANNER</h2>
+    {{-- <h5 class="text-center m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5> --}}
+    <h5 class="text-center m-0 p-0">NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</h5>
     <h1 class="text-center m-0 p-0">Income - Expense Report</h1>
 </div>
 <div class="add-detail mt-10">

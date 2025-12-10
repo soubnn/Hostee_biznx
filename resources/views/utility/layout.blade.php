@@ -5,9 +5,9 @@
         <meta charset="utf-8" />
         <title>Utility Mode </title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Techsoul" name="author" />
+        <meta content="Hostee" name="author" />
         <!-- App favicon -->
-        <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}">
+        {{-- <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}"> --}}
 
          <!-- DataTables -->
         <link href="{{ asset('assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" type="text/css" />
@@ -62,11 +62,11 @@
                         <!-- LOGO -->
                         <div class="navbar-brand-box">
                             <a href="{{ route('util_dash') }}" class="logo logo-light">
-                                <span class="logo-sm">
+                                {{-- <span class="logo-sm">
                                     <img src="{{ asset('assets/images/logo_sm.png') }}" alt="" height="30" style="margin-left: -25px;">
-                                </span>
+                                </span> --}}
                                 <span class="logo-lg">
-                                    <img src="{{ asset('assets/images/logo.png') }}" alt="" height="50" style="margin-left: -25px;">
+                                    <img src="{{ asset('assets/images/biznx_white.png') }}" alt="" height="70" style="margin-left: -25px;">
                                 </span>
                             </a>
                         </div>
@@ -166,7 +166,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-sm-6">
-                                <script>document.write(new Date().getFullYear())</script> © Team Techsoul.
+                                <script>document.write(new Date().getFullYear())</script> © Hostee the Planner.
                             </div>
                             <div class="col-sm-6">
                                 <div class="text-sm-end d-none d-sm-block">

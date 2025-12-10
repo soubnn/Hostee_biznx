@@ -366,7 +366,7 @@ class PurchaseOrderController extends Controller
         $grand_total_in_words = strtoupper(number_to_word($purchase_order->grand_total));
 
         $pdf = Pdf::loadView('invoices.purchase_order',compact('purchase_order_details','purchase_order','total_unit_price','total_qty','generated_by','grand_total_in_words'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul - PurchaseOrder.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee - PurchaseOrder.pdf',array("Attachment"=>false));
     }public function whatsappPurchaseOrder($id){
         function number_to_word1(float $number)
         {
@@ -436,7 +436,7 @@ class PurchaseOrderController extends Controller
         $grand_total_in_words = strtoupper(number_to_word1($purchase_order->grand_total));
 
         $pdf = Pdf::loadView('invoices.purchase_order',compact('purchase_order_details','purchase_order','total_unit_price','total_qty','generated_by','grand_total_in_words'))->setPaper('a4', 'portrait');
-        return $pdf->download('Techsoul Cyber Solutions - PurchaseOrder.pdf',array("Attachment"=>false));
+        return $pdf->download('Hostee the Planner - PurchaseOrder.pdf',array("Attachment"=>false));
     }
 
 }

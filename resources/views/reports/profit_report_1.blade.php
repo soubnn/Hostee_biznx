@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Monthly Profit Summary - Techsoul Cyber Solutions</title>
+    <title>Monthly Profit Summary - Hostee the Planner</title>
 </head>
 <style type="text/css">
     body{
@@ -126,9 +126,9 @@
     </div>
     <div class="container">
         <div class="head-title">
-            <h2 class="text-center m-0 p-0">TECHSOUL CYBER SOLUTIONS</h2>
-            <h5 class="text-center m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5>
-            <h5 class="text-center m-0 p-0">OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO</h5>
+            <h2 class="text-center m-0 p-0">HOSTEE THE PLANNER</h2>
+            {{-- <h5 class="text-center m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5> --}}
+            <h5 class="text-center m-0 p-0">NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</h5>
             <h1 class="text-center m-0 p-0 mt-10">Monthly Profit Summary - {{ $search_date }}</h1>
         </div>
 
@@ -145,7 +145,7 @@
                     <th>Purchase Amount</th>
                     <th>Profit</th>
                     <th>Service Charge</th>
-                    <th>Total Amount<br>To Techsoul</th>
+                    <th>Total Amount<br>To Hostee</th>
                     <th>Status</th>
                 </tr>
             </thead>

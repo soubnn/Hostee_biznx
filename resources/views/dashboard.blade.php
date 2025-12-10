@@ -37,17 +37,17 @@
                                     </div>
 
                                     <div class="col-sm-7">
-                                        <div class="pt-4">
+                                        <div class="pt-4 text-right">
 
                                             <div class="row">
                                                 <div class="col-6">
                                                     <h5 class="font-size-15">{{ $staff_count }}</h5>
                                                     <p class="text-muted mb-0">Staffs</p>
                                                 </div>
-                                                <div class="col-6">
+                                                {{-- <div class="col-6">
                                                     <h5 class="font-size-15">{{ $product_count }}</h5>
                                                     <p class="text-muted mb-0">Products</p>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                             <div class="mt-4">
                                                 <a href="{{ route('profile') }}" class="btn btn-primary waves-effect waves-light btn-sm">View Profile <i class="mdi mdi-arrow-right ms-1"></i></a>
@@ -59,7 +59,7 @@
                         </div>
                     @if($profile->role == 'marketing' || $profile->role == 'intern')
                     @else
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-body">
                                 @if( $profile->role == 'super-admin' )
                                     <input type="date" id="salesDate" class="form-control mb-3" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
@@ -104,8 +104,8 @@
                                     </div>
                                 @endif
                             </div>
-                        </div>
-                        <div class="card">
+                        </div> --}}
+                        {{-- <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered nowrap w-100">
@@ -125,35 +125,11 @@
                                     <a href="{{ route('stockout_product') }}" style="float:right;">view all</a>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
-                    <div class="col-xl-8">
+                    {{-- <div class="col-xl-8">
                     @if($profile->role!="intern")
                         <div class="row">
-                            <div class="col-2">
-                                <a href="{{ route('consignment.create') }}">
-                                    <div class="social-source text-center mt-3">
-                                        <div class="avatar-xs mx-auto mb-3">
-                                            <span class="avatar-title rounded-circle bg-primary font-size-16">
-                                                <i class="mdi mdi-cards text-white"></i>
-                                            </span>
-                                        </div>
-                                        <h5 style="font-size: 13px;">Jobcard</h5>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-2">
-                                <a href="{{ route('purchase.create') }}">
-                                    <div class="social-source text-center mt-3">
-                                        <div class="avatar-xs mx-auto mb-3">
-                                            <span class="avatar-title rounded-circle bg-info font-size-16">
-                                                <i class="mdi mdi-store text-white"></i>
-                                            </span>
-                                        </div>
-                                        <h5 style="font-size: 13px;">Purchase</h5>
-                                    </div>
-                                </a>
-                            </div>
                             <div class="col-2">
                                 <a href="{{ route('directSales.create') }}">
                                     <div class="social-source text-center mt-3">
@@ -205,27 +181,6 @@
                         </div>
                     @endif
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="card mini-stats-wid">
-                                    <div class="card-body">
-                                        <a href="{{ route('view_pending') }}">
-                                            <div class="d-flex">
-                                                <div class="flex-grow-1">
-                                                    <p class="text-muted fw-medium">Job Cards</p>
-                                                    <h4 class="mb-0">{{ $jobcard_month_count }}<span style="font-size:12px;">&nbsp;(this month)</span></h4>
-                                                </div>
-                                                <div class="flex-shrink-0 align-self-center">
-                                                    <div class="mini-stat-icon avatar-sm rounded-circle bg-primary">
-                                                        <span class="avatar-title">
-                                                            <i class="bx bx-copy-alt font-size-24"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
                             @if( $profile->role == 'admin' || $profile->role == 'super-admin' )
                                 <div class="col-md-4">
                                     <div class="card mini-stats-wid">
@@ -286,20 +241,20 @@
                                             </select>
                                         </div>
                                         <div class="d-sm-flex flex-wrap">
-                                            <h4 class="card-title mb-4">Average Job Card Graph</h4>
+                                            <h4 class="card-title mb-4">Average Sales Graph</h4>
                                         </div>
                                         <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             @endif
         </div>
     </div>
-    @if (\Carbon\Carbon::parse(\App\Models\DaybookBalance::report_date())->format('Y-m-d') < \Carbon\Carbon::now()->format('Y-m-d'))
+    {{-- @if (\Carbon\Carbon::parse(\App\Models\DaybookBalance::report_date())->format('Y-m-d') < \Carbon\Carbon::now()->format('Y-m-d'))
         @include('daybook_warning_modal')
         <script>
             document.addEventListener("DOMContentLoaded", function () {
@@ -307,7 +262,7 @@
                 myModal.show();
             });
         </script>
-    @endif
+    @endif --}}
 @endsection
 
 @push('chartData')

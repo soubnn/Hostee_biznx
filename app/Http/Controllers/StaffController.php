@@ -56,18 +56,16 @@ class StaffController extends Controller
             'phone1' =>'digits:10|required',
             'phone2' =>'digits:10|nullable',
             'email' => 'nullable|email',
-
         ]);
+
         $data = $request->all();
         $status= Staffs::create($data);
         if($status){
-            Toastr::success('Staff Added edited', 'success',["positionClass" => "toast-bottom-right"]);
-        }
-        else{
+            Toastr::success('Staff Added edited', 'success', ["positionClass" => "toast-bottom-right"]);
+        } else {
             Toastr::error('try again!', 'error',["positionClass" => "toast-bottom-right"]);
         }
         return redirect()->route('staff.create');
-
     }
 
     /**
@@ -103,7 +101,7 @@ class StaffController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return 123;
+        // return 123;
         $staff = Staffs::findOrFail($id);
         $this->validate($request,[
             'category_id' => 'required',
@@ -219,7 +217,7 @@ class StaffController extends Controller
         }
         return redirect()->route('staff.payments');
     }
-    
+
     public function store_advance(Request $request, $id)
     {
 

@@ -40,17 +40,17 @@ class ProductCategoryController extends Controller
         $data = $request->all();
 
         $this->validate($request, [
-            'category_name' => 'required|unique:product_categories'
+            'category_name' => 'required|unique:product_categories',
         ]);
+
         $data['category_name'] = strtoupper($request->category_name);
         $status = product_categories::create($data);
-        if($status){
-            Toastr::success("Category Added Successfully","success",["positionClass" => "toast-bottom-right"]);
+        if ($status) {
+            Toastr::success('Category Added Successfully', 'success', ['positionClass' => 'toast-bottom-right']);
+        } else {
+            Toastr::error('Please try again!!', 'error', ['positionClass' => 'toast-bottom-right']);
         }
-        else{
 
-            Toastr::error("Please try again!!","error",["positionClass" => "toast-bottom-right"]);
-        }
         return redirect()->route('product_category.index');
     }
 
@@ -87,17 +87,17 @@ class ProductCategoryController extends Controller
     {
         $category = product_categories::findOrFail($id);
         $this->validate($request, [
-            'category_name'=> 'required'
+            'category_name' => 'required',
         ]);
 
         $data = $request->all();
-        $status =$category->fill($data)->save();
-        if($status){
-            Toastr::success("Details Edited Successfully","success",["positionClass" => "toast-bottom-right"]);
+        $status = $category->fill($data)->save();
+        if ($status) {
+            Toastr::success('Details Edited Successfully', 'success', ['positionClass' => 'toast-bottom-right']);
+        } else {
+            Toastr::error('Please try again!!', 'error', ['positionClass' => 'toast-bottom-right']);
         }
-        else{
-            Toastr::error("Please try again!!","error",["positionClass" => "toast-bottom-right"]);
-        }
+
         return redirect()->route('product_category.index');
     }
 
@@ -110,35 +110,31 @@ class ProductCategoryController extends Controller
     public function destroy($id)
     {
         $status = product_categories::findOrFail($id)->delete();
-        if($status){
-            Toastr::success("Details Removed Succesfully","success",["positionClass" => "toast-bottom-right"]);
+        if ($status) {
+            Toastr::success('Details Removed Succesfully', 'success', ['positionClass' => 'toast-bottom-right']);
+        } else {
+            Toastr::error('Please try again!!', 'error', ['positionClass' => 'toast-bottom-right']);
         }
-        else{
-            Toastr::error("Please try again!!","error",["positionClass" => "toast-bottom-right"]);
-        }
+
         return redirect()->route('product_category.index');
     }
+
     public function add_category(Request $request)
     {
-
         $data = $request->all();
 
-        $get_category_count = DB::table('product_categories')->where('category_name',$request->category_name)->count();
+        $get_category_count = DB::table('product_categories')->where('category_name', $request->category_name)->count();
 
-            if( $get_category_count == 0){
+        if ($get_category_count == 0) {
+            $status = product_categories::create($data);
+        }
 
-                $status = product_categories::create($data);
-
-            }
-
-        if($status){
-
+        if ($status) {
             $category_status = DB::table('product_categories')->latest('id')->first();
+        } else {
+            $category_status = 'Error';
         }
-        else{
-
-            $category_status = "Error";
-        }
+        
         return response()->json($category_status);
     }
 }

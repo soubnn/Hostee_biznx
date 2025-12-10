@@ -260,7 +260,7 @@ class CustomerController extends Controller
             $sale->amount       = $amount;
             $sale->paidAmount   = $paidAmount;
             $sale->pending_days = $pending_days;
-            $sale->message      = $message;
+            // $sale->message      = $message;
             $sale->balance      = round($balance,2);
             $sale->consolidate_bill = Consoulidate::where('sales_id', $sale->id)->first();
         }

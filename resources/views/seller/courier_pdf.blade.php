@@ -49,19 +49,19 @@
     <div style="text-align: right">
         <!--<img src="assets/images/tslogo-dark.png" alt="Company Logo">-->
         {{-- Uncomment the line below if using Laravel --}}
-        <img src="{{ asset('assets/images/tslogo-dark.png') }}" alt="Company Logo">
+        <img src="{{ asset('assets/images/invoice/logo.png') }}" alt="Company Logo">
     </div>
     <div class="container">
         <div class="from">
             <p style="margin-left: -35px;margin-bottom: 10px;">From:</p>
-            <h3>TECHSOUL CYBER SOLUTIONS</h3>
-            <p>GSTIN: 32ADNPO8730B1ZO</p>
-            <p>OPP. TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO</p>
-            <p>MALAPPURAM-KERALA, Pin: 676510</p>
-            <p>Tel: +918891989842</p>
-            <p>Tel: +919526989842</p>
-            <p>Email: service@teamtechsoul.com</p>
-            <p>Website: www.teamtechsoul.com</p>
+            <h3>HOSTEE THE PLANNER</h3>
+            {{-- <p>GSTIN: 32ADNPO8730B1ZO</p> --}}
+            <p>NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</p>
+            <p>MALAPPURAM-KERALA, Pin: 676503</p>
+            <p>Tel: +91 85929 24592</p>
+            <p>Tel: +91 85929 24692</p>
+            <p>Email: hosteetheplanner@gmail.com</p>
+            <p>Website: www.hosteetheplanner.com</p>
         </div>
         <div class="to">
             <p style="margin-left: -35px;margin-bottom: 10px;">To:</p>
@@ -81,6 +81,6 @@
                 <p>Tel: {{ $seller->seller_mobile }}</p>
             @endif  --}}
         </div>
-    </div> 
+    </div>
 </body>
 </html>

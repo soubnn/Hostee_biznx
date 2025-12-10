@@ -309,7 +309,7 @@
                     {
                         var newDynamicOption = document.createElement("option");
                         newDynamicOption.setAttribute("value",response[i].id);
-                        newDynamicOption.innerHTML = "[" + response[i].product_code +"]" + response[i].product_name;
+                        newDynamicOption.innerHTML = response[i].product_name;
                         newProductSel.appendChild(newDynamicOption);
                         console.log("Added option");
                     }
@@ -324,15 +324,15 @@
 
 
             //Column 2
-            var newColumn2 = document.createElement("td");
-            var warrenty_col = document.createElement("input");
-            warrenty_col.setAttribute("type","text");
-            warrenty_col.setAttribute("value","1 YEAR");
-            warrenty_col.setAttribute("class","form-control");
-            warrenty_col.setAttribute("id","warrenty" + count);
-            warrenty_col.setAttribute("name","warrenty[]");
-            warrenty_col.setAttribute("style","width:100%");
-            newColumn2.appendChild(warrenty_col);
+            // var newColumn2 = document.createElement("td");
+            // var warrenty_col = document.createElement("input");
+            // warrenty_col.setAttribute("type","text");
+            // warrenty_col.setAttribute("value","1 YEAR");
+            // warrenty_col.setAttribute("class","form-control");
+            // warrenty_col.setAttribute("id","warrenty" + count);
+            // warrenty_col.setAttribute("name","warrenty[]");
+            // warrenty_col.setAttribute("style","width:100%");
+            // newColumn2.appendChild(warrenty_col);
 
             //Column 3
             var newColumn3 = document.createElement("td");
@@ -451,7 +451,7 @@
             var tableBody = document.getElementById("product_table_body");
             newRow.appendChild(newColumn1);
             newRow.appendChild(new_product_hidden);
-            newRow.appendChild(newColumn2);
+            // newRow.appendChild(newColumn2);
             newRow.appendChild(newColumn3);
             newRow.appendChild(newColumn4);
             newRow.appendChild(newColumn5);
@@ -618,7 +618,7 @@
                                                         <select class="form-control select2" name="estimate_type" id='estimate_type'  onchange="show_div(this.value)">
                                                             <option selected>Select</option>
                                                             <option value="Product">Product</option>
-                                                            <option value="System">System</option>
+                                                            {{-- <option value="System">System</option> --}}
                                                         </select>
                                                         @error('estimate_type')
                                                             <span class="text-danger">{{$message}}</span>
@@ -675,7 +675,7 @@
                                                         <table class="table" id="productsTable" style="width: 100%">
                                                             <thead>
                                                                 <th class="w-25">PRODUCT</th>
-                                                                <th class="w-15">WARRENTY</th>
+                                                                {{-- <th class="w-15">WARRENTY</th> --}}
                                                                 <th class="w-15">UNIT PRICE</th>
                                                                 <th class="w-15">QTY</th>
                                                                 <th class="w-15">TAXABLE</th>
@@ -694,13 +694,13 @@
                                                                                 $products = DB::table('products')->get();
                                                                             @endphp
                                                                             @foreach ($products as $product)
-                                                                                <option value="{{ $product->id }}">[{{ $product->product_code }}] {{ $product->product_name }}</option>
+                                                                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </td>
                                                                     <td id="td_product_text0" style="display:none;">
                                                                     </td>
-                                                                    <td><input class="form-control" type="text" value="1 Year" id="warrenty0" name="warrenty[]" style="width: 100%"></td>
+                                                                    {{-- <td><input class="form-control" type="text" value="1 Year" id="warrenty0" name="warrenty[]" style="width: 100%"></td> --}}
                                                                     <td><input class="form-control" type="number" value="0" id="unitPrice0" name="unitPrice[]" step=".50" onkeyup="calculateTotal(0)" onchange="calculateTotal(0)" style="width: 100%"></td>
                                                                     <td><input class="form-control" id="productQty0" name="qty[]" type="number" step="1" value="1" onkeyup="calculateTotal(0)" min="0" onchange="calculateTotal(0)" style="width: 100%"></td>
                                                                     <td id="total0" class="Total" onchange="calculateGSTAndTotal(0)">₹0</td>
@@ -777,7 +777,7 @@
                                                                     </td>
                                                                     <td id="td_text0" style="display:none;">
                                                                     </td>
-                                                                    <td><input class="form-control" type="text" id="system_warrenty0" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td>
+                                                                    {{-- <td><input class="form-control" type="text" id="system_warrenty0" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td> --}}
                                                                     <td><input class="form-control" type="number" value="" id="system_unit_price0" name="system_unit_price[]" step=".50" onkeyup="system_calculateTotal(0)" onchange="system_calculateTotal(0)" style="width: 100%"></td>
                                                                     <td><input class="form-control" id="system_product_qty0" name="system_product_qty[]" type="number" step="1" value="1" onkeyup="system_calculateTotal(0)" min="0" onchange="system_calculateTotal(0)" style="width: 100%"></td>
                                                                     <td style="font-weight:bold" id="system_total0" class="System_total">0</td>
@@ -802,7 +802,7 @@
                                                                                         $products = DB::table('products')->where('category_id',$get_category->id)->get();
                                                                                     @endphp
                                                                                     @foreach ($products as $product)
-                                                                                        <option value="{{ $product->id }}">[{{ $product->product_code }}] {{ $product->product_name }}</option>
+                                                                                        <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                                                                                     @endforeach
                                                                             </select>
                                                                         @endif
@@ -810,7 +810,7 @@
                                                                     <td id="td_text1" style="display:none;">
 
                                                                     </td>
-                                                                    <td><input class="form-control" type="text" id="system_warrenty1" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td>
+                                                                    {{-- <td><input class="form-control" type="text" id="system_warrenty1" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td> --}}
                                                                     <td><input class="form-control" type="number" value="" id="system_unit_price1" name="system_unit_price[]" step=".50" onkeyup="system_calculateTotal(1)" onchange="system_calculateTotal(1)" style="width: 100%"></td>
                                                                     <td><input class="form-control" id="system_product_qty1" name="system_product_qty[]" type="number" step="1" value="1" onkeyup="system_calculateTotal(1)" min="0" onchange="system_calculateTotal(1)" style="width: 100%"></td>
                                                                     <td style="font-weight:bold" id="system_total1" class="System_total">0</td>
@@ -844,7 +844,7 @@
                                                                     <td id="td_text2" style="display:none;">
 
                                                                     </td>
-                                                                    <td><input class="form-control" type="text" id="system_warrenty2" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td>
+                                                                    {{-- <td><input class="form-control" type="text" id="system_warrenty2" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td> --}}
                                                                     <td><input class="form-control" type="number" value="" id="system_unit_price2" name="system_unit_price[]" step=".50" onkeyup="system_calculateTotal(2)" onchange="system_calculateTotal(2)" style="width: 100%"></td>
                                                                     <td><input class="form-control" id="system_product_qty2" name="system_product_qty[]" type="number" step=".50" value="1" onkeyup="system_calculateTotal(2)" min="0" onchange="system_calculateTotal(2)" style="width: 100%"></td>
                                                                     <td style="font-weight:bold" id="system_total2" class="System_total">0</td>
@@ -876,7 +876,7 @@
                                                                     <td id="td_text3" style="display:none;">
 
                                                                     </td>
-                                                                    <td><input class="form-control" type="text" id="system_warrenty3" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td>
+                                                                    {{-- <td><input class="form-control" type="text" id="system_warrenty3" name="system_warrenty[]" value="1 YEAR" style="width: 100%"></td> --}}
                                                                     <td><input class="form-control" type="number" value="" id="system_unit_price3" name="system_unit_price[]" step="1" onkeyup="system_calculateTotal(3)" onchange="system_calculateTotal(3)" style="width: 100%"></td>
                                                                     <td><input class="form-control" id="system_product_qty3" name="system_product_qty[]" type="number" step="1" value="1" onkeyup="system_calculateTotal(3)" min="0" onchange="system_calculateTotal(3)" style="width: 100%"></td>
                                                                     <td style="font-weight:bold" id="system_total3" class="System_total">0</td>

@@ -1,11 +1,11 @@
 <head>
     <meta charset="utf-8" />
-    <title>Admin | Techsoul Cyber Solutions</title>
+    <title>Biznx | Hostee</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Inventory for Techsoul Cyber Solutions" name="description" />
-    <meta content="Techsoul" name="author" />
+    <meta content="Hostee the planner" name="description" />
+    <meta content="Hostee" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}">
+    {{-- <link rel="shortcut icon" href="{{ asset('assets/images/favicon.png') }}"> --}}
     <!-- PWA  -->
     <meta name="theme-color" content="#6777ef"/>
     <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Daily Report - Techsoul Cyber Solution</title>
+    <title>Daily Report - Hostee the Planner</title>
 </head>
 <style type="text/css">
     body{
@@ -139,7 +139,7 @@
 </style>
 <body>
     <div class="head-title">
-        <h4 class="text-center" style="margin-top: -30px;">TECHSOUL DAILY ACCOUNT</h4>
+        <h4 class="text-center" style="margin-top: -30px;">HOSTEE DAILY ACCOUNT</h4>
     </div>
     <div class="add-detail mt-8">
         <div class="w-50 float-left mt-5">
@@ -509,7 +509,7 @@
                 </tr>
                 <tr class="text-center">
                     <td style="font-weight: 600px;text-transform:uppercase;">{{ $daybook_summary->added_by }}</td>
-                    <td style="font-weight: 600px;">{{ 'RAMIS ABDUL HAKEEM O' }}</td>
+                    <td style="font-weight: 600px;">{{ 'ADMIN' }}</td>
                     <td style="font-weight: 600px;"></td>
                 </tr>
             </table>

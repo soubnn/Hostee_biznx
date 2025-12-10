@@ -90,6 +90,7 @@ class SellerController extends Controller
     {
         $this->validate($request,[
             'seller_name' => 'required',
+            'seller_opening_balance' => 'required',
             'seller_mobile' => 'required|digits:10'
         ]);
         $seller = new Seller();

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Bank Entry Report - Techsoul Cyber Solutions</title>
+    <title>Bank Entry Report - Hostee the Planner</title>
 </head>
 <style type="text/css">
     body{
@@ -42,7 +42,7 @@
 </style>
 <body>
     <div class="head-title">
-        <h2 class="text-center">TECHSOUL CYBER SOLUTIONS</h2>
+        <h2 class="text-center">HOSTEE THE PLANNER</h2>
         <h5 class="text-center">Bank Entry Report</h5>
     </div>
     <div class="details">

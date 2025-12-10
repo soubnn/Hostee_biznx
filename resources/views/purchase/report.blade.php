@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Purchase GST Report - Techsoul Cyber Solutions</title>
+    <title>Purchase GST Report - Hostee the Planner</title>
 </head>
 <style type="text/css">
     body{
@@ -108,9 +108,9 @@
     <div>
         <h3 class="m-0 p-0 w-100" style="text-align: right">Purchase GST Report</h3>
         <h5 class="m-0 p-0 w-100" style="text-align: right">{{ carbon\Carbon::parse($fromDate)->format('d-m-Y') }} to {{ carbon\Carbon::parse($toDate)->format('d-m-Y') }}</h5>
-        <h2 class="m-0 p-0 w-50">TECHSOUL CYBER SOLUTIONS</h2>
-        <h5 class="m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5>
-        <h5 class="m-0 p-0">OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO</h5>
+        <h2 class="m-0 p-0 w-50">HOSTEE THE PLANNER</h2>
+        {{-- <h5 class="m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5> --}}
+        <h5 class="m-0 p-0">NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</h5>
     </div>
     <div style="width: 50%; text-align: right">
     </div>

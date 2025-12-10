@@ -1,7 +1,7 @@
 <table>
     <thead>
         <tr>
-            <th colspan="5" style="text-align:center;">TECHSOUL CYBER SOLUTIONS</th>
+            <th colspan="5" style="text-align:center;">HOSTEE THE PLANNER</th>
         </tr>
         <tr>
             <th colspan="5" style="text-align:center;">Bank Entry Report</th>

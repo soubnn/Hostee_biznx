@@ -46,8 +46,6 @@ class ProformaInvoiceController extends Controller
             'customer_phone' =>'nullable',
             'customer_name' => 'required',
             'invoice_number' => 'required'
-
-
         ]);
         $data = $request->all();
 
@@ -63,7 +61,7 @@ class ProformaInvoiceController extends Controller
 
 
         $estimate_product   =   $request->get('estimate_product');
-        $warrenty           =   $request->get('warrenty');
+        // $warrenty           =   $request->get('warrenty');
         $unit_price         =   $request->get('unitPrice');
         $qty                =   $request->get('qty');
         $product_tax        =   $request->get('product_tax');
@@ -80,7 +78,7 @@ class ProformaInvoiceController extends Controller
                 $datasave = [
                     'Proforma_id'       =>  $Proforma_id,
                     'product_name'      =>  $estimate_product[$i],
-                    'warrenty'          =>  $warrenty[$i],
+                    // 'warrenty'          =>  $warrenty[$i],
                     'unit_price'        =>  $unit_price[$i],
                     'product_tax'       =>  $product_tax[$i],
                     'qty'               =>  $qty[$i],
@@ -225,6 +223,6 @@ class ProformaInvoiceController extends Controller
         $grand_total_in_words = strtoupper(number_to_word($estimate->grand_total));
 
         $pdf = Pdf::loadView('proforma.invoice',compact('estimate_details','estimate','total_unit_price','total_qty','generated_by','grand_total_in_words','gst_count'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul Cyber Solutions - Proforma Invoice.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the Planner - Proforma Invoice.pdf',array("Attachment"=>false));
     }
 }

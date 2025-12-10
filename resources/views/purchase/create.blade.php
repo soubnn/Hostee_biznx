@@ -515,6 +515,7 @@
             else if(sellerOpeningBalance == '')
             {
                 sellerOpeningBalance = 0;
+                document.getElementById("sellerOpErrorMsg").style.display="block";
             }
             else if(sellerMobileNumber == '')
             {
@@ -524,6 +525,7 @@
             {
                 document.getElementById("sellerNameErrorMsg").style.display="none";
                 document.getElementById("sellerMobileErrorMsg").style.display="none";
+                document.getElementById("sellerOpErrorMsg").style.display="none";
 
                 $.ajaxSetup({
 					headers : {
@@ -603,6 +605,7 @@
                 }, 0);
             });
         });
+
         function category_modal(category){
             if(category == 'new category'){
                 $('#newCategoryModal').modal("toggle");
@@ -613,13 +616,10 @@
         {
             var category_name = $("#category_name").val();
 
-
-
             if(category_name == '')
             {
                 document.getElementById("category_name_error").style.display="block";
             }
-
 
             else
             {
@@ -647,6 +647,7 @@
                 });
             }
         }
+
         function enable_btn(){
 
             var invoice_no = document.getElementById('invoice_no').value;
@@ -749,7 +750,7 @@
                                                                 $sellers = DB::table('sellers')->get();
                                                             @endphp
                                                             @foreach ($sellers as $seller)
-                                                            <option value="{{ $seller->id }}">{{ $seller->seller_name }} , {{ $seller->seller_city }}</option>
+                                                            <option value="{{ $seller->id }}">{{ $seller->seller_name }} @if ($seller->seller_city) , {{ $seller->seller_city }}@endif</option>
                                                             @endforeach
                                                         </select>
                                                         <small class="text-danger" id="sellerError" style="display: none">Seller cannot be empty</small>
@@ -794,7 +795,7 @@
                                                                                 $products = DB::table('products')->get();
                                                                             @endphp
                                                                             @foreach ($products as $product)
-                                                                                <option value="{{ $product->id }}">[{{ $product->product_code }}] {{ $product->product_name }}</option>
+                                                                                <option value="{{ $product->id }}">{{ $product->product_name }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </td>
@@ -870,14 +871,15 @@
                                     <div class="form-group mb-3 col-md-6">
                                         <label class="col-form-label">Opening Balance</label>
                                         <input id="openingBalance" name="openingBalance" type="number" class="form-control" placeholder="" Value="0">
+                                        <small style="color: red; display: none" id="sellerOpErrorMsg" >* Opening balance cannot be empty</small>
                                     </div>
                                     <div class="form-group mb-3 col-md-6">
                                         <label for="sellerPhone" class="col-form-label">Phone</label>
-                                        <input id="sellerPhone" name="sellerPhone" type="text" class="form-control validate" placeholder="" Value="">
+                                        <input id="sellerPhone" name="sellerPhone" type="text" class="form-control validate" placeholder="">
                                     </div>
                                     <div class="form-group mb-3 col-md-6">
                                         <label for="sellerMobile" class="col-form-label">Mobile</label>
-                                        <input id="sellerMobile" name="sellerMobile" type="text" class="form-control validate" placeholder="" Value="">
+                                        <input id="sellerMobile" name="sellerMobile" type="text" class="form-control validate" placeholder="">
                                         <small style="color: red; display: none" id="sellerMobileErrorMsg" >* Seller mobile cannot be empty</small>
                                     </div>
                                     <div class="form-group mb-3 col-md-6">
@@ -1010,11 +1012,6 @@
                             <div class="modal-body">
                                 <form id="productRegistrationForm" enctype="multipart/form-data" method="POST" action="javascript:void(0)">
                                     <div class="row">
-                                        <div class="form-group mb-3 col-md-6">
-                                            <label class="col-form-label">Product Code *</label>
-                                            <input class="form-control" id="product_code" name="product_code" type="text" required>
-                                            <small id="productCodeError" style="display:none" class="text-danger">Product Code cannot be empty</small>
-                                        </div>
                                         <div class="form-group mb-3 col-md-6">
                                             <label class="col-form-label">Product Name *</label>
                                             <input id="product_name" name="product_name" type="text" class="form-control" placeholder="" Value="">

@@ -31,7 +31,6 @@ class ProductController extends Controller
     public function addProduct(Request $request)
     {
         $data = $request->all();
-        $data['product_code'] = strtoupper($data['product_code']);
         $data['product_name'] = strtoupper($data['product_name']);
         $data['date']         = Carbon::now();
         $data['add_by']       = Auth::user()->name;
@@ -410,18 +409,19 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'category_id' => 'required',
+            'category_id' => 'nullable',
             'product_name' => 'required',
-            'product_code' => 'required',
             'hsn_code' => 'required',
+            'product_price' => 'required',
+            'product_schedule' => 'required',
             'image' => 'nullable'
-
         ]);
+
         $data = $request->all();
-        $data['product_code'] = strtoupper($data['product_code']);
         $data['product_name'] = strtoupper($data['product_name']);
         $data['date']         = Carbon::now();
         $data['add_by']       = Auth::user()->name;
+
         if($request->product_image)
         {
             $product_image = $request->file('product_image');
@@ -431,7 +431,9 @@ class ProductController extends Controller
             $path = $product_image->save(storage_path('app/public/products/'.$image_name));
             $data['product_image'] = $image_name;
         }
+
         $createProductStatus = Product::create($data);
+
         if($createProductStatus)
         {
             Toastr::success('Product Added Successfully','success',["positionClass" => "toast-bottom-right"]);

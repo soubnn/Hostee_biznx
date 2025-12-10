@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-        
+
         <meta charset="utf-8" />
-        <title>Maintenance Page | Biznx From Techsoul</title>
+        <title>Maintenance Page | Biznx From Hostee the Planner</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta content="Inventory by Techsoul" name="description" />
-        <meta content="Techsoul" name="author" />
+        <meta content="Inventory by Hostee the Planner" name="description" />
+        <meta content="Hostee the Planner" name="author" />
         <!-- App favicon -->
         <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }}">
 
@@ -35,7 +35,7 @@
                                     <img src="{{ asset('assets/images/logo-light.png') }}" alt="" height="20" class="auth-logo-light mx-auto">
                                 </a>
                             </div>
-                            
+
 
                             <div class="row justify-content-center">
                                 <div class="col-sm-4">
@@ -74,8 +74,9 @@
                                             <h5 class="font-size-15 text-uppercase">
                                                 Do you need Support?</h5>
                                             <p class="text-muted mb-0">Contact us on <a
-                                                        href="mailto:techsoultechnologies@gmail.com"
-                                                        class="text-decoration-underline">techsoultechnologies@gmail.com</a></p>
+                                                        href="mailto:technologies@gmail.com"
+                                                        class="text-decoration-underline">techsoultechnologies@gmail.com</a>
+                                                    </p>
                                         </div>
                                     </div>
                                 </div>
@@ -87,7 +88,7 @@
             </div>
         </section>
 
-        
+
         <!-- JAVASCRIPT -->
         <script src="{{ asset('assets/libs/jquery/jquery.min.js') }}"></script>
         <script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

@@ -219,7 +219,7 @@ class ConsoulidateController extends Controller
         $getSoldItems = array();
         foreach($getConsoulidate as $item)
         {
-            $unitPrice = number_format((float) $salesDetails->grand_total / (1 + $item->gst / 100), 2, '.', '');  
+            $unitPrice = number_format((float) $salesDetails->grand_total / (1 + $item->gst / 100), 2, '.', '');
             $unitQty = 1;
             $gstPercent = number_format((float) $item->gst , 2, '.', '');
 
@@ -229,7 +229,7 @@ class ConsoulidateController extends Controller
             $gst_amount += $gst;
             $netTotal += $total;
             $getSoldItems[] = [
-                'product_id' => "159", 
+                'product_id' => "159",
                 'serial_number' => $item->description,
                 'product_quantity' => "1",
                 'unit_price' => $unitPrice,
@@ -264,7 +264,7 @@ class ConsoulidateController extends Controller
         // return $completeReportDetails;
         $pdf = Pdf::loadView('consolidate.invoice',compact('completeReportDetails'));
 
-        return $pdf->stream($salesDetails->invoice_number.'-Techsoul Cyber Solution.pdf',array("Attachment"=>false));
+        return $pdf->stream($salesDetails->invoice_number.'-Hostee the Planner.pdf',array("Attachment"=>false));
     }
     public function WhatsappConsolidateInvoice($id)
     {
@@ -388,7 +388,7 @@ class ConsoulidateController extends Controller
         }
         $completeReportDetails['bill_generated_staff'] = $bill_generated;
         $completeReportDetails['sales_id'] = $id;
-        $fileName = "Techsoul Cyber Solutions - #" . $salesDetails->invoice_number. ".pdf";
+        $fileName = "Hostee the Planner - #" . $salesDetails->invoice_number. ".pdf";
         $pdf = Pdf::loadView('consolidate.userInvoice',compact('completeReportDetails'));
         return $pdf->download($fileName,array("Attachment"=>false));
     }

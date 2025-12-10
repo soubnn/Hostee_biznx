@@ -71,7 +71,7 @@ class ReportController extends Controller
             return $b['amount'] <=> $a['amount'];
         });
         $pdf = Pdf::loadView('reports.profit_report',compact('sales_details','search_date','total_expense','total_expense_category','total_deposit_category','expense_categroy_expenses','deposit_categroy_expenses'))->setPaper('a4', 'landscape');
-        return $pdf->stream('Techsoul Cyber Solutions - Profit Summary '.$search_date.'.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the Planner - Profit Summary '.$search_date.'.pdf',array("Attachment"=>false));
     }
     public function generate_profit_summary_date(Request $request){
         $startDate = Carbon::parse($request->start_date)->format('Y-m-d');
@@ -128,7 +128,7 @@ class ReportController extends Controller
             return $b['amount'] <=> $a['amount'];
         });
         $pdf = Pdf::loadView('reports.profit_report',compact('sales_details','search_date','total_expense','total_expense_category','total_deposit_category','expense_categroy_expenses','deposit_categroy_expenses'))->setPaper('a4', 'landscape');
-        return $pdf->stream('Techsoul Cyber Solutions - Profit Summary From :'.$start_date.' To : '.$end_date.'.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the Planner - Profit Summary From :'.$start_date.' To : '.$end_date.'.pdf',array("Attachment"=>false));
     }
     public function generate_monthly_summary(Request $request){
         $startDate = Carbon::parse($request->summary_date)->format('Y-m-d');
@@ -217,7 +217,7 @@ class ReportController extends Controller
                     $total_purchase_amount = $total_purchase_amount+$purchase_amount;
                     $total_purchase_amount = number_format($total_purchase_amount, 2, '.', '');
                     $total_profit_amount = $total_profit_amount+$profit;
-                    
+
                     $total_profit = $profit;
                 }
                 $total_amount_to_techsoul = $total_amount_to_techsoul+$total_profit;
@@ -225,6 +225,6 @@ class ReportController extends Controller
         }
 
         $pdf = Pdf::loadView('reports.monthly_summary_pdf',compact('search_date','total_expense','total_bank_deposit','total_amount_to_sellers','total_amount_to_salary','total_amount_to_incentive','total_of_top_expense','total_bill_amount','total_rate_of_item','total_purchase_amount','total_profit_amount','total_service_charge','total_amount_to_techsoul','total_sales_amount','total_job_amount','total_income'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul Cyber Solutions - Monthly Summary '.$search_date.'.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the Planner - Monthly Summary '.$search_date.'.pdf',array("Attachment"=>false));
     }
 }

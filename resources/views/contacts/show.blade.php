@@ -22,36 +22,27 @@
 
                                         <div class="table-responsive">
                                             <table class="table table-bordered table-striped table-nowrap mb-0" style="text-transform: uppercase;">
-
                                                 <tbody>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Enquiry Date</th>
-                                                    <td colspan="6">{{ Carbon\carbon::parse($contact->date)->format('d-m-Y') }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Name</th>
-                                                    <td colspan="6">{{ $contact->name }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Company</th>
-                                                    <td colspan="6">{{ $contact->company }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Contact</th>
-                                                    <td colspan="6">{{ $contact->contact }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Email</th>
-                                                    <td colspan="6" style="text-transform: lowercase;">{{ $contact->email }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Subject</th>
-                                                    <td colspan="6">{{ $contact->subject }}</td>
-                                                </tr>
-                                                <tr>
-                                                    <th class="text-nowrap" scope="row">Message</th>
-                                                    <td colspan="6" style="white-space: normal;">{{ $contact->message }}</td>
-                                                </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">Enquiry Date</th>
+                                                        <td colspan="6">{{ Carbon\carbon::parse($contact->date)->format('d-m-Y') }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">Name</th>
+                                                        <td colspan="6">{{ $contact->name }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">Contact</th>
+                                                        <td colspan="6">{{ $contact->contact }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">Email</th>
+                                                        <td colspan="6" style="text-transform: lowercase;">{{ $contact->email }}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="text-nowrap" scope="row">Message</th>
+                                                        <td colspan="6" style="white-space: normal;">{{ $contact->message }}</td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>

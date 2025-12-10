@@ -325,7 +325,7 @@ class AdminController extends Controller
         }
         $numberOfJobs = DB::table('consignments')->whereBetween('date',[$startDate,$endDate])->count();
         $pdf = Pdf::loadView('reports.monthly_report',compact('searchDate','totalJobAmount','totalSalesAmount','jobAmount','salesAmount','totalExpenseInPeriod','topExpenses','total5ExpenseAmount','numberOfJobs','totalIncomeInPeriod'))->setPaper('a4', 'portrait');
-        return $pdf->stream('Techsoul Cyber Solutions - Monthly Report '.$searchDate.'.pdf',array("Attachment"=>false));
+        return $pdf->stream('Hostee the planner - Monthly Report '.$searchDate.'.pdf',array("Attachment"=>false));
     }
 
     public function updateKeywords(Request $request)

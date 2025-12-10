@@ -72,15 +72,16 @@ body .image147 img {width: 118px; height: auto;}
                 <thead>
                 <tr>
                   <td align="center" width="60%" style="padding: 0;">
-                    <img src="{{ asset('assets/images/invoice/logo.png') }}" width="320" style="width: 320px;margin: auto;">
-                    <p style="font-size: 11px;font-weight: 600;margin: 0;font-family: Arial, Helvetica, sans-serif;">
-                      GSTIN : 32ADNPO8730B1ZO<br />
-                      OPP.TRUST HOSPITAL ROOM NO: 20/792, RM-VENTURES, RANDATHANI.PO<br />
-                      MALAPPURAM-KERALA Pin : 676510 Tel: +918891989842<br />
-                      email: service@teamtechsoul.com<br />
-                      www.teamtechsoul.com
+                    <img src="{{ public_path('assets/images/invoice/logo.png') }}" width="320"
+                        style="width: 290px; margin: auto;">
+                    <p
+                        style="font-size: 11px; font-weight: 600; margin: 10px 0 0 0; font-family: Arial, Helvetica, sans-serif;">
+                        {{-- GSTIN : 32ADNPO8730B1ZO<br /> --}}
+                        NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD<br />
+                        MALAPPURAM-KERALA Pin : 676503 Tel: +91 85929 24592 /<br /> +91 85929 24692
+                        email: hosteetheplanner@gmail.com<br />
+                        www.hosteetheplanner.in
                     </p>
-
                   </td>
                   <td width="40%" valign="top" style="padding: 0;">
                     <table width="100%" border="0" cellpadding="0" cellspacing="0">
@@ -334,11 +335,7 @@ body .image147 img {width: 118px; height: auto;}
           </tr>
           <tr>
             <td style="font-size: 11px;padding: 8px 0;">
-              <b>TERMS AND CONDITIONS : (1)</b> There will be no warranty or replacement for physical or external damages like:- lightning, mishandling, electric short circuit, warranty seal broken,
-              cover broken or damages caused by courier service. or Without proper Invoice <b>(2)</b> After the payment due date, fine at 24% per month will be charged on the amount overdue. <b>(3)</b>
-              RS 500 will be charged per cheque, if it bounced. <b>(4)</b> The cheque has to be given within 5 days of purchase. If the cheque is not given, the account will be blocked by the account
-              section. <b>(5)</b> Items sold will not be taken back or exchanged. <b>(6)</b> It is the responsibility of the customer to check whether the items are damaged or not. <b>(7)</b> Only the warranty as per
-              manufactures warranty policy will be applicable for the items sold. <b>(8)</b> There is no guarantee for Data
+              <b>TERMS AND CONDITIONS : (A)</b> The advance payment will be 50% of total development cost. <b>(B)</b>Unless otherwise specified, payments are due thirty (30) days after the date of invoice.<b>(C)</b> Any unpaid due amounts will be subject to penalty charges at 1.5% per month, or, if less, the maximum rate allowed by law. <b>(D)</b> Seller shall not be liable under any warranty stated herein if the purchase price has not been paid in full. <b>(E)</b> Seller may offset amounts Seller owes to Buyer against amounts Buyer owes to Seller, whether under the same or a different Purchase Order.
             </td>
           </tr>
         <tr>
@@ -354,7 +351,7 @@ body .image147 img {width: 118px; height: auto;}
               <tr>
                 <td colspan="2">
                   @php
-                  $url = "https://techsoul.biznx.in/index.php/userInvoice/" . $completeReportDetails['sales_id'] ;
+                  $url = "https://hostee.biznx.in/index.php/userInvoice/" . $completeReportDetails['sales_id'] ;
                   @endphp
                   {{--  <!--<img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->generate($url)) !!} " width="60" height="60" style="width:60px;height:60px;margin: 0;">-->  --}}
                 </td>
