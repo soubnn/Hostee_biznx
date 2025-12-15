@@ -127,7 +127,7 @@
                             </div>
                         </div> --}}
                     </div>
-                    {{-- <div class="col-xl-8">
+                    <div class="col-xl-8">
                     @if($profile->role!="intern")
                         <div class="row">
                             <div class="col-2">
@@ -248,7 +248,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
             @endif

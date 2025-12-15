@@ -6,6 +6,7 @@ use App\Exports\EventBookingsExport;
 use App\Models\UpcomingEvent;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UpcomingEventController extends Controller

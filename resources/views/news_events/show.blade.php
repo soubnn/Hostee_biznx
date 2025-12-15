@@ -11,7 +11,7 @@
                         <h4 class="mb-sm-0 font-size-18">News Event Details</h4>
                         <div class="page-title-right">
                             <ol class="breadcrumb m-0">
-                                <li class="breadcrumb-item"><a href="{{ route('news_events.index') }}">News Events</a></li>
+                                <li><a href="{{ route('news_events.index') }}">News Events</a></li>
                                 <li class="breadcrumb-item active">Event Details</li>
                             </ol>
                         </div>
@@ -43,10 +43,10 @@
                                     <td>{{ $event->description }}</td>
                                 </tr>
                                 @if($event->photo)
-                                <tr>
-                                    <th>Photo:</th>
-                                    <td><img src="{{ asset('storage/news_events/' . $event->photo) }}" class="img-fluid" alt="Event Photo"></td>
-                                </tr>
+                                    <tr>
+                                        <th>Photo:</th>
+                                        <td><img src="{{ asset('storage/news_events/' . $event->photo) }}" class="img-fluid" alt="Event Photo"></td>
+                                    </tr>
                                 @endif
                             </table>
                             <div class="mt-4">

@@ -18,7 +18,7 @@ class EventBookingsExport implements FromCollection, WithHeadings
     public function collection()
     {
         return EventBooking::where('event_id', $this->event_id)
-            ->select('name', 'place', 'whatsapp_no', 'phone', 'created_at')
+            ->select('name', 'place', 'whatsapp_no', 'phone')
             ->get();
     }
 
@@ -28,8 +28,7 @@ class EventBookingsExport implements FromCollection, WithHeadings
             'Name',
             'Place',
             'Whatsapp No',
-            'Phone',
-            'Booked At'
+            'Phone'
         ];
     }
 }
