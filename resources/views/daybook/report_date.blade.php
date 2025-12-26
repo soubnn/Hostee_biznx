@@ -69,18 +69,18 @@
                                                 </tr>
                                                 @if ($status == 'empty')
                                                     <tr>
-                                                        <td class="text-danger">{{ $prev_closing_balance->cash_balance }}
+                                                        <td class="text-danger">{{ $prev_closing_balance->cash_balance ?? 0 }}
                                                         </td>
-                                                        <td class="text-danger">{{ $prev_closing_balance->account_balance }}
+                                                        <td class="text-danger">{{ $prev_closing_balance->account_balance ?? 0 }}
                                                         </td>
                                                         {{--  <td class="text-danger">{{ $prev_closing_balance->ledger_balance }}</td>  --}}
                                                     </tr>
                                                     <input type="hidden" name="opening_cash"
-                                                        value="{{ $prev_closing_balance->cash_balance }}">
+                                                        value="{{ $prev_closing_balance->cash_balance ?? 0 }}">
                                                     <input type="hidden" name="opening_account"
-                                                        value="{{ $prev_closing_balance->account_balance }}">
+                                                        value="{{ $prev_closing_balance->account_balance ?? 0 }}">
                                                     <input type="hidden" name="opening_ledger"
-                                                        value="{{ $prev_closing_balance->ledger_balance }}">
+                                                        value="{{ $prev_closing_balance->ledger_balance ?? 0 }}">
                                                 @elseif($status == 'not_empty')
                                                     <tr>
                                                         <td class="text-danger">{{ $daybook_summary->opening_cash }}</td>
@@ -107,13 +107,6 @@
                                             <tr>
                                                 <th colspan="2">Income</th>
                                                 <th colspan="2">Expense</th>
-                                                <th>Service&nbsp;
-                                                    {{--  @if ($status == 'empty')
-                                                            <span class="text-primary">
-                                                                <i class="fa fa-plus-circle" onclick="add_row()"></i>
-                                                            </span>
-                                                        @endif  --}}
-                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody id="t_body">
@@ -368,39 +361,6 @@
                                                         @endforeach
                                                     </table>
                                                 </td>
-                                                <td>
-                                                    <table class="table table-bordered table-striped table-nowrap mb-0">
-                                                        <tr>
-                                                            <th>Name of service</th>
-                                                        </tr>
-                                                        <tbody id="service_table">
-                                                            {{--  @if ($status == 'empty')
-                                                                    <tr>
-                                                                        <td>
-                                                                            <input type="text" name="daybook_service[]" class="form-control">
-                                                                        </td>
-                                                                    </tr>
-                                                                @elseif ($status == 'not_empty')  --}}
-                                                            @foreach ($daybook_services as $service)
-                                                                <tr>
-                                                                    <td style="white-space: normal">
-                                                                        @php
-                                                                            $customer = DB::table('customers')
-                                                                                ->where('id', $service->daybook_service)
-                                                                                ->first();
-                                                                        @endphp
-                                                                        @if ($customer)
-                                                                            {{ $customer->name }} - {{ $customer->place }}
-                                                                        @else
-                                                                            {{ $service->daybook_service }}
-                                                                        @endif
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
-                                                            {{--  @endif  --}}
-                                                        </tbody>
-                                                    </table>
-                                                </td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
@@ -409,7 +369,6 @@
                                                 <th class="text-danger">{{ $total_income }}</th>
                                                 <th>Total</th>
                                                 <th class="text-danger">{{ $total_expense }}</th>
-                                                <th></th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -448,18 +407,18 @@
                                                 </tr>
                                                 @if ($status == 'empty')
                                                     <tr>
-                                                        <td class="text-danger">{{ $cur_closing_balance->cash_balance }}
+                                                        <td class="text-danger">{{ $cur_closing_balance->cash_balance ?? 0 }}
                                                         </td>
-                                                        <td class="text-danger">{{ $cur_closing_balance->account_balance }}
+                                                        <td class="text-danger">{{ $cur_closing_balance->account_balance ?? 0 }}
                                                         </td>
                                                         {{--  <td class="text-danger">{{ $cur_closing_balance->ledger_balance }}</td>  --}}
                                                     </tr>
                                                     <input type="hidden" name="closing_cash"
-                                                        value="{{ $cur_closing_balance->cash_balance }}">
+                                                        value="{{ $cur_closing_balance->cash_balance ?? 0 }}">
                                                     <input type="hidden" name="closing_account"
-                                                        value="{{ $cur_closing_balance->account_balance }}">
+                                                        value="{{ $cur_closing_balance->account_balance ?? 0 }}">
                                                     <input type="hidden" name="closing_ledger"
-                                                        value="{{ $cur_closing_balance->ledger_balance }}">
+                                                        value="{{ $cur_closing_balance->ledger_balance ?? 0 }}">
                                                 @elseif ($status == 'not_empty')
                                                     <tr>
                                                         <td class="text-danger">{{ $daybook_summary->closing_cash }}</td>

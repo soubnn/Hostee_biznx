@@ -49,7 +49,7 @@
                                     <a href="{{ route('login') }}" class="auth-logo-light">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle bg-light">
-                                                <img src="{{ asset('assets/images/logo_sm.png') }}" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ asset('assets/images/hostee_H.png') }}" alt="" class="rounded-circle" height="34">
                                             </span>
                                         </div>
                                     </a>
@@ -57,7 +57,7 @@
                                     <a href="{{ route('login') }}" class="auth-logo-dark">
                                         <div class="avatar-md profile-user-wid mb-4">
                                             <span class="avatar-title rounded-circle" style="background-color:#556EE6;">
-                                                <img src="{{ asset('assets/images/logo_sm.png') }}" alt="" class="rounded-circle" height="34">
+                                                <img src="{{ asset('assets/images/hostee_H.png') }}" alt="" class="rounded-circle" height="40">
                                             </span>
                                         </div>
                                     </a>

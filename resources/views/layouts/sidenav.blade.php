@@ -134,9 +134,12 @@
                                 @if ($profile->role == 'admin' || $profile->role == 'super-admin')
                                     <li><a href="{{ route('daybook.view_personal') }}" key="t-task-list">View
                                             Personal Report</a></li>
-                                @endif
-                                <li><a href="{{ url('date_report') }}?report_date={{ \App\Models\DaybookBalance::report_date() }}"
-                                        key="t-task-list">Daily Report</a></li> --}}
+                                @endif --}}
+                                <li>
+                                    <a href="{{ url('date_report') }}?report_date={{ \App\Models\DaybookBalance::report_date() }}"
+                                        key="t-task-list">Daily Report
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endif

@@ -229,7 +229,7 @@
                                                                 style="font-size: 12px;padding-bottom: 10px;">
                                                                 <span style="display: block;">Customer Details</span>
                                                                 <strong style="display: block;">
-                                                                    {{ $estimate->customer_name }}<br>{{ $estimate->customer_phone }} <br>
+                                                                    {{ $customer_name }}<br>{{ $estimate->customer_phone }} <br>
                                                                 </strong>
                                                                 @if($estimate->gst_available == 'Yes')
                                                                     <p style="margin: 0;padding: 0;"><b>GSTIN : <span>{{ $estimate->gst_number }}</span></b></p>

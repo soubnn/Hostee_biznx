@@ -108,16 +108,16 @@
                                                                             <i class="mdi mdi-printer font-size-18"></i>
                                                                         </a>
                                                                     @endif
-                                                                    <a href="#!">
+                                                                    {{-- <a href="#!">
                                                                         <button class="btn btn-light btn-sm text-success" onclick="window.location.href='{{ route('WhatsappInvoice', $sale->id) }}'">
                                                                             <i class="mdi mdi-whatsapp font-size-18"></i>
                                                                         </button>
-                                                                    </a>
-                                                                    {{-- <a href="#!">
+                                                                    </a> --}}
+                                                                    <a href="#!">
                                                                         <button class="btn btn-light btn-sm waves-effect text-success" title="Whatsapp"  onclick="whatsappInvoice({{ $sale->id }})">
                                                                             <i class="mdi mdi-whatsapp font-size-18"></i>
                                                                         </button>
-                                                                    </a> --}}
+                                                                    </a>
                                                                 </div>
                                                                 <input type="hidden" id="hiddenURL_{{ $sale->id }}" value="https://api.whatsapp.com/send/?phone=91{{ $sale->customer_detail->mobile }}&text={{ $sale->message }}">
                                                                 @if (isset($sale->consolidate_bill))

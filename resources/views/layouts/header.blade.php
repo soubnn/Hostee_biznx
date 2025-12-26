@@ -6,10 +6,10 @@
 
                 <a href="{{ route('dashboard') }}" class="logo logo-light">
                     <span class="logo-sm">
-                        <!--<img src="{{ asset('assets/images/logo_sm.png') }}" alt="" height="50" style="margin-left: -40px;">-->
+                        <img src="{{ asset('assets/images/hostee_H.png') }}" alt="" height="50" style="margin-left: -10px;">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ asset('assets/images/biznx_white.png') }}" alt="logo" height="75" style="margin-left: -25px;">
+                        <img src="{{ asset('assets/images/hostee_white.png') }}" alt="logo" height="60" style="margin-left: -25px;">
                     </span>
                 </a>
             </div>

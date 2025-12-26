@@ -83,7 +83,6 @@ class DirectSalesController extends Controller
         return view('direct_sales.index', compact('sales'));
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -1145,120 +1144,6 @@ class DirectSalesController extends Controller
     //         return Excel::download(new CustomerExport($tableData), $startDate.' to '.$endDate.' - '.' Report.csv');
     //     }
     // }
-    // public function WhatsappInvoice($id)
-    // {
-    //     function number_to_word1(float $number)
-    //     {
-    //         $no = floor($number);
-    //         $decimal = round($number - $no, 2) * 100;
-    //         $decimal_part = $decimal;
-    //         $hundred = null;
-    //         $hundreds = null;
-    //         $digits_length = strlen($no);
-    //         $decimal_length = strlen($decimal);
-    //         $i = 0;
-    //         $str = array();
-    //         $str2 = array();
-    //         $words = array(0 => '', 1 => 'one', 2 => 'two',
-    //             3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six',
-    //             7 => 'seven', 8 => 'eight', 9 => 'nine',
-    //             10 => 'ten', 11 => 'eleven', 12 => 'twelve',
-    //             13 => 'thirteen', 14 => 'fourteen', 15 => 'fifteen',
-    //             16 => 'sixteen', 17 => 'seventeen', 18 => 'eighteen',
-    //             19 => 'nineteen', 20 => 'twenty', 30 => 'thirty',
-    //             40 => 'forty', 50 => 'fifty', 60 => 'sixty',
-    //             70 => 'seventy', 80 => 'eighty', 90 => 'ninety');
-    //         $digits = array('', 'hundred','thousand','lakh', 'crore');
-
-    //         while( $i < $digits_length ) {
-    //             $divider = ($i == 2) ? 10 : 100;
-    //             $number = floor($no % $divider);
-    //             $no = floor($no / $divider);
-    //             $i += $divider == 10 ? 1 : 2;
-    //             if ($number) {
-    //                 $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
-    //                 $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
-    //                 $str [] = ($number < 21) ? $words[$number].' '. $digits[$counter]. $plural.' '.$hundred:$words[floor($number / 10) * 10].' '.$words[$number % 10]. ' '.$digits[$counter].$plural.' '.$hundred;
-    //             } else $str[] = null;
-    //         }
-
-    //         $d = 0;
-    //         while( $d < $decimal_length ) {
-    //             $divider = ($d == 2) ? 10 : 100;
-    //             $decimal_number = floor($decimal % $divider);
-    //             $decimal = floor($decimal / $divider);
-    //             $d += $divider == 10 ? 1 : 2;
-    //             if ($decimal_number) {
-    //                 $plurals = (($counter = count($str2)) && $decimal_number > 9) ? 's' : null;
-    //                 $hundreds = ($counter == 1 && $str2[0]) ? ' and ' : null;
-    //                 @$str2 [] = ($decimal_number < 21) ? $words[$decimal_number].' '. $digits[$decimal_number]. $plural.' '.$hundred:$words[floor($decimal_number / 10) * 10].' '.$words[$decimal_number % 10]. ' '.$digits[$counter].$plural.' '.$hundred;
-    //             } else $str2[] = null;
-    //         }
-
-    //         $Rupees = implode('', array_reverse($str));
-    //         $paise = implode('', array_reverse($str2));
-    //         $paise = ($decimal_part > 0) ? $paise . ' Paise' : '';
-    //         return ($Rupees ? $Rupees . 'Rupees ' : '') . $paise;
-    //     }
-
-    //     $salesDetails = DB::table('direct_sales')->where('id',$id)->first();
-    //     $completeReportDetails = array();
-    //     $qtyTotal = DB::table('sales_items')->where('sales_id',$id)->sum('product_quantity');
-    //     $completeReportDetails['invoice_number'] = $salesDetails->invoice_number;
-    //     $completeReportDetails['invoice_date'] = Carbon::createFromFormat('Y-m-d',$salesDetails->sales_date)->format('d-m-Y');
-    //     $get_customer = DB::table('customers')->where('id',$salesDetails->customer_id)->first();
-    //     $completeReportDetails['customer_name'] = $get_customer->name;
-    //     $completeReportDetails['pay_method'] = $salesDetails->pay_method;
-    //     $completeReportDetails['customer_place'] = $get_customer->place;
-    //     $getInvoice = Invoice::where('sales_id',$id)->latest('id')->first();
-    //     if($getInvoice->is_gst == "Yes")
-    //     {
-    //         $completeReportDetails['gst_number'] = $salesDetails->gst_number;
-    //     }
-    //     else
-    //     {
-    //         $completeReportDetails['gst_number'] = "";
-    //     }
-    //     $completeReportDetails['qty_total'] = $qtyTotal;
-    //     $getSoldItems = DB::table('sales_items')->where('sales_id',$id)->get();
-    //     $gst_amount = 0.00;
-    //     $netTotal = 0.00;
-    //     foreach($getSoldItems as $item)
-    //     {
-    //         $unitPrice = number_format((float) $item->unit_price, 2, '.', '');
-    //         $unitQty = (float) $item->product_quantity;
-    //         $gstPercent = (float) $item->gst_percent;
-    //         $total = $unitPrice * $unitQty;
-    //         $gst = ($unitPrice * $unitQty * $gstPercent) / 100 ;
-    //         $gst_amount += $gst;
-    //         $netTotal += $total;
-    //     }
-    //     $completeReportDetails['net_total'] = number_format((float)$netTotal, 2, '.', '');
-    //     $discount = number_format((float) $salesDetails->discount, 2, '.', '');
-    //     $grandTotal = number_format((float) $salesDetails->grand_total, 2, '.', '');
-    //     $discounted_total = $grandTotal-$salesDetails->discount;
-    //     $completeReportDetails['gst_amount'] = $gst_amount;
-    //     $completeReportDetails['discount'] = $salesDetails->discount;
-    //     $completeReportDetails['grand_total'] = $grandTotal;
-    //     $completeReportDetails['discounted_total'] = $discounted_total;
-    //     $grand_total_in_words = number_to_word1($discounted_total);
-    //     $completeReportDetails['grand_total_words'] = strtoupper($grand_total_in_words);
-    //     $completeReportDetails['sales_items'] = $getSoldItems;
-    //     $get_sales_staff = DB::table('staffs')->where('id',$salesDetails->sales_staff)->first();
-    //     $completeReportDetails['sales_staff'] = $get_sales_staff->staff_name;
-    //     if(Auth::user())
-    //     {
-    //         $completeReportDetails['bill_generated_staff'] = strtoupper(Auth::user()->name);
-    //     }
-    //     else
-    //     {
-    //         $completeReportDetails['bill_generated_staff'] = $get_sales_staff->staff_name;
-    //     }
-    //     $completeReportDetails['sales_id'] = $id;
-    //     $fileName = "Hostee the Planner - #" . $salesDetails->invoice_number. ".pdf";
-    //     $pdf = Pdf::loadView('invoices.userInvoice',compact('completeReportDetails'));
-    //     return $pdf->download($fileName,array("Attachment"=>false));
-    // }
     public function WhatsappInvoice($id)
     {
         function number_to_word1(float $number)
@@ -1266,117 +1151,232 @@ class DirectSalesController extends Controller
             $no = floor($number);
             $decimal = round($number - $no, 2) * 100;
             $decimal_part = $decimal;
-            $words = [
-                0 => '', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six',
-                7 => 'seven', 8 => 'eight', 9 => 'nine', 10 => 'ten', 11 => 'eleven', 12 => 'twelve',
-                13 => 'thirteen', 14 => 'fourteen', 15 => 'fifteen', 16 => 'sixteen', 17 => 'seventeen',
-                18 => 'eighteen', 19 => 'nineteen', 20 => 'twenty', 30 => 'thirty', 40 => 'forty',
-                50 => 'fifty', 60 => 'sixty', 70 => 'seventy', 80 => 'eighty', 90 => 'ninety'
-            ];
-            $digits = ['', 'hundred', 'thousand', 'lakh', 'crore'];
-
-            $str = [];
+            $hundred = null;
+            $hundreds = null;
+            $digits_length = strlen($no);
+            $decimal_length = strlen($decimal);
             $i = 0;
-            while ($no > 0) {
+            $str = array();
+            $str2 = array();
+            $words = array(0 => '', 1 => 'one', 2 => 'two',
+                3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six',
+                7 => 'seven', 8 => 'eight', 9 => 'nine',
+                10 => 'ten', 11 => 'eleven', 12 => 'twelve',
+                13 => 'thirteen', 14 => 'fourteen', 15 => 'fifteen',
+                16 => 'sixteen', 17 => 'seventeen', 18 => 'eighteen',
+                19 => 'nineteen', 20 => 'twenty', 30 => 'thirty',
+                40 => 'forty', 50 => 'fifty', 60 => 'sixty',
+                70 => 'seventy', 80 => 'eighty', 90 => 'ninety');
+            $digits = array('', 'hundred','thousand','lakh', 'crore');
+
+            while( $i < $digits_length ) {
                 $divider = ($i == 2) ? 10 : 100;
-                $number = $no % $divider;
+                $number = floor($no % $divider);
                 $no = floor($no / $divider);
-                $i += ($divider == 10) ? 1 : 2;
+                $i += $divider == 10 ? 1 : 2;
                 if ($number) {
-                    $counter = count($str);
-                    $hundred = ($counter == 1 && $str[0]) ? ' and ' : '';
-                    $str[] = ($number < 21)
-                        ? $words[$number] . ' ' . $digits[$counter] . ' ' . $hundred
-                        : $words[floor($number / 10) * 10] . ' ' . $words[$number % 10] . ' ' . $digits[$counter] . ' ' . $hundred;
-                } else {
-                    $str[] = null;
-                }
+                    $plural = (($counter = count($str)) && $number > 9) ? 's' : null;
+                    $hundred = ($counter == 1 && $str[0]) ? ' and ' : null;
+                    $str [] = ($number < 21) ? $words[$number].' '. $digits[$counter]. $plural.' '.$hundred:$words[floor($number / 10) * 10].' '.$words[$number % 10]. ' '.$digits[$counter].$plural.' '.$hundred;
+                } else $str[] = null;
+            }
+
+            $d = 0;
+            while( $d < $decimal_length ) {
+                $divider = ($d == 2) ? 10 : 100;
+                $decimal_number = floor($decimal % $divider);
+                $decimal = floor($decimal / $divider);
+                $d += $divider == 10 ? 1 : 2;
+                if ($decimal_number) {
+                    $plurals = (($counter = count($str2)) && $decimal_number > 9) ? 's' : null;
+                    $hundreds = ($counter == 1 && $str2[0]) ? ' and ' : null;
+                    @$str2 [] = ($decimal_number < 21) ? $words[$decimal_number].' '. $digits[$decimal_number]. $plural.' '.$hundred:$words[floor($decimal_number / 10) * 10].' '.$words[$decimal_number % 10]. ' '.$digits[$counter].$plural.' '.$hundred;
+                } else $str2[] = null;
             }
 
             $Rupees = implode('', array_reverse($str));
-            return trim(ucwords($Rupees) . ' Rupees Only');
+            $paise = implode('', array_reverse($str2));
+            $paise = ($decimal_part > 0) ? $paise . ' Paise' : '';
+            return ($Rupees ? $Rupees . 'Rupees ' : '') . $paise;
         }
 
-        $sales = DB::table('direct_sales')->where('id', $id)->first();
-        $customer = DB::table('customers')->where('id', $sales->customer_id)->first();
-
-        $qtyTotal = DB::table('sales_items')->where('sales_id', $id)->sum('product_quantity');
-        $getSoldItems = DB::table('sales_items')->where('sales_id', $id)->get();
-        $getInvoice = DB::table('invoices')->where('sales_id', $id)->latest('id')->first();
-
+        $salesDetails = DB::table('direct_sales')->where('id',$id)->first();
+        $completeReportDetails = array();
+        $qtyTotal = DB::table('sales_items')->where('sales_id',$id)->sum('product_quantity');
+        $completeReportDetails['invoice_number'] = $salesDetails->invoice_number;
+        $completeReportDetails['invoice_date'] = Carbon::createFromFormat('Y-m-d',$salesDetails->sales_date)->format('d-m-Y');
+        $get_customer = DB::table('customers')->where('id',$salesDetails->customer_id)->first();
+        $completeReportDetails['customer_name'] = $get_customer->name;
+        $completeReportDetails['pay_method'] = $salesDetails->pay_method;
+        $completeReportDetails['customer_place'] = $get_customer->place;
+        $getInvoice = Invoice::where('sales_id',$id)->latest('id')->first();
+        if($getInvoice->is_gst == "Yes")
+        {
+            $completeReportDetails['gst_number'] = $salesDetails->gst_number;
+        }
+        else
+        {
+            $completeReportDetails['gst_number'] = "";
+        }
+        $completeReportDetails['qty_total'] = $qtyTotal;
+        $getSoldItems = DB::table('sales_items')->where('sales_id',$id)->get();
         $gst_amount = 0.00;
         $netTotal = 0.00;
-        foreach ($getSoldItems as $item) {
-            $unitPrice = (float) $item->unit_price;
+        foreach($getSoldItems as $item)
+        {
+            $unitPrice = number_format((float) $item->unit_price, 2, '.', '');
             $unitQty = (float) $item->product_quantity;
             $gstPercent = (float) $item->gst_percent;
             $total = $unitPrice * $unitQty;
-            $gst = ($total * $gstPercent) / 100;
+            $gst = ($unitPrice * $unitQty * $gstPercent) / 100 ;
             $gst_amount += $gst;
             $netTotal += $total;
         }
-
-        $discount = (float) $sales->discount;
-        $grandTotal = (float) $sales->grand_total;
-        $discounted_total = $grandTotal - $discount;
-
-        $gst_number = ($getInvoice && $getInvoice->is_gst == "Yes") ? $sales->gst_number : "";
-
-        $completeReportDetails = [
-            'invoice_number'      => $sales->invoice_number,
-            'invoice_date'        => Carbon::parse($sales->sales_date)->format('d-m-Y'),
-            'customer_name'       => $customer->name,
-            'customer_place'      => $customer->place,
-            'gst_number'          => $gst_number,
-            'pay_method'          => $sales->pay_method,
-            'qty_total'           => $qtyTotal,
-            'sales_items'         => $getSoldItems,
-            'net_total'           => number_format($netTotal, 2, '.', ''),
-            'gst_amount'          => number_format($gst_amount, 2, '.', ''),
-            'discount'            => number_format($discount, 2, '.', ''),
-            'grand_total'         => number_format($grandTotal, 2, '.', ''),
-            'discounted_total'    => number_format($discounted_total, 2, '.', ''),
-            'grand_total_words'   => strtoupper(number_to_word1($discounted_total)),
-            'sales_id'            => $id,
-            'sales_staff'         => DB::table('staffs')->where('id', $sales->sales_staff)->value('staff_name') ?? 'N/A',
-            'bill_generated_staff'=> Auth::user()->name ?? 'SYSTEM',
-        ];
-
-        // $fileName = "Hostee_" . $sales->invoice_number . ".pdf";
-        // $filePath = storage_path("app/public/invoices/" . $fileName);
-        // if (!file_exists(dirname($filePath))) {
-        //     mkdir(dirname($filePath), 0777, true);
-        // }
-
-        // $pdf = Pdf::loadView('invoices.userInvoice', compact('completeReportDetails'));
-        // $pdf->save($filePath);
-        // $publicUrl = asset('storage/invoices/' . $fileName);
-
-        $phone    = $customer->mobile;
-
-        $param1 = urlencode($customer->name);
-        $param2 = $sales->invoice_number;
-        $param3 = Carbon::parse($sales->sales_date)->format('d-m-Y');
-
-        $publicUrl = route('userInvoice', ['id' => $id]);
-
-        $apiUrl = "https://bhashsms.com/api/sendmsgutil.php?user=Techsoul_BW&pass=123456&sender=BUZWAP&phone=$phone&text=inv_pdf_1711&priority=wa&stype=normal&Params=$param1,$param2,$param3&htype=document&url=$publicUrl";
-
-        // dd([
-        //     'url' => $apiUrl
-        // ]);
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        Toastr::success('Invoice generated and WhatsApp message sent successfully.', 'Success', ["positionClass" => "toast-bottom-right"]);
-        session()->flash('whatsapp_sent', true);
-
-        return redirect()->back();
+        $completeReportDetails['net_total'] = number_format((float)$netTotal, 2, '.', '');
+        $discount = number_format((float) $salesDetails->discount, 2, '.', '');
+        $grandTotal = number_format((float) $salesDetails->grand_total, 2, '.', '');
+        $discounted_total = $grandTotal-$salesDetails->discount;
+        $completeReportDetails['gst_amount'] = $gst_amount;
+        $completeReportDetails['discount'] = $salesDetails->discount;
+        $completeReportDetails['grand_total'] = $grandTotal;
+        $completeReportDetails['discounted_total'] = $discounted_total;
+        $grand_total_in_words = number_to_word1($discounted_total);
+        $completeReportDetails['grand_total_words'] = strtoupper($grand_total_in_words);
+        $completeReportDetails['sales_items'] = $getSoldItems;
+        $get_sales_staff = DB::table('staffs')->where('id',$salesDetails->sales_staff)->first();
+        $completeReportDetails['sales_staff'] = $get_sales_staff->staff_name;
+        if(Auth::user())
+        {
+            $completeReportDetails['bill_generated_staff'] = strtoupper(Auth::user()->name);
+        }
+        else
+        {
+            $completeReportDetails['bill_generated_staff'] = $get_sales_staff->staff_name;
+        }
+        $completeReportDetails['sales_id'] = $id;
+        $fileName = "Hostee the Planner - #" . $salesDetails->invoice_number. ".pdf";
+        $pdf = Pdf::loadView('invoices.userInvoice',compact('completeReportDetails'));
+        return $pdf->download($fileName,array("Attachment"=>false));
     }
+
+    // public function WhatsappInvoice($id)
+    // {
+    //     function number_to_word1(float $number)
+    //     {
+    //         $no = floor($number);
+    //         $decimal = round($number - $no, 2) * 100;
+    //         $decimal_part = $decimal;
+    //         $words = [
+    //             0 => '', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six',
+    //             7 => 'seven', 8 => 'eight', 9 => 'nine', 10 => 'ten', 11 => 'eleven', 12 => 'twelve',
+    //             13 => 'thirteen', 14 => 'fourteen', 15 => 'fifteen', 16 => 'sixteen', 17 => 'seventeen',
+    //             18 => 'eighteen', 19 => 'nineteen', 20 => 'twenty', 30 => 'thirty', 40 => 'forty',
+    //             50 => 'fifty', 60 => 'sixty', 70 => 'seventy', 80 => 'eighty', 90 => 'ninety'
+    //         ];
+    //         $digits = ['', 'hundred', 'thousand', 'lakh', 'crore'];
+
+    //         $str = [];
+    //         $i = 0;
+    //         while ($no > 0) {
+    //             $divider = ($i == 2) ? 10 : 100;
+    //             $number = $no % $divider;
+    //             $no = floor($no / $divider);
+    //             $i += ($divider == 10) ? 1 : 2;
+    //             if ($number) {
+    //                 $counter = count($str);
+    //                 $hundred = ($counter == 1 && $str[0]) ? ' and ' : '';
+    //                 $str[] = ($number < 21)
+    //                     ? $words[$number] . ' ' . $digits[$counter] . ' ' . $hundred
+    //                     : $words[floor($number / 10) * 10] . ' ' . $words[$number % 10] . ' ' . $digits[$counter] . ' ' . $hundred;
+    //             } else {
+    //                 $str[] = null;
+    //             }
+    //         }
+
+    //         $Rupees = implode('', array_reverse($str));
+    //         return trim(ucwords($Rupees) . ' Rupees Only');
+    //     }
+
+    //     $sales = DB::table('direct_sales')->where('id', $id)->first();
+    //     $customer = DB::table('customers')->where('id', $sales->customer_id)->first();
+
+    //     $qtyTotal = DB::table('sales_items')->where('sales_id', $id)->sum('product_quantity');
+    //     $getSoldItems = DB::table('sales_items')->where('sales_id', $id)->get();
+    //     $getInvoice = DB::table('invoices')->where('sales_id', $id)->latest('id')->first();
+
+    //     $gst_amount = 0.00;
+    //     $netTotal = 0.00;
+    //     foreach ($getSoldItems as $item) {
+    //         $unitPrice = (float) $item->unit_price;
+    //         $unitQty = (float) $item->product_quantity;
+    //         $gstPercent = (float) $item->gst_percent;
+    //         $total = $unitPrice * $unitQty;
+    //         $gst = ($total * $gstPercent) / 100;
+    //         $gst_amount += $gst;
+    //         $netTotal += $total;
+    //     }
+
+    //     $discount = (float) $sales->discount;
+    //     $grandTotal = (float) $sales->grand_total;
+    //     $discounted_total = $grandTotal - $discount;
+
+    //     $gst_number = ($getInvoice && $getInvoice->is_gst == "Yes") ? $sales->gst_number : "";
+
+    //     $completeReportDetails = [
+    //         'invoice_number'      => $sales->invoice_number,
+    //         'invoice_date'        => Carbon::parse($sales->sales_date)->format('d-m-Y'),
+    //         'customer_name'       => $customer->name,
+    //         'customer_place'      => $customer->place,
+    //         'gst_number'          => $gst_number,
+    //         'pay_method'          => $sales->pay_method,
+    //         'qty_total'           => $qtyTotal,
+    //         'sales_items'         => $getSoldItems,
+    //         'net_total'           => number_format($netTotal, 2, '.', ''),
+    //         'gst_amount'          => number_format($gst_amount, 2, '.', ''),
+    //         'discount'            => number_format($discount, 2, '.', ''),
+    //         'grand_total'         => number_format($grandTotal, 2, '.', ''),
+    //         'discounted_total'    => number_format($discounted_total, 2, '.', ''),
+    //         'grand_total_words'   => strtoupper(number_to_word1($discounted_total)),
+    //         'sales_id'            => $id,
+    //         'sales_staff'         => DB::table('staffs')->where('id', $sales->sales_staff)->value('staff_name') ?? 'N/A',
+    //         'bill_generated_staff'=> Auth::user()->name ?? 'SYSTEM',
+    //     ];
+
+    //     // $fileName = "Hostee_" . $sales->invoice_number . ".pdf";
+    //     // $filePath = storage_path("app/public/invoices/" . $fileName);
+    //     // if (!file_exists(dirname($filePath))) {
+    //     //     mkdir(dirname($filePath), 0777, true);
+    //     // }
+
+    //     // $pdf = Pdf::loadView('invoices.userInvoice', compact('completeReportDetails'));
+    //     // $pdf->save($filePath);
+    //     // $publicUrl = asset('storage/invoices/' . $fileName);
+
+    //     $phone    = $customer->mobile;
+
+    //     $param1 = urlencode($customer->name);
+    //     $param2 = $sales->invoice_number;
+    //     $param3 = Carbon::parse($sales->sales_date)->format('d-m-Y');
+
+    //     $publicUrl = route('userInvoice', ['id' => $id]);
+
+    //     $apiUrl = "https://bhashsms.com/api/sendmsgutil.php?user=Techsoul_BW&pass=123456&sender=BUZWAP&phone=$phone&text=inv_pdf_1711&priority=wa&stype=normal&Params=$param1,$param2,$param3&htype=document&url=$publicUrl";
+
+    //     // dd([
+    //     //     'url' => $apiUrl
+    //     // ]);
+
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     $response = curl_exec($ch);
+    //     curl_close($ch);
+
+    //     Toastr::success('Invoice generated and WhatsApp message sent successfully.', 'Success', ["positionClass" => "toast-bottom-right"]);
+    //     session()->flash('whatsapp_sent', true);
+
+    //     return redirect()->back();
+    // }
 
     public function userInvoice($id)
     {

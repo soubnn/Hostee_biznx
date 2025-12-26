@@ -72,7 +72,6 @@
                                                     $casualLeaveDay = 0;
                                                     $leaveDays = 0;
                                                     $lastTotalAmount = 0;
-                                                    $balancePaymentAmount = 0;
 
                                                     $last_term_salary = DB::table('salary_payments')->where('staff_id',$staff->id)->where('payment_type','salary')->latest('id')->first();
                                                     $today_color = Carbon\carbon::now()->format('Y-m-d');
@@ -144,9 +143,9 @@
                                                             $currentLeaveDays = $last_term_salary->leaveDays;
                                                             $currentBasicSalary = $last_term_salary->basic_salary;
 
-                                                            if ($currentLeaveDays > 1) {
+                                                            if ($currentLeaveDays > 0) {
                                                                 $leaveDays = $currentLeaveDays - 1;
-                                                                $casualLeaveDay = 1;
+                                                                $casualLeaveDay = 0;
                                                             } else {
                                                                 $leaveDays = 0;
                                                                 $casualLeaveDay = 0;
@@ -207,7 +206,7 @@
                                                                 <div class="form-group row mb-4">
                                                                     <label class="col-md-3 col-form-label">Basic Salary</label>
                                                                     <div class="col-md-9">
-                                                                        <input type="text" class="form-control" value="{{ $staff->salary }}" readonly>
+                                                                        <input type="text" class="form-control" id="basicSalary{{ $staff->id }}" value="{{ $staff->salary }}" readonly>
                                                                     </div>
                                                                 </div>
 
@@ -217,13 +216,14 @@
                                                                     <div class="col-md-2">
                                                                         <input type="text" class="form-control" value="30" readonly>
                                                                     </div>
-                                                                    <label class="col-md-2 col-form-label">Casual Leave</label>
+                                                                    {{-- <label class="col-md-2 col-form-label">Casual Leave</label> --}}
+                                                                    <label class="col-md-2 col-form-label">Extra Leave</label>
                                                                     <div class="col-md-1">
                                                                         <input type="checkbox" id="casualLeave{{$staff->id}}" onchange="toggleLeaveDays(this, {{$staff->id}})">
                                                                     </div>
                                                                     <label class="col-md-2 col-form-label">Leave Days</label>
                                                                     <div class="col-md-2">
-                                                                        <input type="text" name="leaveDays" id="leaveDays{{$staff->id}}" class="form-control" value="{{ $leaveDays }}" onkeyup="getPayablesalary({{$staff->id}}); generateDescription({{$staff->id}})" readonly>
+                                                                        <input type="text" name="leaveDays" id="leaveDays{{$staff->id}}" class="form-control" value="{{ $leaveDays }}" onkeyup="getPayablesalary({{$staff->id}}); generateDescription({{$staff->id}})" disabled>
                                                                     </div>
                                                                 </div>
 
@@ -374,13 +374,37 @@
                 calculateTotalAmount(staffId);
             });
         });
-        function getPayablesalary( staffId ){
-            console.log(staffId);
-            let leaveDaysInput = document.getElementById('leaveDays'+staffId);
-            var leaveDays = parseInt(leaveDaysInput.value);
-            var basicSalary = parseFloat($('#basicSalary'+staffId).val());
-            var payableAmount = leaveDays === 0 ? basicSalary : basicSalary - (basicSalary * 24 * leaveDays) / 300;
-            $('#paybleAmount'+staffId).val(payableAmount.toFixed(2));
+
+        // function getPayablesalary( staffId ){
+
+        //     let leaveDaysInput = document.getElementById('leaveDays' + staffId);
+        //     var leaveDays = parseInt(leaveDaysInput.value) || 0;
+
+        //     var basicSalary = parseFloat($('#basicSalary' + staffId).val());
+        //     let payableAmount = basicSalary;
+
+        //     if (leaveDays > 0) {
+        //         payableAmount = basicSalary - ((basicSalary * 24 * leaveDays) / 300);
+        //     }
+
+        //     $('#paybleAmount'+staffId).val(payableAmount.toFixed(2));
+        //     calculateTotalAmount(staffId);
+        // }
+
+        function getPayablesalary(staffId) {
+            let leaveDaysInput = document.getElementById('leaveDays' + staffId);
+            let leaveDays = parseInt(leaveDaysInput.value) || 0;
+
+            let basicSalary = parseFloat($('#basicSalary' + staffId).val()) || 0;
+            let totalWorkingDays = 26;
+            let perDaySalary = basicSalary / totalWorkingDays;
+
+            let payableAmount = basicSalary - (perDaySalary * leaveDays);
+
+            $('#paybleAmount' + staffId).val(payableAmount.toFixed(2));
+            $('#amount' + staffId).val(payableAmount.toFixed(2));
+            $('#PayingAmount' + staffId).val(payableAmount.toFixed(2));
+
             calculateTotalAmount(staffId);
         }
 
@@ -400,19 +424,20 @@
 
             document.getElementById('description' + staffId).value = description;
         }
-        function generateLeaveDays(staffId) {
-            var casualLeaveCheckbox = document.getElementById('casualLeave' + staffId);
-            var leaveDaysText = document.querySelectorAll('[id^=leaveDays' + staffId + ']');
-            var leaveDays = 0;
 
-            if (casualLeaveCheckbox.checked) {
-                leaveDays = parseFloat(leaveDaysText[0].value) + 1;
-            } else {
-                leaveDays = parseFloat(leaveDaysText[1].value);
-            }
+        // function generateLeaveDays(staffId) {
+        //     var casualLeaveCheckbox = document.getElementById('casualLeave' + staffId);
+        //     var leaveDaysText = document.querySelectorAll('[id^=leaveDays' + staffId + ']');
+        //     var leaveDays = 0;
 
-            document.getElementById('leaveDayshidden' + staffId).value = leaveDays;
-        }
+        //     if (casualLeaveCheckbox.checked) {
+        //         leaveDays = parseFloat(leaveDaysText[0].value) + 1;
+        //     } else {
+        //         leaveDays = parseFloat(leaveDaysText[1].value);
+        //     }
+
+        //     document.getElementById('leaveDayshidden' + staffId).value = leaveDays;
+        // }
 
     </script>
     <script>
@@ -424,7 +449,6 @@
             }
         }
     </script>
-
 
 @endsection
 

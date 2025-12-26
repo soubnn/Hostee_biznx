@@ -132,18 +132,18 @@
                                                     <span style="font-weight:500;">Print Invoice</span>
                                                 </button></a>
                                         </div>
-                                        <div class="col-md-2 mt-3">
+                                        {{-- <div class="col-md-2 mt-3">
                                             <button type="button" class="btn btn-success waves-effect waves-light me-1"
                                                 onclick="window.location.href='{{ route('WhatsappInvoice', $salesDetails->id) }}'"><i
                                                     class="bx bxl-whatsapp"></i>
                                                 <span style="font-weight:500;">Whatsapp</span>
                                             </button>
-                                        </div>
-                                        {{-- <div class="col-md-2 mt-3">
+                                        </div> --}}
+                                        <div class="col-md-2 mt-3">
                                             <button type="button" class="btn btn-success waves-effect waves-light me-1" onclick="whatsappInvoice()"><i class="bx bxl-whatsapp"></i>
                                                 <span style="font-weight:500;">Whatsapp</span>
                                             </button>
-                                        </div> --}}
+                                        </div>
                                         {{-- <div class="col-md-2 mt-3">
                                             <a href="{{ route('sendInvoiceSMS', $salesDetails->id) }}">
                                                 <button type="button"

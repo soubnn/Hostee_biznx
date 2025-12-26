@@ -219,10 +219,13 @@ class ProformaInvoiceController extends Controller
         $total_unit_price = DB::table('proforma_invoice_items')->where('Proforma_id',$id)->sum('unit_price');
         $total_qty = DB::table('proforma_invoice_items')->where('Proforma_id',$id)->where('product_name','<>','')->sum('qty');
         $gst_count = DB::table('proforma_invoice_items')->where('Proforma_id',$id)->where('product_tax','>',0)->count();
+        $get_customer = DB::table('customers')->where('id',$estimate->customer_name)->first();
+        $customer_name = $get_customer->name;
+
         $generated_by = Auth::user()->name;
         $grand_total_in_words = strtoupper(number_to_word($estimate->grand_total));
 
-        $pdf = Pdf::loadView('proforma.invoice',compact('estimate_details','estimate','total_unit_price','total_qty','generated_by','grand_total_in_words','gst_count'))->setPaper('a4', 'portrait');
+        $pdf = Pdf::loadView('proforma.invoice',compact('estimate_details','estimate','total_unit_price','total_qty','customer_name','generated_by','grand_total_in_words','gst_count'))->setPaper('a4', 'portrait');
         return $pdf->stream('Hostee the Planner - Proforma Invoice.pdf',array("Attachment"=>false));
     }
 }

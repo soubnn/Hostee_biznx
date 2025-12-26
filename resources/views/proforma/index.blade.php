@@ -58,7 +58,7 @@ $(document).ready(function(){
                                                         <td style="white-space: normal;" data-sort="">{{ $invoice->invoice_number }}</td>
                                                         <td style="white-space: normal;">
                                                             <a href="{{ route('generate_invoice',$invoice->id) }}" target="_blank">
-                                                                {{ $invoice->customer_name }}
+                                                                {{ $invoice->customer_detail->name }}
                                                             </a>
                                                         </td>
                                                         <td style="white-space: normal;">{{ $invoice->customer_phone }}</td>

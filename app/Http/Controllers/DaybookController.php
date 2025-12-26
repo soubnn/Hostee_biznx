@@ -1016,7 +1016,7 @@ class DaybookController extends Controller
         $daybook_summary = DaybookSummary::where('date', $report_date)->first();
         if ($daybook_summary == Null) {
             $prev_date_details = DB::table('daybook_summaries')->where('date', '<', $report_date)->orderby('date', 'DESC')->first();
-            $prev_date = $prev_date_details->date;
+            $prev_date = $prev_date_details->date ?? Carbon::today()->toDateString();
             $prev_closing_balance = DaybookBalance::where('date', $prev_date)->first();
             $cur_closing_balance = DaybookBalance::where('date', $report_date)->first();
             if ($cur_closing_balance == Null) {
