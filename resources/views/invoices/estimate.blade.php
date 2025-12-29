@@ -187,7 +187,7 @@
                                                 <p
                                                     style="font-size: 11px; font-weight: 600; margin: 10px 0 0 0; font-family: Arial, Helvetica, sans-serif;">
                                                     {{-- GSTIN : 32ADNPO8730B1ZO<br /> --}}
-                                                    NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD<br />
+                                                    NEAR LANCOR CONCEPTS, CHERUSHOLA ROAD, SWAGATHAMAD<br />
                                                     MALAPPURAM-KERALA Pin : 676503 Tel: +91 85929 24592 /<br /> +91 85929 24692
                                                     email: hosteetheplanner@gmail.com<br />
                                                     www.hosteetheplanner.in

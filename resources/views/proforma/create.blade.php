@@ -291,17 +291,16 @@
             new_product_hidden.setAttribute("id", "td_product_text" + count);
             new_product_hidden.setAttribute("style", "display:none");
 
-
             //Column 2
-            // var newColumn2 = document.createElement("td");
-            // var warrenty_col = document.createElement("input");
-            // warrenty_col.setAttribute("type","text");
-            // warrenty_col.setAttribute("value","1 YEAR");
-            // warrenty_col.setAttribute("class","form-control");
-            // warrenty_col.setAttribute("id","warrenty" + count);
-            // warrenty_col.setAttribute("name","warrenty[]");
-            // warrenty_col.setAttribute("style","width:100%");
-            // newColumn2.appendChild(warrenty_col);
+            var newColumn2 = document.createElement("td");
+            var description_col = document.createElement("input");
+            description_col.setAttribute("type","text");
+            description_col.setAttribute("value","");
+            description_col.setAttribute("class","form-control");
+            description_col.setAttribute("id","description" + count);
+            description_col.setAttribute("name","description[]");
+            description_col.setAttribute("style","width:100%");
+            newColumn2.appendChild(description_col);
 
             //Column 3
             var newColumn3 = document.createElement("td");
@@ -432,7 +431,7 @@
             var tableBody = document.getElementById("product_table_body");
             newRow.appendChild(newColumn1);
             newRow.appendChild(new_product_hidden);
-            // newRow.appendChild(newColumn2);
+            newRow.appendChild(newColumn2);
             newRow.appendChild(newColumn3);
             newRow.appendChild(newColumn4);
             newRow.appendChild(newColumn5);
@@ -448,7 +447,7 @@
         }
 
         function clearTableFields(row) {
-            document.getElementById("warrenty" + row).innerHTML = '';
+            document.getElementById("description" + row).innerHTML = '';
             document.getElementById("unitPrice" + row).value = '';
             document.getElementById("productQty" + row).value = '';
             document.getElementById("total" + row).innerHTML = '';
@@ -807,7 +806,7 @@
                                                 <table class="table" id="productsTable" style="width: 100%">
                                                     <thead>
                                                         <th class="w-25">PRODUCT</th>
-                                                        {{-- <th class="w-15">WARRENTY</th> --}}
+                                                        <th class="w-25">DESCRIPTION</th>
                                                         <th class="w-15">UNIT PRICE</th>
                                                         <th class="w-15">QTY</th>
                                                         <th class="w-15 gstTD" style="display: none">TAXABLE</th>
@@ -839,7 +838,7 @@
                                                             </td>
                                                             <td id="td_product_text0" style="display:none;">
                                                             </td>
-                                                            {{-- <td><input class="form-control" type="text" value="1 Year" id="warrenty0" name="warrenty[]" style="width: 100%"></td> --}}
+                                                            <td><input class="form-control" type="text" id="description0" name="description[]" style="width: 100%"></td>
                                                             <td><input class="form-control" type="number" value="0"
                                                                     id="unitPrice0" name="unitPrice[]" step=".50"
                                                                     onkeyup="calculateTotal(0)"
@@ -893,6 +892,7 @@
                                                     disabled>Save Details</button>
                                             </div>
                                         </div>
+                                    </div>
                                 </form>
                                 {{-- ---------------------------------system div----------------------------------------------------- --}}
 

@@ -187,7 +187,7 @@
                                                 <p
                                                     style="font-size: 11px; font-weight: 600; margin: 10px 0 0 0; font-family: Arial, Helvetica, sans-serif;">
                                                     {{-- GSTIN : 32ADNPO8730B1ZO<br /> --}}
-                                                    NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD<br />
+                                                    NEAR LANCOR CONCEPTS, CHERUSHOLA ROAD, SWAGATHAMAD<br />
                                                     MALAPPURAM-KERALA Pin : 676503 Tel: +91 85929 24592 /<br /> +91 85929 24692
                                                     email: hosteetheplanner@gmail.com<br />
                                                     www.hosteetheplanner.in
@@ -297,7 +297,7 @@
                                                             @php
                                                             $name_length = strlen($get_product->product_name);
                                                             @endphp
-                                                            @if ($name_length > 50 && $name_length < 100)
+                                                            {{-- @if ($name_length > 50 && $name_length < 100)
                                                                 @php
                                                                     $product_name1 = substr($get_product->product_name,0,50);
                                                                     $product_name2 = substr($get_product->product_name,50);
@@ -315,13 +315,13 @@
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}</td>
                                                                     @php
                                                                         $row_length= $row_length+38;
-                                                                    @endphp
-                                                            @else
-                                                                <td>{{ $get_product->product_name }}</td>
+                                                                    @endphp --}}
+                                                            {{-- @else --}}
+                                                                <td>{{ $get_product->product_name }} - {{ $estimate_details->description }}</td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
-                                                            @endif
+                                                            {{-- @endif --}}
                                                         @else
                                                             @php
                                                                 $name_length = strlen($estimate_details->product_name);
@@ -410,7 +410,7 @@
                                                                     @php
                                                                         $row_length= $row_length+88;
                                                                     @endphp
-                                                        {--    @elseif($name_length > 500)
+                                                            {--@elseif($name_length > 500)
                                                                 @php
                                                                     $product_name1 = substr($estimate_details->product_name,0,50);
                                                                     $product_name2 = substr($estimate_details->product_name,50,50);
@@ -427,9 +427,9 @@
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}<br>{{ $product_name10 }}<br>{{ $product_name11 }}</td>
                                                                     @php
                                                                         $row_length= $row_length+118;
-                                                                    @endphp --}
+                                                                @endphp --}
                                                             @else
-                                                                <td>{{ $estimate_details->product_name }}</td>
+                                                                <td>{{ $estimate_details->product_name }} - {{ $estimate_details->description }}</td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
@@ -541,7 +541,7 @@
                                                             @php
                                                             $name_length = strlen($get_product->product_name);
                                                             @endphp
-                                                            @if ($name_length > 50 && $name_length < 100)
+                                                            {{-- @if ($name_length > 50 && $name_length < 100)
                                                                 @php
                                                                     $product_name1 = substr($get_product->product_name,0,50);
                                                                     $product_name2 = substr($get_product->product_name,50);
@@ -556,16 +556,16 @@
                                                                     $product_name2 = substr($get_product->product_name,50,50);
                                                                     $product_name3 = substr($get_product->product_name,100);
                                                                 @endphp
-                                                                    <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}</td>
-                                                                    @php
-                                                                        $row_length= $row_length+38;
-                                                                    @endphp
-                                                            @else
-                                                                <td colspan="3">{{ $get_product->product_name }}</td>
+                                                                <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}</td>
+                                                                @php
+                                                                    $row_length= $row_length+38;
+                                                                @endphp
+                                                            @else --}}
+                                                                <td colspan="3">{{ $get_product->product_name }} - {{ $estimate_details->description }}</td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
-                                                            @endif
+                                                            {{-- @endif --}}
                                                         @else
                                                             @php
                                                                 $name_length = strlen($estimate_details->product_name);
@@ -701,12 +701,12 @@
                                                                     $product_name10 = substr($estimate_details->product_name,450,50);
                                                                     $product_name11 = substr($estimate_details->product_name,500);
                                                                 @endphp
-                                                                    <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}<br>{{ $product_name10 }}<br>{{ $product_name11 }}</td>
-                                                                    @php
-                                                                        $row_length= $row_length+118;
-                                                                    @endphp
+                                                                <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}<br>{{ $product_name10 }}<br>{{ $product_name11 }}</td>
+                                                                @php
+                                                                    $row_length= $row_length+118;
+                                                                @endphp
                                                             @else
-                                                                <td colspan="3">{{ $estimate_details->product_name }}</td>
+                                                                <td colspan="3">{{ $estimate_details->product_name }} - {{ $estimate_details->description }}</td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp

@@ -228,24 +228,25 @@
                             </div>
                         </div>
                         <!-- end row -->
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label for="yearSelect">Select Year:</label>
-                                            <select id="yearSelect" class="form-control">
-                                                @foreach ($years as $year)
-                                                    <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        <div class="d-sm-flex flex-wrap">
-                                            <h4 class="card-title mb-4">Average Sales Graph</h4>
-                                        </div>
-                                        <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
-                                    </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label for="yearSelect">Select Year:</label>
+                                    <select id="yearSelect" class="form-control">
+                                        @foreach ($years as $year)
+                                            <option value="{{ $year }}" {{ $year == $currentYear ? 'selected' : '' }}>{{ $year }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
+                                <div class="d-sm-flex flex-wrap">
+                                    <h4 class="card-title mb-4">Average Sales Graph</h4>
+                                </div>
+                                <div id="stacked-column-chart" class="apex-charts" dir="ltr"></div>
                             </div>
                         </div>
                     </div>

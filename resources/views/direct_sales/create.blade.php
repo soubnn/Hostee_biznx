@@ -253,7 +253,8 @@
 
             $.ajax({
                 type: "get",
-                url: "{{ route('getProductsInStock') }}",
+                // url: "{{ route('getProductsInStock') }}",
+                url : "../getProducts",
                 dataType: "json",
                 success: function(response) {
                     // console.log(response);
@@ -265,15 +266,13 @@
                     for (var i = 0; i < response.length; i++) {
                         var newDynamicOption = document.createElement("option");
                         newDynamicOption.setAttribute("value", response[i].id);
-                        newDynamicOption.innerHTML = "[" + response[i].product_code + "]" + response[i]
-                            .product_name + " ( " + response[i].stock + " )";
+                        newDynamicOption.innerHTML = response[i].product_name;
                         newProductSel.appendChild(newDynamicOption);
                         // console.log("Added option");
                     }
                 }
             });
             newColumn1.appendChild(newProductSel);
-
 
             //Column 2
             var newColumn2 = document.createElement("td");
@@ -430,8 +429,6 @@
 
         function clearTableFields(row) {
             document.getElementById("priceWithTax" + row).value = '';
-            document.getElementById("cgstPercentage" + row).value = '';
-            document.getElementById("sgstPercentage" + row).value = '';
             document.getElementById("productQty" + row).value = '';
             document.getElementById("total" + row).innerHTML = '';
             document.getElementById("gst" + row).innerHTML = '';
@@ -806,22 +803,23 @@
                                                                         onchange="productSelected(this.value,0)">
                                                                         <option value="">Select Product</option>
                                                                         @php
-                                                                            $inStockProducts = DB::table('stocks')
-                                                                                ->where('product_qty', '>', 0)
-                                                                                ->get();
+                                                                            // $inStockProducts = DB::table('stocks')
+                                                                            //     ->where('product_qty', '>', 0)
+                                                                            //     ->get();
+
+                                                                            $products = DB::table('products')->get();
                                                                         @endphp
-                                                                        @foreach ($inStockProducts as $product)
-                                                                            @php
+                                                                        @foreach ($products as $product)
+                                                                            {{-- @php
                                                                                 $products = DB::table('products')
                                                                                     ->where('id', $product->product_id)
                                                                                     ->first();
                                                                                 $stocks = DB::table('stocks')
                                                                                     ->where('product_id', $products->id)
                                                                                     ->first();
-                                                                            @endphp
-                                                                            <option value="{{ $products->id }}">
-                                                                                {{ $products->product_name }} (
-                                                                                {{ $stocks->product_qty }} )</option>
+                                                                            @endphp --}}
+                                                                            <option value="{{ $product->id }}">
+                                                                                {{ $product->product_name }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </td>

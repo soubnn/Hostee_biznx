@@ -61,7 +61,7 @@ class ProformaInvoiceController extends Controller
 
 
         $estimate_product   =   $request->get('estimate_product');
-        // $warrenty           =   $request->get('warrenty');
+        $description        =   $request->get('description');
         $unit_price         =   $request->get('unitPrice');
         $qty                =   $request->get('qty');
         $product_tax        =   $request->get('product_tax');
@@ -78,7 +78,7 @@ class ProformaInvoiceController extends Controller
                 $datasave = [
                     'Proforma_id'       =>  $Proforma_id,
                     'product_name'      =>  $estimate_product[$i],
-                    // 'warrenty'          =>  $warrenty[$i],
+                    'description'       =>  $description[$i],
                     'unit_price'        =>  $unit_price[$i],
                     'product_tax'       =>  $product_tax[$i],
                     'qty'               =>  $qty[$i],

@@ -110,7 +110,7 @@
         <h5 class="m-0 p-0 w-100" style="text-align: right">{{ carbon\Carbon::parse($fromDate)->format('d-m-Y') }} to {{ carbon\Carbon::parse($toDate)->format('d-m-Y') }}</h5>
         <h2 class="m-0 p-0 w-50">HOSTEE THE PLANNER</h2>
         {{-- <h5 class="m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5> --}}
-        <h5 class="m-0 p-0">NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</h5>
+        <h5 class="m-0 p-0">NEAR LANCOR CONCEPTS, CHERUSHOLA ROAD, SWAGATHAMAD</h5>
     </div>
     <div style="width: 50%; text-align: right">
     </div>

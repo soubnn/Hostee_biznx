@@ -56,7 +56,7 @@
             <p style="margin-left: -35px;margin-bottom: 10px;">From:</p>
             <h3>HOSTEE THE PLANNER</h3>
             {{-- <p>GSTIN: 32ADNPO8730B1ZO</p> --}}
-            <p>NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</p>
+            <p>NEAR LANCOR CONCEPTS, CHERUSHOLA ROAD, SWAGATHAMAD</p>
             <p>MALAPPURAM-KERALA, Pin: 676503</p>
             <p>Tel: +91 85929 24592</p>
             <p>Tel: +91 85929 24692</p>

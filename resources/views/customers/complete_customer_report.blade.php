@@ -88,7 +88,7 @@
     <div class="head-title">
         <h2 class="text-center m-0 p-0">HOSTEE THE PLANNER</h2>
         {{-- <h5 class="text-center m-0 p-0">GSTIN : 32ADNPO8730B1ZO</h5> --}}
-        <h5 class="text-center m-0 p-0">NEAR LANSOR CONSEPTS, CHERUSSOLA ROAD, SWAGATHAMAD</h5>
+        <h5 class="text-center m-0 p-0">NEAR LANCOR CONCEPTS, CHERUSHOLA ROAD, SWAGATHAMAD</h5>
         <h4 class="text-center mt-10 p-0">CUSTOMER SALES REPORT</h4>
     </div>
     <div class="add-detail mt-10">

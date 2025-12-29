@@ -248,7 +248,7 @@
                         newDynamicOption.setAttribute("value",response[i].id);
                         newDynamicOption.innerHTML = "[" + response[i].product_code +"]" + response[i].product_name;
                         newProductSel.appendChild(newDynamicOption);
-                        console.log("Added option");
+                        // console.log("Added option");
                     }
                 }
             });
