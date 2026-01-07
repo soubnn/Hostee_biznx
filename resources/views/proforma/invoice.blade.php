@@ -198,7 +198,7 @@
                                                     <thead>
                                                         <tr>
                                                             <td colspan="2" style="color:#215967;font-size: 20px;font-weight: bolder;text-align: right;padding: 0;">
-                                                                INVOICE
+                                                                PROFORMA INVOICE
                                                             </td>
                                                         </tr>
                                                         <tr style="border-bottom: 2px solid #dddddd;">
@@ -317,7 +317,10 @@
                                                                         $row_length= $row_length+38;
                                                                     @endphp --}}
                                                             {{-- @else --}}
-                                                                <td>{{ $get_product->product_name }} - {{ $estimate_details->description }}</td>
+                                                                <td colspan="3">
+                                                                    <b>{{ $estimate_details->product_name }}</b> <br />
+                                                                    [ {{ $estimate_details->description }} ]
+                                                                </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
@@ -429,7 +432,10 @@
                                                                         $row_length= $row_length+118;
                                                                 @endphp --}
                                                             @else
-                                                                <td>{{ $estimate_details->product_name }} - {{ $estimate_details->description }}</td>
+                                                                <td colspan="3">
+                                                                    <b>{{ $estimate_details->product_name }}</b>  <br />
+                                                                    [ {{ $estimate_details->description }} ]
+                                                                </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
@@ -514,9 +520,9 @@
                                         <thead>
                                             <tr style="height: 30px;">
                                                 <th colspan="2" style="border: 1px solid;text-align: center;">SL. NO</th>
-                                                <th width="135" colspan="3" style="border: 1px solid;">Description of Goods</th>
+                                                <th width="140" colspan="3" style="border: 1px solid;">Description of Goods</th>
                                                 {{-- <th width="35" colspan="2" style="border: 1px solid;">Warrenty</th> --}}
-                                                <th width="35" colspan="2" style="border: 1px solid;">Unit Price</th>
+                                                <th width="45" colspan="2" style="border: 1px solid;">Unit Price</th>
                                                 <th width="35" style="border: 1px solid;">Qty</th>
                                                 <th width="50" colspan="2" style="border: 1px solid;">Total</th>
                                             </tr>
@@ -561,13 +567,16 @@
                                                                     $row_length= $row_length+38;
                                                                 @endphp
                                                             @else --}}
-                                                                <td colspan="3">{{ $get_product->product_name }} - {{ $estimate_details->description }}</td>
+                                                                <td colspan="3">
+                                                                    <b>{{ $estimate_details->product_name }}</b> <br />
+                                                                    [ {{ $estimate_details->description }} ]
+                                                                </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
                                                             {{-- @endif --}}
                                                         @else
-                                                            @php
+                                                            {{-- @php
                                                                 $name_length = strlen($estimate_details->product_name);
                                                             @endphp
                                                             @if ($name_length > 50 && $name_length <= 100)
@@ -705,12 +714,15 @@
                                                                 @php
                                                                     $row_length= $row_length+118;
                                                                 @endphp
-                                                            @else
-                                                                <td colspan="3">{{ $estimate_details->product_name }} - {{ $estimate_details->description }}</td>
+                                                            @else --}}
+                                                                <td colspan="3">
+                                                                    <b>{{ $estimate_details->product_name }}</b> <br />
+                                                                    [ {{ $estimate_details->description }} ]
+                                                                </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
-                                                            @endif
+                                                            {{-- @endif --}}
                                                         @endif
                                                         {{-- <td colspan="2">{{ $estimate_details->warrenty }}</td> --}}
                                                         <td colspan="2">{{ number_format((float) $estimate_details->unit_price, 2, '.', '') }}</td>

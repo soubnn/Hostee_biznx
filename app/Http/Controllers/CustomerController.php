@@ -258,10 +258,10 @@ class CustomerController extends Controller
             $sale->mobile_no    = $customer->mobile;
             $sale->pay_balance  = round($pay_balance,2);
             $sale->amount       = $amount;
-            $sale->paidAmount   = $paidAmount;
+            $sale->paidAmount   = ($amount == '0') ? '0' : $paidAmount;
             $sale->pending_days = $pending_days;
             // $sale->message      = $message;
-            $sale->balance      = round($balance,2);
+            $sale->balance      = ($amount == '0') ? '0' : round($balance,2);
             $sale->consolidate_bill = Consoulidate::where('sales_id', $sale->id)->first();
         }
 
@@ -271,6 +271,11 @@ class CustomerController extends Controller
         foreach ( $complete_credit_sales as $credit_sales){
             $single_total = ( $credit_sales->grand_total )-($credit_sales->discount);
             $paid_amount = Daybook::where('job',$credit_sales->invoice_number)->where('type','Income')->sum('amount');
+            if($single_total == '0'){
+                $paid_amount = 0;
+            } else {
+                $paid_amount = $paid_amount;
+            };
             $single_balance = $single_total - $paid_amount;
             $total_balance = $total_balance + $single_balance;
         }

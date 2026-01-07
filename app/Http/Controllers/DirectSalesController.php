@@ -133,7 +133,7 @@ class DirectSalesController extends Controller
                     $invoiceCount++;
                     if($invoiceNumberArray[2] == "22")
                     {
-                        $invoiceNumberArray[2] = "2324";
+                        $invoiceNumberArray[2] = "2526";
                         $invoiceCount = 1;
                     }
                     $invoiceCount = str_pad($invoiceCount, 5, '0', STR_PAD_LEFT);
@@ -141,7 +141,7 @@ class DirectSalesController extends Controller
                 }
                 else
                 {
-                    $newInvoiceNumber = "B2B-00001-2324";
+                    $newInvoiceNumber = "B2B-00001-2526";
                 }
             }
 
@@ -157,7 +157,7 @@ class DirectSalesController extends Controller
                     $invoiceCount++;
                     if($invoiceNumberArray[2] == "22")
                     {
-                        $invoiceNumberArray[2] = "2324";
+                        $invoiceNumberArray[2] = "2526";
                         $invoiceCount = 1;
                     }
                     $invoiceCount = str_pad($invoiceCount, 5, '0', STR_PAD_LEFT);
@@ -165,7 +165,7 @@ class DirectSalesController extends Controller
                 }
                 else
                 {
-                    $newInvoiceNumber = "B2C-00001-2324";
+                    $newInvoiceNumber = "B2C-00001-2526";
                 }
             }
         }
@@ -207,44 +207,25 @@ class DirectSalesController extends Controller
             $productQty = $request->get('productQty');
             $productTax = $request->get('productTax');
             $total = $request->get('total');
+            // $status2 = false;
+            for ($i = 0; $i < count($products); $i++) {
+                $data1 = [
+                    'sales_id' => $salesDetails->id,
+                    'product_id' => $products[$i],
+                    'unit_price' => $unitPrice[$i],
+                    'product_quantity' => $productQty[$i],
+                    'gst_percent' => $productTax[$i],
+                    'sales_price' => $total[$i],
+                    'sales_date' => $salesDetails->sales_date,
+                    'serial_number' => $serialNumber[$i]
+                ];
 
-            for($i=0; $i < count($products); $i++)
-            {
-                $getStockCount = DB::table('stocks')->where('product_id',$products[$i])->count();
-                if($getStockCount > 0)
-                {
-                    $getStockDetails = DB::table('stocks')->where('product_id',$products[$i])->first();
-                    if($productQty[$i] <= $getStockDetails->product_qty)
-                    {
-                        $data1 = [
-                            'sales_id' => $salesDetails->id,
-                            'product_id' => $products[$i],
-                            'unit_price' => $unitPrice[$i],
-                            // 'unit_price' => $unitPrice[$i],
-                            'product_quantity' => $productQty[$i],
-                            'gst_percent' => $productTax[$i],
-                            'sales_price' => $total[$i],
-                            'sales_date' => $salesDetails->sales_date,
-                            'serial_number' => $serialNumber[$i]
-                        ];
-
-                        $status2 = SalesItems::create($data1);
-                    }
-
-                    if($status2)
-                    {
-                        $qty = (float) $productQty[$i];
-                        $stockQty = (float) $getStockDetails->product_qty;
-                        $newQty = $stockQty - $qty;
-                        $updateStockBalance = DB::table('stocks')->where('product_id',$products[$i])->update(['product_qty' => $newQty]);
-                    }
-                }
+                $status2 = SalesItems::create($data1);
             }
             if($status2 && $invoice_status)
             {
                 if($salesDetails->pay_method == "CASH")
                 {
-
                     $data3 = array();
                     $data3['income_id'] = "FROM_INVOICE";
                     $data3['type'] = "Income";
@@ -323,7 +304,7 @@ class DirectSalesController extends Controller
                         }
                     }
                 }
-                $customer = DB::table('customers')->where('id',$salesDetails->customer_id)->first();
+                // $customer = DB::table('customers')->where('id',$salesDetails->customer_id)->first();
                 // if(strlen($customer->mobile) == 10)
                 // {
                 //     $apiKey = urlencode(env('SMS_API_KEY'));

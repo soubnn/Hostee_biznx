@@ -80,24 +80,23 @@ class UtilityController extends Controller
         return view('utility.purchase_items', compact('purchases'));
     }
 
+    // public function utility_edit_stock(Request $request)
+    // {
+    //     $id = $request->id;
+    //     $stock = DB::table('stocks')->where('id', $id)->first();
 
-    public function utility_edit_stock(Request $request)
-    {
-        $id = $request->id;
-        $stock = DB::table('stocks')->where('id', $id)->first();
+    //     $stock->product_unit_price = $request->price;
+    //     $stock->product_qty = $request->qty;
 
-        $stock->product_unit_price = $request->price;
-        $stock->product_qty = $request->qty;
+    //     $status = DB::table('stocks')->where('id', $id)->update([
+    //         'product_unit_price' => $stock->product_unit_price,
+    //         'product_qty' => $stock->product_qty
+    //     ]);
 
-        $status = DB::table('stocks')->where('id', $id)->update([
-            'product_unit_price' => $stock->product_unit_price,
-            'product_qty' => $stock->product_qty
-        ]);
-
-        if ($status) {
-            return redirect()->back();
-        }
-    }
+    //     if ($status) {
+    //         return redirect()->back();
+    //     }
+    // }
 
     public function utility_edit_purchase(Request $request)
     {
@@ -223,8 +222,6 @@ class UtilityController extends Controller
         $product = $salesItem->product_id;
         $product_qty = $salesItem->product_quantity;
         $customer = Customer::findOrFail($salesDetails->customer_id);
-        $stockDetails = stock::where('product_id', $product)->first();
-        $currentQty = $stockDetails->product_qty;
         $currentBalance = $customer->balance;
         if ($salesDetails->discount) {
             $oldBalance = (float) $salesDetails->grand_total - (float) $salesDetails->discount;
@@ -257,17 +254,10 @@ class UtilityController extends Controller
                 $data2['balance'] = round($data2['balance'], 2);
                 $updateBalanceStatus = $customer->fill($data2)->save();
                 if ($updateBalanceStatus) {
-                    $newQty = $currentQty + $product_qty;
-                    $data3['product_qty'] = $newQty;
-                    $updateStockStatus = $stockDetails->fill($data3)->save();
-                    if ($updateStockStatus) {
-                        Toastr::success('Item Deleted Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
-                        if($itemsCount == 0)
-                        {
-                            return redirect()->route('utility_sales');
-                        }
-                    } else {
-                        Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
+                    Toastr::success('Item Deleted Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
+                    if($itemsCount == 0)
+                    {
+                        return redirect()->route('utility_sales');
                     }
                 } else {
                     Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
@@ -309,32 +299,25 @@ class UtilityController extends Controller
         $data['serial_number'] = strtoupper($request->serial_number);
         $updateItemStatus = SalesItems::create($data);
         if ($updateItemStatus) {
-            $qty = (float) $data['product_quantity'];
-            $stockQty = (float) $stockDetails->product_qty;
-            $newQty = $stockQty - $qty;
-            $updateStockBalance = DB::table('stocks')->where('product_id',$data['product_id'])->update(['product_qty' => $newQty]);
-            if($updateStockBalance)
-            {
-                $totalAmount = DB::table('sales_items')->where('sales_id', $sales->id)->sum('sales_price');
-                $data1['grand_total'] = round($totalAmount, 2);
-                if ($sales->discount) {
-                    $newBalance = (float)$totalAmount - (float) $sales->discount;
-                } else {
-                    $newBalance = (float)$totalAmount;
-                }
-                $updateSalesStatus = $sales->fill($data1)->save();
-                if ($updateSalesStatus) {
-                    $data2['balance'] = ($currentBalance - $oldAmount) + $newBalance;
-                    $data2['balance'] = round($data2['balance'], 2);
-                    $updateBalanceStatus = $customer->fill($data2)->save();
-                    if ($updateBalanceStatus) {
-                        Toastr::success('New Item Added Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
-                    } else {
-                        Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
-                    }
+            $totalAmount = DB::table('sales_items')->where('sales_id', $sales->id)->sum('sales_price');
+            $data1['grand_total'] = round($totalAmount, 2);
+            if ($sales->discount) {
+                $newBalance = (float)$totalAmount - (float) $sales->discount;
+            } else {
+                $newBalance = (float)$totalAmount;
+            }
+            $updateSalesStatus = $sales->fill($data1)->save();
+            if ($updateSalesStatus) {
+                $data2['balance'] = ($currentBalance - $oldAmount) + $newBalance;
+                $data2['balance'] = round($data2['balance'], 2);
+                $updateBalanceStatus = $customer->fill($data2)->save();
+                if ($updateBalanceStatus) {
+                    Toastr::success('New Item Added Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
                 } else {
                     Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
                 }
+            } else {
+                Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
             }
         } else {
             Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
@@ -455,11 +438,6 @@ class UtilityController extends Controller
             $sale->save();
 
             $sale_items = SalesItems::where('sales_id', $id)->get();
-            foreach ($sale_items as $item) {
-                $stock = stock::where('product_id', $item->product_id)->first();
-                $stock->increment('product_qty', $item->product_quantity);
-            }
-
             SalesItems::where('sales_id', $id)->delete();
 
             $date = Carbon::now()->format('Y-m-d');
@@ -523,11 +501,6 @@ class UtilityController extends Controller
             $sale->save();
 
             $sale_items = SalesItems::where('sales_id', $id)->get();
-            foreach ($sale_items as $item) {
-                $stock = stock::where('product_id', $item->product_id)->first();
-                $stock->increment('product_qty', $item->product_quantity);
-            }
-
             $status = SalesItems::where('sales_id', $id)->delete();
 
             if ($status) {
@@ -618,9 +591,6 @@ class UtilityController extends Controller
                 $sales_return_item = new SalesReturnItem();
                 $sales_item = SalesItems::findOrFail($itemId);
 
-                $stock = stock::where('product_id',$sales_item->product_id)->first();
-                $stock->product_qty += $quantity;
-
                 $sales_return_item->return_date = Carbon::now()->format('Y-m-d');
                 $sales_return_item->return_id   = $sales_return->id;
                 $sales_return_item->sales_item_id = $itemId;
@@ -630,7 +600,6 @@ class UtilityController extends Controller
                 $sales_return_item->quantity    = $quantity;
                 $sales_item_total_price         = round(($sales_item->unit_price) + (($sales_item->unit_price/100) * ($sales_item->gst_percent)),2);
                 $sales_return_item->total       = round(($sales_item_total_price) * ($quantity),2);
-                $stock->save();
                 $status = $sales_return_item->save();
             }
             $sales = DirectSales::findOrFail($id);
@@ -814,9 +783,6 @@ class UtilityController extends Controller
                 $purchase_return_item = new PurchaseReturnItem();
                 $purchase_item = PurchaseItems::findOrFail($itemId);
 
-                $stock = stock::where('product_id',$purchase_item->product_id)->first();
-                $stock->product_qty -= $quantity;
-
                 $purchase_return_item->return_date = Carbon::now()->format('Y-m-d');
                 $purchase_return_item->return_id   = $purchase_return->id;
                 $purchase_return_item->purchase_item_id = $itemId;
@@ -827,7 +793,6 @@ class UtilityController extends Controller
                 $purchase_return_item->quantity    = $quantity;
                 $purchase_return_item->total       = round(($unit_price_with_tax) * ($quantity),2);
 
-                $stock->save();
                 $status = $purchase_return_item->save();
             }
             $purchase = Purchase::findOrFail($id);

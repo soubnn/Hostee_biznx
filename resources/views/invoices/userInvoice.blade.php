@@ -293,7 +293,7 @@
                                                         $product_name =
                                                             $productDetails->product_name .
                                                             ' - ' .
-                                                            strtoupper($item->serial_number);
+                                                            '[' . strtoupper($item->serial_number) . ']';
                                                     } else {
                                                         $product_name = $productDetails->product_name;
                                                     }

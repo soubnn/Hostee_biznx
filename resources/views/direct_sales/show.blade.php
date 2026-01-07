@@ -102,7 +102,8 @@
                                             <tr>
                                                 <td style="white-space:normal">{{ $item->product_name }}</td>
                                                 <td style="white-space:normal">
-                                                    {{ $item->product_detail->category_details->category_name }}</td>
+                                                    {{ $item->product_detail->category_details->category_name ?? '-' }}
+                                                </td>
                                                 <td style="white-space:normal">₹ {{ $item->unit_price }}</td>
                                                 <td style="white-space:normal">{{ $item->product_quantity }}</td>
                                                 <td style="white-space:normal">{{ $item->gst_percent }} %</td>
