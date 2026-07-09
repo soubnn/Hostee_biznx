@@ -942,7 +942,20 @@ class DaybookController extends Controller
                 } else if ($daybook->expense_id == "staff_incentive") {
                     $temp['name'] = "Incentive";
                 } else if ($daybook->expense_id == "SALE_RETURN") {
-                    $temp['name'] = strtoupper($daybook->job);
+                    $customerName = '';
+                    if ($daybook->job) {
+                        $saleReturn = DB::table('sales_returns')->where('invoice_number', $daybook->job)->first();
+                        if ($saleReturn) {
+                            $sale = DB::table('direct_sales')->where('id', $saleReturn->sale_id)->first();
+                            if ($sale) {
+                                $customerName = $sale->customer_name;
+                                if (empty($customerName) && !empty($sale->customer_id)) {
+                                    $customerName = DB::table('customers')->where('id', $sale->customer_id)->value('name');
+                                }
+                            }
+                        }
+                    }
+                    $temp['name'] = $daybook->job ? (strtoupper($daybook->job) . ($customerName ? " (" . strtoupper($customerName) . ")" : "")) : '';
                 } else if ($daybook->expense_id == "FOR_SUPPLIER") {
                     $sellerDetails = DB::table('sellers')->where('id', $daybook->job)->first();
                     $temp['name'] = strtoupper($sellerDetails->seller_name);
@@ -965,7 +978,17 @@ class DaybookController extends Controller
                 $temp1 = array();
                 $temp1['date'] = $daybook->date;
                 if ($daybook->income_id == "FROM_INVOICE") {
-                    $temp1['name'] = $daybook->job;
+                    $customerName = '';
+                    if ($daybook->job) {
+                        $sale = DB::table('direct_sales')->where('invoice_number', $daybook->job)->first();
+                        if ($sale) {
+                            $customerName = $sale->customer_name;
+                            if (empty($customerName) && !empty($sale->customer_id)) {
+                                $customerName = DB::table('customers')->where('id', $sale->customer_id)->value('name');
+                            }
+                        }
+                    }
+                    $temp1['name'] = $daybook->job ? ($daybook->job . ($customerName ? " ({$customerName})" : "")) : '';
                 } elseif ($daybook->income_id == "INVESTOR_INVESTMENT") {
                     $temp1['name'] = "INVESTOR INVESTMENT";
                 } elseif ($daybook->income_id == "WITHDRAW_BANK") {

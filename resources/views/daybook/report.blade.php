@@ -203,7 +203,18 @@
             @foreach ($tableData as $data)
                 <tr style="text-align:center">
                     <td>{{ carbon\Carbon::parse($data['date'])->format('d-m-Y') }}</td>
-                    <td>{{ $data['name'] }}</td>
+                    <td>
+                        @if(strpos($data['name'], ' (') !== false)
+                            @php
+                                $parts = explode(' (', $data['name'], 2);
+                                $invoice = $parts[0];
+                                $cName = rtrim($parts[1], ')');
+                            @endphp
+                            {{ $invoice }}<br><span style="font-size: 9px; color: #555; font-weight: normal; display: block; line-height: 1.1;">({{ $cName }})</span>
+                        @else
+                            {{ $data['name'] }}
+                        @endif
+                    </td>
                     <td>{{ $data['description'] }}</td>
                     <td>{{ round(floatval($data['debit']), 2) }}</td>
                     <td>{{ round(floatval($data['credit']), 2) }}</td>

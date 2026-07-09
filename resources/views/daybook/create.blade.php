@@ -412,7 +412,7 @@
         //Column 3
         var newColumn3 = document.createElement("td");
         var newAmount = document.createElement("input");
-        newAmount.setAttribute("class","form-control cAmount");
+        newAmount.setAttribute("class","form-control bAmount");
         newAmount.setAttribute("type","number");
         newAmount.setAttribute("value","0");
         newAmount.setAttribute("step","0.01");
@@ -435,10 +435,10 @@
 
         var newAccOption2 = document.createElement("option");
         newAccOption2.setAttribute("value","CASH");
-        newAccOption2.setAttribute("selected","");
         newAccOption2.innerHTML = "CASH";
         var newAccOption4 = document.createElement("option");
         newAccOption4.setAttribute("value","ACCOUNT");
+        newAccOption4.setAttribute("selected","");
         newAccOption4.innerHTML = "ACCOUNT";
         accountsSel.appendChild(newAccOption2);
         accountsSel.appendChild(newAccOption4);

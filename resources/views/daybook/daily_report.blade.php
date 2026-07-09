@@ -203,7 +203,7 @@
                                         $account = 'C';
                                     }
                                 @endphp
-                                <td>{{ $income->job }}({{ $account }})<br>{{substr($income->sales_detail->customer_detail->name, 0, 20)}}</td>
+                                <td>{{ $income->job }}({{ $account }})<br><span style="font-size: 8px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{substr($income->sales_detail->customer_detail->name, 0, 20)}}</span></td>
                             @endif
                         @elseif ($income->income_id == 'PURCHASE_RETURN')
                             @if(!$income->purchase_return_detail)
@@ -222,7 +222,7 @@
                                         $account = 'C';
                                     }
                                 @endphp
-                                <td>DN-{{ $income->job }}-{{ $year }}({{ $account }})<br>{{substr($income->purchase_return_detail->purchase_details->seller_detail->seller_name, 0, 20)}}</td>
+                                <td>DN-{{ $income->job }}-{{ $year }}({{ $account }})<br><span style="font-size: 8px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{substr($income->purchase_return_detail->purchase_details->seller_detail->seller_name, 0, 20)}}</span></td>
                             @endif
                         @elseif ($income->income_id == 'INVESTOR_INVESTMENT')
                             @php
@@ -236,7 +236,7 @@
                                     $account = 'C';
                                 }
                             @endphp
-                            <td>INVESTOR INVESTMENT ({{ $account }})<br>{{substr($income->investor_detail->name, 0, 20)}}</td>
+                            <td>INVESTOR INVESTMENT ({{ $account }})<br><span style="font-size: 8px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{substr($income->investor_detail->name, 0, 20)}}</span></td>
                         @else
                             @php
                                 // $income_details = DB::table('incomes')->where('id',$income->income_id)->first();
@@ -352,7 +352,7 @@
                                     $account = 'C';
                                 }
                             @endphp
-                            <td>INVESTOR WITHDRAWAL ({{ $account }})<br>{{substr($expense->investor_detail->name, 0, 20)}}</td>
+                            <td>INVESTOR WITHDRAWAL ({{ $account }})<br><span style="font-size: 8px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{substr($expense->investor_detail->name, 0, 20)}}</span></td>
                             <td>{{ $expense->amount }}</td>
                         @elseif($expense->expense_id == 'INVEST_BANK')
                             @php

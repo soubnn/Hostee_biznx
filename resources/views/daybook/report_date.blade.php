@@ -144,7 +144,7 @@
                                                                                 $account = 'C';
                                                                             }
                                                                         @endphp
-                                                                        <td>{{ $income->job }}({{ $account }})<br>{{ substr($customer->name, 0, 20) }}
+                                                                        <td>{{ $income->job }}({{ $account }})<br><span style="font-size: 10px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{ substr($customer->name, 0, 20) }}</span>
                                                                         </td>
                                                                     @endif
                                                                 @elseif($income->income_id == 'INVESTOR_INVESTMENT')
@@ -200,7 +200,7 @@
                                                                                 $account = 'C';
                                                                             }
                                                                         @endphp
-                                                                        <td>{{ $sale_details->invoice_number }}({{ $account }})<br>{{ substr($seller->seller_name, 0, 20) }}
+                                                                        <td>{{ $sale_details->invoice_number }}({{ $account }})<br><span style="font-size: 10px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{ substr($seller->seller_name, 0, 20) }}</span>
                                                                         </td>
                                                                     @endif
                                                                 @else
@@ -267,7 +267,7 @@
                                                                             $exp_account = 'C';
                                                                         }
                                                                     @endphp
-                                                                    <td>{{ $supplierDetails->invoice_number }}({{ $exp_account }})<br>{{ substr($customer->name, 0, 20) }}
+                                                                    <td>{{ $supplierDetails->invoice_number }}({{ $exp_account }})<br><span style="font-size: 10px; color: #555; font-weight: normal; display: block; line-height: 1.1;">{{ substr($customer->name, 0, 20) }}</span>
                                                                     </td>
                                                                     <td>{{ $expense->amount }}</td>
                                                                 @elseif($expense->expense_id == 'INVESTOR_WITHDRAWAL')
