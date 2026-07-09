@@ -157,6 +157,9 @@
                 color: red !important;
                 -webkit-print-color-adjust: exact;
             }
+            .page-break {
+                page-break-after: always;
+            }
         }
 
         /*@page{*/
@@ -170,8 +173,34 @@
     </style>
 </head>
 
-<body>
-    <div class="top_headder" style="padding: 0;margin-left:-15px;">
+@php
+    $itemsPerPage = 18;
+    $chunks = collect($estimate_details)->chunk($itemsPerPage);
+    $no = 1;
+
+    $total_sgst = 0;
+    $total_cgst = 0;
+    $total_taxable = 0;
+    $total_unit_price_all = 0;
+    $total_qty_all = 0;
+
+    // Calculate totals first to ensure they are available on the last page
+    foreach ($estimate_details as $item) {
+        if ($item->product_name) {
+            $amount = round($item->qty * $item->unit_price, 2);
+            $total_taxable += $amount;
+            $sgst_cgst = $item->product_tax / 2;
+            $sgst_value = round(($amount * $sgst_cgst) / 100, 2);
+            $cgst_value = round(($amount * $sgst_cgst) / 100, 2);
+            $total_sgst += $sgst_value;
+            $total_cgst += $cgst_value;
+            $total_unit_price_all += $item->unit_price;
+            $total_qty_all += $item->qty;
+        }
+    }
+@endphp
+@foreach($chunks as $chunkIndex => $estimate_details_chunk)
+    <div class="top_headder {{ !$loop->last ? 'page-break' : '' }}" style="padding: 0;margin-left:-15px;">
         <div class="container_banner">
             <div class="banner_body">
                 <table border="0" class="table topbanner mystyle" style="margin-bottom:10px;width: 100%" width="100%">
@@ -274,21 +303,17 @@
                                                 <th width="33" style="border: 1px solid;">Amount</th>
                                             </tr>
                                         </thead>
-                                        @php
-                                            $no = 1;
-                                            $row_length = 0;
-                                            $sgst_total=0;
-                                            $cgst_total=0;
-                                            $taxable_total = 0;
-                                        @endphp
                                         <tbody style="vertical-align: top;" valign="top">
-                                            @foreach ( $estimate_details as $estimate_details)
-                                                @if($estimate_details->product_name)
+                                            @php
+                                                $row_length = 0;
+                                            @endphp
+                                            @foreach ( $estimate_details_chunk as $estimate_detail)
+                                                @if($estimate_detail->product_name)
                                                     <tr>
                                                         <td style="text-align: center;">{{ $no }}</td>
                                                         @php
-                                                            if (is_numeric($estimate_details->product_name) && ctype_digit(strval($estimate_details->product_name))) {
-                                                                $get_product = DB::table('products')->where('id', $estimate_details->product_name)->first();
+                                                            if (is_numeric($estimate_detail->product_name) && ctype_digit(strval($estimate_detail->product_name))) {
+                                                                $get_product = DB::table('products')->where('id', $estimate_detail->product_name)->first();
                                                             } else {
                                                                 $get_product = null;
                                                             }
@@ -318,8 +343,8 @@
                                                                     @endphp --}}
                                                             {{-- @else --}}
                                                                 <td colspan="3">
-                                                                    <b>{{ $estimate_details->product_name }}</b> <br />
-                                                                    [ {{ $estimate_details->description }} ]
+                                                                    <b>{{ $get_product->product_name }}</b> <br />
+                                                                    [ {{ $estimate_detail->description }} ]
                                                                 </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
@@ -327,12 +352,12 @@
                                                             {{-- @endif --}}
                                                         @else
                                                             @php
-                                                                $name_length = strlen($estimate_details->product_name);
+                                                                $name_length = strlen($estimate_detail->product_name);
                                                             @endphp
                                                             @if ($name_length > 50 && $name_length <= 100)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}</td>
                                                                     @php
@@ -340,9 +365,9 @@
                                                                     @endphp
                                                             @elseif($name_length > 100 && $name_length <= 150)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}</td>
                                                                     @php
@@ -350,10 +375,10 @@
                                                                     @endphp
                                                             @elseif($name_length > 150 && $name_length <= 200)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}</td>
                                                                     @php
@@ -361,11 +386,11 @@
                                                                     @endphp
                                                             @elseif($name_length > 200 && $name_length <= 250)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}</td>
                                                                     @php
@@ -373,12 +398,12 @@
                                                                     @endphp
                                                             @elseif($name_length > 250 && $name_length <= 300)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}</td>
                                                                     @php
@@ -386,13 +411,13 @@
                                                                     @endphp
                                                             @elseif($name_length > 300 && $name_length <= 350)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}</td>
                                                                     @php
@@ -400,14 +425,14 @@
                                                                     @endphp
                                                             @elseif($name_length > 350)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300,50);
-                                                                    $product_name8 = substr($estimate_details->product_name,350);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300,50);
+                                                                    $product_name8 = substr($estimate_detail->product_name,350);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}</td>
                                                                     @php
@@ -415,17 +440,17 @@
                                                                     @endphp
                                                             {--@elseif($name_length > 500)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300,50);
-                                                                    $product_name8 = substr($estimate_details->product_name,350,50);
-                                                                    $product_name9 = substr($estimate_details->product_name,400,50);
-                                                                    $product_name10 = substr($estimate_details->product_name,450,50);
-                                                                    $product_name11 = substr($estimate_details->product_name,500);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300,50);
+                                                                    $product_name8 = substr($estimate_detail->product_name,350,50);
+                                                                    $product_name9 = substr($estimate_detail->product_name,400,50);
+                                                                    $product_name10 = substr($estimate_detail->product_name,450,50);
+                                                                    $product_name11 = substr($estimate_detail->product_name,500);
                                                                 @endphp
                                                                     <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}<br>{{ $product_name10 }}<br>{{ $product_name11 }}</td>
                                                                     @php
@@ -433,27 +458,27 @@
                                                                 @endphp --}
                                                             @else
                                                                 <td colspan="3">
-                                                                    <b>{{ $estimate_details->product_name }}</b>  <br />
-                                                                    [ {{ $estimate_details->description }} ]
+                                                                    <b>{{ $estimate_detail->product_name }}</b>  <br />
+                                                                    [ {{ $estimate_detail->description }} ]
                                                                 </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
                                                             @endif
                                                         @endif
-                                                        {{-- <td>{{ $estimate_details->warrenty }}</td> --}}
+                                                        {{-- <td>{{ $estimate_detail->warrenty }}</td> --}}
                                                         @php
-                                                            $unit_price = number_format((float)$estimate_details->unit_price, 2, '.', '');
+                                                            $unit_price = number_format((float)$estimate_detail->unit_price, 2, '.', '');
                                                         @endphp
                                                         <td>{{ $unit_price }}</td>
-                                                        <td>{{ $estimate_details->qty }}</td>
+                                                        <td>{{ $estimate_detail->qty }}</td>
                                                         @php
-                                                            $amount = round($estimate_details->qty * $estimate_details->unit_price,2);
+                                                            $amount = round($estimate_detail->qty * $estimate_detail->unit_price,2);
                                                         @endphp
                                                         <td>{{ number_format((float)$amount, 2, '.', '') }}</td>
                                                         <td>{{ number_format((float)$amount, 2, '.', '') }}</td>
                                                         @php
-                                                            $sgst = $cgst = ($estimate_details->product_tax)/2;
+                                                            $sgst = $cgst = ($estimate_detail->product_tax)/2;
                                                         @endphp
                                                         <td style="text-align: right;">{{ $sgst }}</td>
                                                         @php
@@ -465,7 +490,7 @@
                                                             $cgst_value = round(($amount*$cgst)/100,2);
                                                         @endphp
                                                         <td style="text-align: right;">{{ number_format((float)$cgst_value, 2, '.', '') }}</td>
-                                                        <td>{{ $estimate_details->total }}</td>
+                                                        <td>{{ $estimate_detail->total }}</td>
                                                     </tr>
                                                     @php
                                                         $no++;
@@ -476,13 +501,13 @@
                                                 @endif
                                             @endforeach
                                             @php
-                                                $row_limit = 315-$row_length;
+                                                $row_limit = 400 - $row_length;
                                             @endphp
+                                            @if ($row_limit > 0)
                                             <tr>
-                                                <td style="height:{{ $row_limit }} !important;"></td>
+                                                <td style="height:{{ $row_limit }}px !important;"></td>
                                                 <td></td>
                                                 <td></td>
-                                                {{-- <td></td> --}}
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -492,25 +517,34 @@
                                                 <td></td>
                                                 <td></td>
                                             </tr>
+                                            @endif
                                         </tbody>
                                         <tfoot>
+                                            @if($loop->last)
                                             <tr>
                                                 <td style="border: 1px solid"></td>
                                                 <td colspan="1" style="text-align: right;border: 1px solid">
                                                     <b>TOTAL</b>
                                                 </td>
-                                                <td style="border: 1px solid">{{ number_format((float) $total_unit_price, 2, '.', '') }}</td>
-                                                <td style="border: 1px solid">{{ $total_qty }}</td>
+                                                <td style="border: 1px solid">{{ number_format((float) $total_unit_price_all, 2, '.', '') }}</td>
+                                                <td style="border: 1px solid">{{ $total_qty_all }}</td>
                                                 <td style="border: 1px solid"></td>
-                                                <td style="border: 1px solid">{{ number_format($taxable_total, 2, '.', '') }}</td>
+                                                <td style="border: 1px solid">{{ number_format($total_taxable, 2, '.', '') }}</td>
                                                 <td style="border: 1px solid"></td>
-                                                <td style="border: 1px solid">{{ number_format($sgst_total, 2, '.', '') }}</td>
+                                                <td style="border: 1px solid">{{ number_format($total_sgst, 2, '.', '') }}</td>
                                                 <td style="border: 1px solid"></td>
-                                                <td style="border: 1px solid">{{ number_format($cgst_total, 2, '.', '') }}</td>
+                                                <td style="border: 1px solid">{{ number_format($total_cgst, 2, '.', '') }}</td>
                                                 <td style="text-align: right;border: 1px solid">
                                                     <b>{{ number_format((float) $estimate->grand_total, 2, '.', '') }}</b>
                                                 </td>
                                             </tr>
+                                            @else
+                                            <tr>
+                                                <td colspan="11" style="text-align: center; border: 1px solid; color: #999;">
+                                                    <i>... Continued on next page ...</i>
+                                                </td>
+                                            </tr>
+                                            @endif
                                         </tfoot>
                                     </table>
                                 </td>
@@ -527,18 +561,17 @@
                                                 <th width="50" colspan="2" style="border: 1px solid;">Total</th>
                                             </tr>
                                         </thead>
-                                        @php
-                                            $no = 1;
-                                            $row_length = 0;
-                                        @endphp
                                         <tbody style="vertical-align: top;" valign="top">
-                                            @foreach ( $estimate_details as $estimate_details)
-                                                @if($estimate_details->product_name)
+                                            @php
+                                                $row_length = 0;
+                                            @endphp
+                                            @foreach ( $estimate_details_chunk as $estimate_detail)
+                                                @if($estimate_detail->product_name)
                                                     <tr>
                                                         <td colspan="2" style="text-align: center;">{{ $no }}</td>
                                                         @php
-                                                            if (is_numeric($estimate_details->product_name) && ctype_digit(strval($estimate_details->product_name))) {
-                                                                $get_product = DB::table('products')->where('id', $estimate_details->product_name)->first();
+                                                            if (is_numeric($estimate_detail->product_name) && ctype_digit(strval($estimate_detail->product_name))) {
+                                                                $get_product = DB::table('products')->where('id', $estimate_detail->product_name)->first();
                                                             } else {
                                                                 $get_product = null;
                                                             }
@@ -568,8 +601,8 @@
                                                                 @endphp
                                                             @else --}}
                                                                 <td colspan="3">
-                                                                    <b>{{ $estimate_details->product_name }}</b> <br />
-                                                                    [ {{ $estimate_details->description }} ]
+                                                                    <b>{{ $get_product->product_name }}</b> <br />
+                                                                    [ {{ $estimate_detail->description }} ]
                                                                 </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
@@ -577,12 +610,12 @@
                                                             {{-- @endif --}}
                                                         @else
                                                             {{-- @php
-                                                                $name_length = strlen($estimate_details->product_name);
+                                                                $name_length = strlen($estimate_detail->product_name);
                                                             @endphp
                                                             @if ($name_length > 50 && $name_length <= 100)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}</td>
                                                                     @php
@@ -590,9 +623,9 @@
                                                                     @endphp
                                                             @elseif($name_length > 100 && $name_length <= 150)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}</td>
                                                                     @php
@@ -600,10 +633,10 @@
                                                                     @endphp
                                                             @elseif($name_length > 150 && $name_length <= 200)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}</td>
                                                                     @php
@@ -611,11 +644,11 @@
                                                                     @endphp
                                                             @elseif($name_length > 200 && $name_length <= 250)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}</td>
                                                                     @php
@@ -623,12 +656,12 @@
                                                                     @endphp
                                                             @elseif($name_length > 250 && $name_length <= 300)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}</td>
                                                                     @php
@@ -636,13 +669,13 @@
                                                                     @endphp
                                                             @elseif($name_length > 300 && $name_length <= 350)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}</td>
                                                                     @php
@@ -650,14 +683,14 @@
                                                                     @endphp
                                                             @elseif($name_length > 350 && $name_length <= 400)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300,50);
-                                                                    $product_name8 = substr($estimate_details->product_name,350);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300,50);
+                                                                    $product_name8 = substr($estimate_detail->product_name,350);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}</td>
                                                                     @php
@@ -665,15 +698,15 @@
                                                                     @endphp
                                                                 @elseif($name_length > 400 && $name_length <= 450)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300,50);
-                                                                    $product_name8 = substr($estimate_details->product_name,350,50);
-                                                                    $product_name9 = substr($estimate_details->product_name,400);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300,50);
+                                                                    $product_name8 = substr($estimate_detail->product_name,350,50);
+                                                                    $product_name9 = substr($estimate_detail->product_name,400);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}</td>
                                                                     @php
@@ -681,16 +714,16 @@
                                                                     @endphp
                                                                 @elseif($name_length > 450 && $name_length <= 500)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300,50);
-                                                                    $product_name8 = substr($estimate_details->product_name,350,50);
-                                                                    $product_name9 = substr($estimate_details->product_name,400,50);
-                                                                    $product_name10 = substr($estimate_details->product_name,450);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300,50);
+                                                                    $product_name8 = substr($estimate_detail->product_name,350,50);
+                                                                    $product_name9 = substr($estimate_detail->product_name,400,50);
+                                                                    $product_name10 = substr($estimate_detail->product_name,450);
                                                                 @endphp
                                                                     <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}<br>{{ $product_name10 }}</td>
                                                                     @php
@@ -698,17 +731,17 @@
                                                                     @endphp
                                                                 @elseif($name_length > 500)
                                                                 @php
-                                                                    $product_name1 = substr($estimate_details->product_name,0,50);
-                                                                    $product_name2 = substr($estimate_details->product_name,50,50);
-                                                                    $product_name3 = substr($estimate_details->product_name,100,50);
-                                                                    $product_name4 = substr($estimate_details->product_name,150,50);
-                                                                    $product_name5 = substr($estimate_details->product_name,200,50);
-                                                                    $product_name6 = substr($estimate_details->product_name,250,50);
-                                                                    $product_name7 = substr($estimate_details->product_name,300,50);
-                                                                    $product_name8 = substr($estimate_details->product_name,350,50);
-                                                                    $product_name9 = substr($estimate_details->product_name,400,50);
-                                                                    $product_name10 = substr($estimate_details->product_name,450,50);
-                                                                    $product_name11 = substr($estimate_details->product_name,500);
+                                                                    $product_name1 = substr($estimate_detail->product_name,0,50);
+                                                                    $product_name2 = substr($estimate_detail->product_name,50,50);
+                                                                    $product_name3 = substr($estimate_detail->product_name,100,50);
+                                                                    $product_name4 = substr($estimate_detail->product_name,150,50);
+                                                                    $product_name5 = substr($estimate_detail->product_name,200,50);
+                                                                    $product_name6 = substr($estimate_detail->product_name,250,50);
+                                                                    $product_name7 = substr($estimate_detail->product_name,300,50);
+                                                                    $product_name8 = substr($estimate_detail->product_name,350,50);
+                                                                    $product_name9 = substr($estimate_detail->product_name,400,50);
+                                                                    $product_name10 = substr($estimate_detail->product_name,450,50);
+                                                                    $product_name11 = substr($estimate_detail->product_name,500);
                                                                 @endphp
                                                                 <td colspan="3">{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}<br>{{ $product_name7 }}<br>{{ $product_name8 }}<br>{{ $product_name9 }}<br>{{ $product_name10 }}<br>{{ $product_name11 }}</td>
                                                                 @php
@@ -716,18 +749,18 @@
                                                                 @endphp
                                                             @else --}}
                                                                 <td colspan="3">
-                                                                    <b>{{ $estimate_details->product_name }}</b> <br />
-                                                                    [ {{ $estimate_details->description }} ]
+                                                                    <b>{{ $estimate_detail->product_name }}</b> <br />
+                                                                    [ {{ $estimate_detail->description }} ]
                                                                 </td>
                                                                 @php
                                                                     $row_length= $row_length+18;
                                                                 @endphp
                                                             {{-- @endif --}}
                                                         @endif
-                                                        {{-- <td colspan="2">{{ $estimate_details->warrenty }}</td> --}}
-                                                        <td colspan="2">{{ number_format((float) $estimate_details->unit_price, 2, '.', '') }}</td>
-                                                        <td>{{ $estimate_details->qty }}</td>
-                                                        <td colspan="2">{{ $estimate_details->total }}</td>
+                                                        {{-- <td colspan="2">{{ $estimate_detail->warrenty }}</td> --}}
+                                                        <td colspan="2">{{ number_format((float) $estimate_detail->unit_price, 2, '.', '') }}</td>
+                                                        <td>{{ $estimate_detail->qty }}</td>
+                                                        <td colspan="2">{{ $estimate_detail->total }}</td>
                                                     </tr>
                                                     @php
                                                         $no++;
@@ -735,35 +768,46 @@
                                                 @endif
                                             @endforeach
                                             @php
-                                                $row_limit = 340-$row_length;
+                                                $row_limit = 420 - $row_length;
                                             @endphp
+                                            @if ($row_limit > 0)
                                             <tr>
-                                                <td colspan="2" style="height:{{ $row_limit }} !important;"></td>
+                                                <td colspan="2" style="height:{{ $row_limit }}px !important;"></td>
                                                 <td colspan="3"></td>
                                                 {{-- <td colspan="2"></td> --}}
                                                 <td colspan="2"></td>
                                                 <td></td>
                                                 <td colspan="2"></td>
                                             </tr>
+                                            @endif
                                         </tbody>
                                         <tfoot>
+                                            @if($loop->last)
                                             <tr>
                                                 <td colspan="2" style="border: 1px solid"></td>
                                                 <td colspan="3" style="text-align: right;border: 1px solid">
                                                     <b>TOTAL</b>
                                                 </td>
-                                                <td  colspan="2" style="border: 1px solid">{{ number_format((float) $total_unit_price, 2, '.', '') }}</td>
-                                                <td style="border: 1px solid">{{ $total_qty }}</td>
+                                                <td  colspan="2" style="border: 1px solid">{{ number_format((float) $total_unit_price_all, 2, '.', '') }}</td>
+                                                <td style="border: 1px solid">{{ $total_qty_all }}</td>
                                                 <td colspan="2" style="text-align: right;border: 1px solid">
                                                     <b>{{ number_format((float) $estimate->grand_total, 2, '.', '') }}</b>
                                                 </td>
                                             </tr>
+                                            @else
+                                            <tr>
+                                                <td colspan="10" style="text-align: center; border: 1px solid; color: #999;">
+                                                    <i>... Continued on next page ...</i>
+                                                </td>
+                                            </tr>
+                                            @endif
                                         </tfoot>
                                     </table>
                                 </td>
                             @endif
 
                         </tr>
+                        @if($loop->last)
                         <tr>
                             <td style="padding: 0;margin: 0;">
                                 <table width="100%" border="0" cellpadding="0" cellspacing="0"
@@ -830,12 +874,13 @@
                                 </table>
                             </td>
                         </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
         </div>
-
     </div>
+@endforeach
 </body>
 
 </html>
