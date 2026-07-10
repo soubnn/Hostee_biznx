@@ -312,6 +312,20 @@
                                     </p>
                                 </td>
                             </tr>
+                            @if (isset($advancePaidAmount) && $advancePaidAmount > 0)
+                            <tr style="height: 15pt">
+                                <td style="width: 96pt;border-bottom-style: solid;border-bottom-width: 1pt;border-right-style: solid;border-right-width: 1pt;">
+                                    <p class="s1" style="padding-left: 5pt;text-indent: 0pt;line-height: 11pt;text-align: left;">
+                                        Advance Paid
+                                    </p>
+                                </td>
+                                <td style="width: 115pt;border-bottom-style: solid;border-bottom-width: 1pt;">
+                                    <p class="s2" style="padding-left: 46pt;padding-right: 46pt;text-indent: 0pt;line-height: 11pt;text-align: center;">
+                                        {{ $advancePaidAmount }}
+                                    </p>
+                                </td>
+                            </tr>
+                            @endif
                             <tr style="height: 15pt">
                                 <td style="width: 96pt;border-bottom-style: solid;border-bottom-width: 1pt;border-right-style: solid;border-right-width: 1pt;">
                                     <p class="s1" style="padding-left: 5pt;text-indent: 0pt;line-height: 11pt;text-align: left;">

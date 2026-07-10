@@ -100,6 +100,14 @@
                                                         $lastTermSalaryLleaveDays = '';
                                                         $lastTermSalaryDescription = '';
 
+                                                        // Query advance payments for this first term
+                                                        $advanceAmount = DB::table('salary_payments')
+                                                            ->where('staff_id', $staff->id)
+                                                            ->where('term', $current_term)
+                                                            ->where('payment_type', 'advance')
+                                                            ->sum('amount');
+                                                        $balancePaymentAmount = $staff->salary - $advanceAmount;
+
                                                     } else {
                                                         // Staff has previous salary
                                                         $last_salary_month_term = explode('-', $last_term_salary->term);
@@ -120,6 +128,14 @@
                                                             $color_day = '30-' . str_pad($current_salary_month, 2, '0', STR_PAD_LEFT) . '-20' . $currentTermYear;
                                                             $color_date = Carbon\carbon::parse($color_day)->format('Y-m-d');
                                                             $color = (Carbon\carbon::now()->format('Y-m-d') >= $color_date) ? 'text-danger' : 'text-success';
+
+                                                            // Query advance payments for this current term
+                                                            $advanceAmount = DB::table('salary_payments')
+                                                                ->where('staff_id', $staff->id)
+                                                                ->where('term', $current_term)
+                                                                ->where('payment_type', 'advance')
+                                                                ->sum('amount');
+                                                            $balancePaymentAmount = $staff->salary - $advanceAmount;
 
                                                         } else {
                                                             // Last salary unpaid
@@ -161,6 +177,13 @@
                                                             $balancePaymentAmount = $lastTotalAmount - $lastAmount;
 
                                                             $color = 'text-danger';
+
+                                                            // Query advance payments for this term
+                                                            $advanceAmount = DB::table('salary_payments')
+                                                                ->where('staff_id', $staff->id)
+                                                                ->where('term', $current_term)
+                                                                ->where('payment_type', 'advance')
+                                                                ->sum('amount');
                                                         }
 
                                                         $lastTermSalaryStatus = $last_term_salary->status;
@@ -177,7 +200,8 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <button class="btn btn-light text-primary" data-bs-toggle="modal" data-bs-target="#advance_modal{{ $staff->id }}">Pay Salary</button>
+                                                    <button class="btn btn-light text-primary mb-1" data-bs-toggle="modal" data-bs-target="#advance_modal{{ $staff->id }}">Pay Salary</button>
+                                                    <button class="btn btn-light text-warning" data-bs-toggle="modal" data-bs-target="#pay_advance_modal{{ $staff->id }}">Pay Advance</button>
                                                 </td>
                                             </tr>
                                             <!-- Modal -->
@@ -210,6 +234,16 @@
                                                                     </div>
                                                                 </div>
 
+                                                                @if ($advanceAmount > 0)
+                                                                <!-- Advance Deductions -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label text-danger">Advance Deductions</label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control text-danger" value="-{{ $advanceAmount }}" readonly style="font-weight: bold;">
+                                                                    </div>
+                                                                </div>
+                                                                @endif
+
                                                                 <!-- Working Days, Leave -->
                                                                 <div class="form-group row mb-4">
                                                                     <label class="col-md-3 col-form-label">Working Days</label>
@@ -238,17 +272,19 @@
                                                                 <!-- Allowances -->
                                                                 <div id="additionalAllowanceFields{{ $staff->id }}"></div>
 
+                                                                <input type="hidden" id="advanceAmount{{$staff->id}}" value="{{ $advanceAmount }}">
+
                                                                 <!-- Total & Paying Amount -->
                                                                 <div class="form-group row mb-4">
                                                                     <label class="col-md-3 col-form-label">Total Amount</label>
                                                                     <div class="col-md-9">
-                                                                        <input type="number" name="totalAmount" id="amount{{$staff->id}}" class="form-control" value="{{ $balancePaymentAmount ?? $staff->salary }}" readonly>
+                                                                        <input type="number" name="totalAmount" id="amount{{$staff->id}}" class="form-control" value="{{ max(0, $balancePaymentAmount ?? $staff->salary) }}" readonly>
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group row mb-4">
                                                                     <label class="col-md-3 col-form-label">Paying Amount</label>
                                                                     <div class="col-md-9">
-                                                                        <input type="number" name="amount" id="PayingAmount{{$staff->id}}" class="form-control" value="{{ $balancePaymentAmount ?? $staff->salary }}" onkeyup="term_validate_amount(this.value,{{$staff->id}});" onchange="term_validate_amount(this.value,{{$staff->id}});">
+                                                                        <input type="number" name="amount" id="PayingAmount{{$staff->id}}" class="form-control" value="{{ max(0, $balancePaymentAmount ?? $staff->salary) }}" onkeyup="term_validate_amount(this.value,{{$staff->id}});" onchange="term_validate_amount(this.value,{{$staff->id}});">
                                                                         <span class="text-danger" id="amount_error_msg_{{ $staff->id }}" style="display: none">The amount can't be greater than balance amount</span>
                                                                     </div>
                                                                 </div>
@@ -278,6 +314,91 @@
                                                                     <div class="col-lg-12 text-end">
                                                                         <button type="submit" class="btn btn-primary" onclick="generateDescription({{$staff->id}});this.disabled=true;this.value='Adding...';this.form.submit();" id="addtask{{$staff->id}}">
                                                                             Make Payment
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- /.modal -->
+
+                                            <!-- Pay Advance Modal -->
+                                            <div id="pay_advance_modal{{$staff->id}}" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title add-task-title">Pay Salary Advance</h5>[{{ $staff->staff_name }}]
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form method="POST" action="{{ route('staff.store_salary_advance', $staff->id) }}">
+                                                                @csrf
+
+                                                                <!-- Target Term -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Salary Term</label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control" value="{{ $current_term_string }}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Date -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Date *</label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="date" name="date" class="form-control" value="{{ Carbon\carbon::now()->format('Y-m-d') }}" required>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Monthly Salary -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Monthly Salary</label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control" value="{{ $staff->salary }}" readonly>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Advance Amount -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Advance Amount *</label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="number" name="amount" min="1" class="form-control" placeholder="Enter advance amount" required>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Payment Method -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Payment Method *</label>
+                                                                    <div class="col-md-9">
+                                                                        <select class="form-control" name="payment_method" data-dropdown-parent="#pay_advance_modal{{$staff->id}}" style="width:100%" required>
+                                                                            <option value="" selected disabled>Select Payment Method</option>
+                                                                            <option value="CASH">CASH</option>
+                                                                            <option value="ACCOUNT">ACCOUNT</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Bank Reference -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Bank Reference No</label>
+                                                                    <div class="col-md-9">
+                                                                        <input type="text" class="form-control" name="bankReference">
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Description -->
+                                                                <div class="form-group row mb-4">
+                                                                    <label class="col-md-3 col-form-label">Description / Remarks</label>
+                                                                    <div class="col-md-9">
+                                                                        <textarea name="description" class="form-control" rows="3" placeholder="Enter optional details..."></textarea>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <div class="col-lg-12 text-end">
+                                                                        <button type="submit" class="btn btn-warning" onclick="this.disabled=true;this.value='Processing...';this.form.submit();">
+                                                                            Record Advance Payment
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -358,8 +479,9 @@
                 }
             });
 
-            $('#amount'+ staffId).val(totalAmount.toFixed(2));
-            $('#PayingAmount'+ staffId).val(totalAmount.toFixed(2));
+            var displayTotal = Math.max(0, totalAmount);
+            $('#amount'+ staffId).val(displayTotal.toFixed(2));
+            $('#PayingAmount'+ staffId).val(displayTotal.toFixed(2));
         }
 
         function removeAllowance(button) {
@@ -375,35 +497,18 @@
             });
         });
 
-        // function getPayablesalary( staffId ){
-
-        //     let leaveDaysInput = document.getElementById('leaveDays' + staffId);
-        //     var leaveDays = parseInt(leaveDaysInput.value) || 0;
-
-        //     var basicSalary = parseFloat($('#basicSalary' + staffId).val());
-        //     let payableAmount = basicSalary;
-
-        //     if (leaveDays > 0) {
-        //         payableAmount = basicSalary - ((basicSalary * 24 * leaveDays) / 300);
-        //     }
-
-        //     $('#paybleAmount'+staffId).val(payableAmount.toFixed(2));
-        //     calculateTotalAmount(staffId);
-        // }
-
         function getPayablesalary(staffId) {
             let leaveDaysInput = document.getElementById('leaveDays' + staffId);
             let leaveDays = parseInt(leaveDaysInput.value) || 0;
 
             let basicSalary = parseFloat($('#basicSalary' + staffId).val()) || 0;
-            let totalWorkingDays = 26;
+            let advanceAmount = parseFloat($('#advanceAmount' + staffId).val()) || 0;
+            let totalWorkingDays = 30;
             let perDaySalary = basicSalary / totalWorkingDays;
 
-            let payableAmount = basicSalary - (perDaySalary * leaveDays);
+            let payableAmount = basicSalary - (perDaySalary * leaveDays) - advanceAmount;
 
             $('#paybleAmount' + staffId).val(payableAmount.toFixed(2));
-            $('#amount' + staffId).val(payableAmount.toFixed(2));
-            $('#PayingAmount' + staffId).val(payableAmount.toFixed(2));
 
             calculateTotalAmount(staffId);
         }

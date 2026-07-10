@@ -550,6 +550,15 @@
                 </tr>
             @endforeach
 
+            @if (isset($advancePaidAmount) && $advancePaidAmount > 0)
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Advance Paid</td>
+                    <td class="text-right" style="font-weight: 700">{{ $advancePaidAmount }}</td>
+                </tr>
+            @endif
+
             <tr>
                 <td class="text-right"><b>Total</b></td>
                 <td class="text-right"><b>{{ $totalIncomAmount }}</b></td>

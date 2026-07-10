@@ -33,6 +33,7 @@ Route::group(['middleware'=>['auth']],function(){
     Route::get('/staffs/search_request',[App\Http\Controllers\StaffController::class, 'search_request'])->name('staffs.search_request');
     Route::post('staff/make_payments/{id}',[App\Http\Controllers\StaffController::class, 'store_payments'])->name('staff.store_payments');
     Route::post('staff/make_advance_payment/{id}',[App\Http\Controllers\StaffController::class, 'store_advance'])->name('staff.store_advance');
+    Route::post('staff/make_salary_advance/{id}',[App\Http\Controllers\StaffController::class, 'store_salary_advance'])->name('staff.store_salary_advance');
     Route::get('/staff/payment/history/{id}',[App\Http\Controllers\StaffController::class, 'payment_history'])->name('staff.payment.history');
     Route::get('/staffs/user',[App\Http\Controllers\StaffController::class, 'index_user'])->name('user.index');
     Route::post('delete_user/{id}',[App\Http\Controllers\StaffController::class, 'delete_user'])->name('delete_user');

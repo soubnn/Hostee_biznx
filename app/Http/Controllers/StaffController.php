@@ -346,7 +346,7 @@ class StaffController extends Controller
         $date = Carbon::parse(DaybookBalance::report_date())->format('Y-m-d');
         $data['date'] = $date;
 
-        if($currentTermTotalAmount > $currentTermAmount){
+        if($request->amount < $request->totalAmount){
             $data['status'] = 'partial';
         }else{
             $data['status'] = 'paid';
@@ -449,13 +449,45 @@ class StaffController extends Controller
             $grandTotalAmountWords = strtoupper($grandTotalAmountInWords);
 
             // paid amount
-            $paidAmount = SalaryPayment::where('staff_id',$staff->id)->where('term',$request->term)->where('id','<', $status->id)->sum('amount');
+            $paidAmount = SalaryPayment::where('staff_id',$staff->id)->where('term',$request->term)->where('payment_type','salary')->where('id','<', $status->id)->sum('amount');
+
+            // advance paid amount
+            $advancePaidAmount = SalaryPayment::where('staff_id',$staff->id)->where('term',$request->term)->where('payment_type','advance')->sum('amount');
+
+            // carry forward logic
+            $expectedTermTotal = $basicSalary + $grantTotal - $leaveAmount;
+            $totalPaidThisTerm = $advancePaidAmount + $paidAmount + $request->amount;
+            if ($totalPaidThisTerm > $expectedTermTotal) {
+                $excessAmount = $totalPaidThisTerm - $expectedTermTotal;
+
+                $term_array = explode('-', $request->term);
+                $month = intval($term_array[0]);
+                $term_no = $term_array[1];
+                $year = intval($term_array[2]);
+
+                $next_month = ($month == 12) ? 1 : $month + 1;
+                $next_year = ($month == 12) ? $year + 1 : $year;
+                $next_term = $next_month . '-1-' . $next_year;
+
+                SalaryPayment::create([
+                    'staff_id' => $staff->id,
+                    'basic_salary' => $staff->salary,
+                    'date' => $date,
+                    'term' => $next_term,
+                    'payment_type' => 'advance',
+                    'amount' => $excessAmount,
+                    'description' => 'Salary Advance Carry Forward from ' . $request->term,
+                    'payment_method' => $request->payment_method,
+                    'bankReference' => $request->bankReference,
+                    'status' => 'paid',
+                ]);
+            }
 
             // Deductions
-            $deductions = $paidAmount + $leaveAmount;
+            $deductions = $paidAmount + $advancePaidAmount + $leaveAmount;
 
             //PDF
-            $pdf = Pdf::loadView('staff.salary_slip', compact('staff', 'staff_categorie','date','leaveDays','grandTotalAmount','dataArray','deductions','paidAmount','totalIncomAmount','termData','paymentMethod','bankReferenceId','basicSalary','leaveAmount','grandTotalAmountWords'))->setPaper('a4', 'portrait');
+            $pdf = Pdf::loadView('staff.salary_slip', compact('staff', 'staff_categorie','date','leaveDays','grandTotalAmount','dataArray','deductions','paidAmount','advancePaidAmount','totalIncomAmount','termData','paymentMethod','bankReferenceId','basicSalary','leaveAmount','grandTotalAmountWords'))->setPaper('a4', 'portrait');
             $filename = time() . "_" . $staff->staff_name . "_" . $date . ".pdf";
             $pdf->save(storage_path('app/public/salary_slip/' . $filename));
 
@@ -466,7 +498,7 @@ class StaffController extends Controller
                 'term' => $termData,
             ];
             $attachmentPath = storage_path('app/public/salary_slip/' . $filename);
-            Mail::to($recipientEmail)->send(new SalaryDisbursementNotification($mailData, $attachmentPath));
+            // Mail::to($recipientEmail)->send(new SalaryDisbursementNotification($mailData, $attachmentPath));
 
             Storage::delete('public/salary_slip/' . $filename);
 
@@ -475,6 +507,109 @@ class StaffController extends Controller
         else{
             Toastr::error('try again!', 'error',["positionClass" => "toast-bottom-right"]);
         }
+        return redirect()->route('staff.payments');
+    }
+
+    public function store_salary_advance(Request $request, $id)
+    {
+        $this->validate($request, [
+            'date' => 'required|date',
+            'amount' => 'required|numeric|min:1',
+            'payment_method' => 'required',
+        ]);
+
+        $staff = staffs::findOrFail($id);
+
+        // Calculate current/active salary term
+        $last_term_salary = SalaryPayment::where('staff_id', $staff->id)->where('payment_type', 'salary')->latest('id')->first();
+        if ($last_term_salary == null) {
+            $join_date = $staff->join_date ?? now();
+            $month = intval(Carbon::parse($join_date)->format('m'));
+            $year = Carbon::parse($join_date)->format('Y');
+            $term = '1';
+            $current_term = $month . '-' . $term . '-' . substr($year, -2);
+        } else {
+            $last_salary_month_term = explode('-', $last_term_salary->term);
+            $last_salary_month = intval($last_salary_month_term[0]);
+            $last_salary_year = intval($last_salary_month_term[2]);
+            if ($last_term_salary->status == 'paid') {
+                $current_salary_month = ($last_salary_month == 12) ? 1 : $last_salary_month + 1;
+                $currentTermYear = ($last_salary_month == 12) ? $last_salary_year + 1 : $last_salary_year;
+                $term = '1';
+                $current_term = $current_salary_month . '-' . $term . '-' . $currentTermYear;
+            } else {
+                $current_term = $last_term_salary->term;
+            }
+        }
+
+        $date = Carbon::parse($request->date)->format('Y-m-d');
+
+        // Create Daybook entry
+        $daybook_data['date'] = $date;
+        $daybook_data['expense_id'] = 'staff_salary';
+        $daybook_data['staff'] = $id;
+        $description = $request->description;
+        if ($description) {
+            $daybook_data['description'] = 'Salary Advance [' . $description . ']';
+        } else {
+            $daybook_data['description'] = 'Salary Advance';
+        }
+        $daybook_data['amount'] = $request->amount;
+        $daybook_data['type'] = 'Expense';
+        $daybook_data['accounts'] = $request->payment_method;
+
+        $daybook_status = Daybook::create($daybook_data);
+
+        // Create SalaryPayment entry
+        $data['staff_id'] = $id;
+        $data['daybook_id'] = $daybook_status->id;
+        $data['basic_salary'] = $staff->salary;
+        $data['date'] = $date;
+        $data['term'] = $current_term;
+        $data['payment_type'] = 'advance';
+        $data['amount'] = $request->amount;
+        $data['description'] = $description ? 'Salary Advance [' . $description . ']' : 'Salary Advance';
+        $data['payment_method'] = $request->payment_method;
+        $data['bankReference'] = $request->bankReference;
+        $data['status'] = 'paid';
+
+        $status = SalaryPayment::create($data);
+
+        if ($status) {
+            $balanceCount = DB::table('daybook_balances')->where('date', $date)->count();
+            if ($balanceCount == 0) {
+                $lastRow = DB::table('daybook_balances')->latest('id')->first();
+                if ($lastRow) {
+                    DB::table('daybook_balances')->insert([
+                        'date' => $date,
+                        'ledger_balance' => $lastRow->ledger_balance,
+                        'account_balance' => $lastRow->account_balance,
+                        'cash_balance' => $lastRow->cash_balance
+                    ]);
+                }
+            }
+
+            $latestBalance = DB::table('daybook_balances')->latest('id')->first();
+            if ($latestBalance) {
+                if ($request->payment_method == "CASH") {
+                    $newCashBalance = $latestBalance->cash_balance - $request->amount;
+                    DB::table('daybook_balances')->where('id', $latestBalance->id)->update(['cash_balance' => $newCashBalance]);
+                }
+                if ($request->payment_method == "ACCOUNT") {
+                    $newAccountBalance = $latestBalance->account_balance - $request->amount;
+                    DB::table('daybook_balances')->where('id', $latestBalance->id)->update(['account_balance' => $newAccountBalance]);
+                }
+                if ($request->payment_method == "LEDGER") {
+                    $newLedgerBalance = $latestBalance->ledger_balance - $request->amount;
+                    DB::table('daybook_balances')->where('id', $latestBalance->id)->update(['ledger_balance' => $newLedgerBalance]);
+                }
+            }
+
+            Toastr::success('Advance Payment Recorded', 'success', ["positionClass" => "toast-bottom-right"]);
+        } else {
+            Toastr::error('try again!', 'error', ["positionClass" => "toast-bottom-right"]);
+        }
+
         return redirect()->route('staff.payments');
     }
 
@@ -656,10 +791,13 @@ class StaffController extends Controller
         $leaveAmount = ($salaryPayment->basic_salary * 24 / 300 ) * $leave;
 
         // paid amount
-        $paidAmount = SalaryPayment::where('staff_id',$salaryPayment->staff_id)->where('term',$salaryPayment->term)->where('id','<', $id)->sum('amount');
+        $paidAmount = SalaryPayment::where('staff_id',$salaryPayment->staff_id)->where('term',$salaryPayment->term)->where('payment_type','salary')->where('id','<', $id)->sum('amount');
+
+        // advance paid amount
+        $advancePaidAmount = SalaryPayment::where('staff_id',$salaryPayment->staff_id)->where('term',$salaryPayment->term)->where('payment_type','advance')->sum('amount');
 
         // Deductions
-        $deductions = $paidAmount + $leaveAmount;
+        $deductions = $paidAmount + $advancePaidAmount + $leaveAmount;
 
         //SALARY TERM
         $term_array = explode('-',$salaryPayment->term);
@@ -686,7 +824,7 @@ class StaffController extends Controller
         $termData = $year . '-' . $term_month . ' [' . $current_salary_term_string . ']';
 
         // return view('staff.salary_slip_report',compact('staff','salaryPayment','leave','staffCategorie','dataArray','totalIncomAmount','termData','leaveAmount'));
-        $pdf = Pdf::loadView('staff.salary_slip_report',compact('staff','salaryPayment','leave','staffCategorie','dataArray','totalIncomAmount','termData','paidAmount','leaveAmount','deductions'))->setPaper('a4','portrait');
+        $pdf = Pdf::loadView('staff.salary_slip_report',compact('staff','salaryPayment','leave','staffCategorie','dataArray','totalIncomAmount','termData','paidAmount','advancePaidAmount','leaveAmount','deductions'))->setPaper('a4','portrait');
         return $pdf->stream($staff->staff_name . '-'. $termData.' - Salary Slip Report.pdf',array("Attachment"=>false));
     }
     public function salarySlipReport($id)
@@ -735,10 +873,13 @@ class StaffController extends Controller
             $leaveAmount = ($salary->basic_salary * 24 / 300 ) * $leave;
 
             // paid amount
-            $paidAmount = SalaryPayment::where('staff_id',$salary->staff_id)->where('term',$salary->term)->where('id','<', $salary->id)->sum('amount');
+            $paidAmount = SalaryPayment::where('staff_id',$salary->staff_id)->where('term',$salary->term)->where('payment_type','salary')->where('id','<', $salary->id)->sum('amount');
+
+            // advance paid amount
+            $advancePaidAmount = SalaryPayment::where('staff_id',$salary->staff_id)->where('term',$salary->term)->where('payment_type','advance')->sum('amount');
 
             // Deductions
-            $deductions = $paidAmount + $leaveAmount;
+            $deductions = $paidAmount + $advancePaidAmount + $leaveAmount;
 
             //SALARY TERM
             $term_array = explode('-',$salary->term);
@@ -776,6 +917,7 @@ class StaffController extends Controller
                 'totalIncomAmount' => $totalIncomAmount,
                 'leaveAmount' => $leaveAmount,
                 'paidAmount' => $paidAmount,
+                'advancePaidAmount' => $advancePaidAmount,
                 'deductions' => $deductions,
                 'termData' => $termData,
             ];

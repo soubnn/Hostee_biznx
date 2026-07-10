@@ -432,6 +432,15 @@
                         </tr>
                     @endforeach
 
+                    @if (isset($salaryPayment['advancePaidAmount']) && $salaryPayment['advancePaidAmount'] > 0)
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Advance Paid</td>
+                            <td class="text-right"><b>{{ $salaryPayment['advancePaidAmount'] }}</b></td>
+                        </tr>
+                    @endif
+
                     <tr>
                         <td class="text-right"><b>Total</b></td>
                         <td class="text-right"><b>{{ $salaryPayment['totalIncomAmount'] }}</b></td>

@@ -84,14 +84,14 @@
                                                                     $leave = $history->leaveDays-1 ;
                                                                 @endphp
                                                                 @if ($history->leaveDays == 1)
-                                                                    1 CASUAL LEAVE
+                                                                    1 EXTRA LEAVE
                                                                 @else
-                                                                    1 CASUAL LEAVE , {{ $leave }} LEAVE
+                                                                    1 EXTRA LEAVE , {{ $leave }} LEAVE
                                                                 @endif
                                                             @endif
                                                         </td>
                                                         <td style="white-space: normal;" class="text-danger">{{ $history->description }}</td>
-                                                        <td style="white-space: normal;" class="text-danger">{{ $history->accounts }} @if ( $history && $history->bankReference)[{{ $history->bankReference }}]@endif</td>
+                                                        <td style="white-space: normal;" class="text-danger">{{ $history->payment_method ?? $history->accounts }} @if ( $history && $history->bankReference)[{{ $history->bankReference }}]@endif</td>
                                                         {{-- <td style="white-space: normal;" class="text-danger">
                                                             @if ($history && $history->id)
                                                                 <a href="{{ route('staff.termSalarySlipReport',$history->id) }}" class="btn btn-primary" target="_blank"><i class="fas fa-print"></i></a>
