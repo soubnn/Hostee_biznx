@@ -215,14 +215,14 @@ Route::group(['middleware'=>['auth']],function(){
 
     // news and events
     Route::resource('news_events', App\Http\Controllers\NewsAndEventsController::class);
-
+    
     // upcoming events
     Route::resource('upcoming_events', App\Http\Controllers\UpcomingEventController::class);
 
     // Event booking
     Route::post('/event-booking/store', [App\Http\Controllers\EventBookingController::class, 'store'])->name('event_booking.store');
     Route::get('/upcoming-events/{id}/bookings/download', [App\Http\Controllers\UpcomingEventController::class, 'downloadBookings'])->name('upcoming_events.download');
-
+    
     // consolidate
     Route::resource('consolidate', App\Http\Controllers\ConsoulidateController::class);
     Route::any('/direct_sales/consolidate/{id}', [App\Http\Controllers\ConsoulidateController::class, 'consolidates_create'])->name('direct_sales.consolidate');

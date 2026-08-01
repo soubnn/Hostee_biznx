@@ -23,8 +23,7 @@ use Carbon\Carbon;
 class AdminController extends Controller
 {
     public function login(){
-        if(Auth::check())
-        {
+        if(Auth::check()) {
             return redirect()->route('dashboard');
         } else {
             return view('auth.login');
@@ -33,9 +32,11 @@ class AdminController extends Controller
 
     public function loginsubmit(Request $request){
         $admin = $request->all();
+        
         $login = Auth::attempt(['username' => $admin['username'],'password' => $admin['password']]);
 
         if($login) {
+            $request->session()->regenerate();
             Toastr::success('Welcome to biznx', 'success', ["positionClass" => "toast-bottom-right"]);
             return redirect()->route('dashboard');
         } else{

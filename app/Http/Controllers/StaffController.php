@@ -824,7 +824,7 @@ class StaffController extends Controller
         $termData = $year . '-' . $term_month . ' [' . $current_salary_term_string . ']';
 
         // return view('staff.salary_slip_report',compact('staff','salaryPayment','leave','staffCategorie','dataArray','totalIncomAmount','termData','leaveAmount'));
-        $pdf = Pdf::loadView('staff.salary_slip_report',compact('staff','salaryPayment','leave','staffCategorie','dataArray','totalIncomAmount','termData','paidAmount','advancePaidAmount','leaveAmount','deductions'))->setPaper('a4','portrait');
+        $pdf = Pdf::loadView('staff.salary_slip_report',compact('staff','salaryPayment','leave','staffCategorie','dataArray','totalIncomAmount','termData','paidAmount','leaveAmount','deductions'))->setPaper('a4','portrait');
         return $pdf->stream($staff->staff_name . '-'. $termData.' - Salary Slip Report.pdf',array("Attachment"=>false));
     }
     public function salarySlipReport($id)

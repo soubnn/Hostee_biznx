@@ -199,7 +199,7 @@
                                                         View
                                                     </a>
                                                 </td>
-                                                <td>
+                                                <<td>
                                                     <button class="btn btn-light text-primary mb-1" data-bs-toggle="modal" data-bs-target="#advance_modal{{ $staff->id }}">Pay Salary</button>
                                                     <button class="btn btn-light text-warning" data-bs-toggle="modal" data-bs-target="#pay_advance_modal{{ $staff->id }}">Pay Advance</button>
                                                 </td>

@@ -482,21 +482,21 @@
                                 </form>
                             </div>
 
-                            <div class="modal fade" id="refreshModal" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-danger">Balance Mismatch</h5>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>The latest Daybook Balance has changed. Please refresh the page before submitting.</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button class="btn btn-primary" onclick="location.reload()">Refresh Page</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <!--<div class="modal fade" id="refreshModal" tabindex="-1">-->
+                            <!--    <div class="modal-dialog">-->
+                            <!--        <div class="modal-content">-->
+                            <!--            <div class="modal-header">-->
+                            <!--                <h5 class="modal-title text-danger">Balance Mismatch</h5>-->
+                            <!--            </div>-->
+                            <!--            <div class="modal-body">-->
+                            <!--                <p>The latest Daybook Balance has changed. Please refresh the page before submitting.</p>-->
+                            <!--            </div>-->
+                            <!--            <div class="modal-footer">-->
+                            <!--                <button class="btn btn-primary" onclick="location.reload()">Refresh Page</button>-->
+                            <!--            </div>-->
+                            <!--        </div>-->
+                            <!--    </div>-->
+                            <!--</div>-->
 
                         </div>
                     </div> <!-- end col -->
@@ -505,26 +505,26 @@
         </div>
     </div> <!-- End Page-content -->
 
-    <script>
-    $('#daybookForm').on('submit', function(e){
-        e.preventDefault();
+    <!--<script>-->
+    <!--$('#daybookForm').on('submit', function(e){-->
+    <!--    e.preventDefault();-->
 
-        let form = $(this);
-        let formData = form.serialize();
+    <!--    let form = $(this);-->
+    <!--    let formData = form.serialize();-->
 
-        $.ajax({
-            url: form.attr('action'),
-            method: "POST",
-            data: formData,
-            success: function(res){
-                if (res.status === 'mismatch') {
-                    $('#refreshModal').modal('show');
-                } else {
-                    window.location.href = "{{ route('daybook.index') }}";
-                }
-            }
-        });
-    });
-    </script>
+    <!--    $.ajax({-->
+    <!--        url: form.attr('action'),-->
+    <!--        method: "POST",-->
+    <!--        data: formData,-->
+    <!--        success: function(res){-->
+    <!--            if (res.status === 'mismatch') {-->
+    <!--                $('#refreshModal').modal('show');-->
+    <!--            } else {-->
+    <!--                window.location.href = "{{ route('daybook.index') }}";-->
+    <!--            }-->
+    <!--        }-->
+    <!--    });-->
+    <!--});-->
+    <!--</script>-->
 
 @endsection

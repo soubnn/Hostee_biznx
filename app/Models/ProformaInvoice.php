@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ProformaInvoice extends Model
 {
     use HasFactory;
-
+    
     protected $casts = [
         'customer_name' => 'integer',
     ];

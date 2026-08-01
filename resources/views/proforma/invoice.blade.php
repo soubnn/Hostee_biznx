@@ -824,8 +824,9 @@
                                         <tr>
                                             <td style="border: 1px solid">BANK DETAILS</td>
                                             <td style="border: 1px solid">
-                                                <b>BANK</b> : ESAF &nbsp;&nbsp;<b>BRANCH</b> : KOTTAKKAL<br />
-                                                <b>ACCOUNT NUMBER</b> : 53250001177379 &nbsp;&nbsp;<b>IFSC</b> : ESMF0001127
+                                                <b>HOLDER NAME</b> : AJVAD KALADI &nbsp;&nbsp; <b>BANK</b> : DHANLAXMI BANK<br /> 
+                                                <b>BRANCH</b> : KOTTAKKAL <b>ACCOUNT NUMBER</b> : 028805300001892 <br /> 
+                                                <b>IFSC</b> : DLXB0000288 &nbsp;&nbsp; <b>GOOGLE PAY</b> : 8592924592
                                             </td>
                                             <td
                                                 style="text-align: right;border: 1px solid;font-size: 14px;font-weight: bold">

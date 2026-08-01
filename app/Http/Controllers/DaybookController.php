@@ -1070,17 +1070,17 @@ class DaybookController extends Controller
     {
         $latestBalance = DaybookBalance::orderBy('date', 'DESC')->first();
 
-        if ($latestBalance) {
-            if (
-                $latestBalance->cash_balance != $request->closing_cash ||
-                $latestBalance->account_balance != $request->closing_account ||
-                $latestBalance->ledger_balance != $request->closing_ledger
-            ) {
-                return response()->json([
-                    'status' => 'mismatch'
-                ]);
-            }
-        }
+        // if ($latestBalance) {
+        //     if (
+        //         $latestBalance->cash_balance != $request->closing_cash ||
+        //         $latestBalance->account_balance != $request->closing_account ||
+        //         $latestBalance->ledger_balance != $request->closing_ledger
+        //     ) {
+        //         return response()->json([
+        //             'status' => 'mismatch'
+        //         ]);
+        //     }
+        // }
 
         $data['date']            = $request->date;
         $data['opening_cash']    = $request->opening_cash;

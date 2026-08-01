@@ -286,90 +286,26 @@
                                                 $productDetails = DB::table('products')
                                                     ->where('id', $item->product_id)
                                                     ->first();
+                                            
+                                                $productName = $productDetails->product_name ?? '';
+                                                $productDesc = '';
+                                            
+                                                if (!empty($item->serial_number)) {
+                                                    $productDesc = strtoupper($item->serial_number);
+                                                }
+                                            
+                                                // Special case
                                                 if ($item->product_id == 159) {
-                                                    $product_name = strtoupper($item->serial_number);
-                                                } else {
-                                                    if ($item->serial_number != '') {
-                                                        $product_name =
-                                                            $productDetails->product_name .
-                                                            ' - ' .
-                                                            '[' . strtoupper($item->serial_number) . ']';
-                                                    } else {
-                                                        $product_name = $productDetails->product_name;
-                                                    }
+                                                    $productName = strtoupper($item->serial_number);
+                                                    $productDesc = '';
                                                 }
                                             @endphp
                                             <tr>
                                                 <td style="text-align: center;">{{ $no }}</td>
-                                                @php
-                                                    $name_length = strlen($product_name);
-                                                @endphp
-                                                {{ $name_length }}
-                                                @if ($name_length > 25 && $name_length <= 50)
-                                                    @php
-                                                        $product_name1 = substr($product_name, 0, 25);
-                                                        $product_name2 = substr($product_name, 25);
-                                                    @endphp
-                                                    <td>{{ $product_name1 }}<br>{{ $product_name2 }}</td>
-                                                    @php
-                                                        $row_length = $row_length + 28;
-                                                    @endphp
-                                                @elseif($name_length > 50 && $name_length <= 75)
-                                                    @php
-                                                        $product_name1 = substr($product_name, 0, 25);
-                                                        $product_name2 = substr($product_name, 25, 25);
-                                                        $product_name3 = substr($product_name, 50);
-                                                    @endphp
-                                                    <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}
-                                                    </td>
-                                                    @php
-                                                        $row_length = $row_length + 38;
-                                                    @endphp
-                                                @elseif($name_length > 75 && $name_length <= 100)
-                                                    @php
-                                                        $product_name1 = substr($product_name, 0, 25);
-                                                        $product_name2 = substr($product_name, 25, 25);
-                                                        $product_name3 = substr($product_name, 50, 25);
-                                                        $product_name4 = substr($product_name, 75);
-                                                    @endphp
-                                                    <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}
-                                                    </td>
-                                                    @php
-                                                        $row_length = $row_length + 48;
-                                                    @endphp
-                                                @elseif($name_length > 100 && $name_length <= 125)
-                                                    @php
-                                                        $product_name1 = substr($product_name, 0, 25);
-                                                        $product_name2 = substr($product_name, 25, 25);
-                                                        $product_name3 = substr($product_name, 50, 25);
-                                                        $product_name4 = substr($product_name, 75, 25);
-                                                        $product_name5 = substr($product_name, 100);
-                                                    @endphp
-                                                    <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}
-                                                    </td>
-                                                    @php
-                                                        $row_length = $row_length + 58;
-                                                    @endphp
-                                                @elseif($name_length > 125)
-                                                    @php
-                                                        $product_name1 = substr($product_name, 0, 25);
-                                                        $product_name2 = substr($product_name, 25, 25);
-                                                        $product_name3 = substr($product_name, 50, 25);
-                                                        $product_name4 = substr($product_name, 75, 25);
-                                                        $product_name5 = substr($product_name, 100, 25);
-                                                        $product_name6 = substr($product_name, 125);
-                                                    @endphp
-                                                    <td>{{ $product_name1 }}<br>{{ $product_name2 }}<br>{{ $product_name3 }}<br>{{ $product_name4 }}<br>{{ $product_name5 }}<br>{{ $product_name6 }}
-                                                    </td>
-                                                    @php
-                                                        $row_length = $row_length + 68;
-                                                    @endphp
-                                                @else
-                                                    <td>{{ $product_name }}</td>
-                                                    @php
-                                                        $row_length = $row_length + 18;
-                                                    @endphp
-                                                @endif
+                                                <td style="white-space: normal;">
+                                                    {{ $productName }} - <br />
+                                                    [{{ $productDesc }}]
+                                                </td>
                                                 <td>{{ $productDetails->hsn_code }}</td>
                                                 <td>{{ $item->product_quantity }}</td>
                                                 @php

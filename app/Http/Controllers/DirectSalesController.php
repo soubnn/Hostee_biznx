@@ -1239,7 +1239,7 @@ class DirectSalesController extends Controller
         $pdf = Pdf::loadView('invoices.userInvoice',compact('completeReportDetails'));
         return $pdf->download($fileName,array("Attachment"=>false));
     }
-
+    
     // public function WhatsappInvoice($id)
     // {
     //     function number_to_word1(float $number)

@@ -317,8 +317,8 @@
                                 elseif ($expense->accounts == 'CASH') {
                                     $exp_account = 'C';
                                 }
-                                if ($expense->accounts == 'Salary Advance' || stripos($expense->description, 'Advance') !== false) {
-                                    $description = 'SAL-ADVANCE';
+                                if ($expense->accounts == 'Salary Advance') {
+                                    $description = 'ADV';
                                 } else {
                                     $description = 'SALARY';
                                 }

@@ -80,23 +80,23 @@ class UtilityController extends Controller
         return view('utility.purchase_items', compact('purchases'));
     }
 
-    // public function utility_edit_stock(Request $request)
-    // {
-    //     $id = $request->id;
-    //     $stock = DB::table('stocks')->where('id', $id)->first();
+    /*public function utility_edit_stock(Request $request)
+    {
+        $id = $request->id;
+        $stock = DB::table('stocks')->where('id', $id)->first();
 
-    //     $stock->product_unit_price = $request->price;
-    //     $stock->product_qty = $request->qty;
+        $stock->product_unit_price = $request->price;
+        $stock->product_qty = $request->qty;
 
-    //     $status = DB::table('stocks')->where('id', $id)->update([
-    //         'product_unit_price' => $stock->product_unit_price,
-    //         'product_qty' => $stock->product_qty
-    //     ]);
+        $status = DB::table('stocks')->where('id', $id)->update([
+            'product_unit_price' => $stock->product_unit_price,
+            'product_qty' => $stock->product_qty
+        ]);
 
-    //     if ($status) {
-    //         return redirect()->back();
-    //     }
-    // }
+        if ($status) {
+            return redirect()->back();
+        }
+    }*/
 
     public function utility_edit_purchase(Request $request)
     {
