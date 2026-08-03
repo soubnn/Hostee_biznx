@@ -3,7 +3,8 @@
 <script>
     $(document).ready(function(){
         $("#datatable").dataTable({
-            "pageLength" : 100
+            "pageLength" : 100,
+            "bPaginate" : false
         });
     });
 </script>
@@ -23,6 +24,16 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                <form method="GET" class="mb-3">
+                                    <label for="year" class="me-2">Select Year:</label>
+                                    <select name="year" id="year" onchange="this.form.submit()" class="form-select w-auto d-inline-block">
+                                        @for ($y = date('Y'); $y >= 2020; $y--)
+                                            <option value="{{ $y }}" {{ (isset($year) && $year == $y) ? 'selected' : '' }}>
+                                                {{ $y }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </form>
                                 <table id="datatable" class="table table-bordered dt-responsive nowrap w-100" style="text-transform: uppercase;">
                                     <thead>
                                     <tr>
@@ -40,27 +51,18 @@
                                                 <td style="white-space:normal;" data-sort="">
                                                     <a href="{{ route('util_sales_details', $sale->id) }}">{{ $sale->invoice_number }}</a>
                                                 </td>
-                                                <td style="white-space:normal;">{{ Carbon\carbon::parse($sale->sales_date)->format('d-m-Y')}}</td>
+                                                <td style="white-space:normal;">
+                                                    @if ($sale->sales_date)
+                                                        {{ Carbon\Carbon::parse($sale->sales_date)->format('d-m-Y') }}
+                                                    @endif
+                                                </td>
+                                                <td style="white-space:normal;">{{ $sale->customer_name ?? 'N/A' }}</td>
                                                 @php
-                                                    $customer=DB::table('customers')->where('id',$sale->customer_id)->first();
+                                                    $purchaseCount = $sale->item_count ?? 0;
+                                                    $amount = $sale->discount ? ((float)$sale->grand_total - (float)$sale->discount) : (float)$sale->grand_total;
                                                 @endphp
-                                                <td style="white-space:normal;">{{ $customer->name }}</td>
-                                                @php
-                                                    $purchaseCount = DB::table('sales_items')->where('sales_id',$sale->id)->count();
-                                                @endphp
-                                                @php
-                                                    if($sale->discount)
-                                                    {
-                                                        $discount = (float)$sale->discount;
-                                                        $amount = (float)$sale->grand_total - $discount;
-                                                    }
-                                                    else
-                                                    {
-                                                        $amount = $sale->grand_total;
-                                                    }
-                                                @endphp
-                                                <td style="white-space:normal;">{{$purchaseCount}}</td>
-                                                <td style="white-space:normal;">{{$amount}}</td>
+                                                <td style="white-space:normal;">{{ $purchaseCount }}</td>
+                                                <td style="white-space:normal;">{{ number_format($amount, 2, '.', '') }}</td>
                                                 <td>
                                                     @if($purchaseCount > 0)
                                                         <a class="btn btn-light waves-effect text-success" href="{{ route('util_sales_details.cancel', $sale->id) }}">
@@ -76,6 +78,9 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                <div class="mt-3">
+                                    {!! $sales->appends(request()->query())->links() !!}
+                                </div>
                             </div>
                         </div>
                     </div> <!-- end col -->

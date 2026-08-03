@@ -204,6 +204,9 @@ Route::group(['middleware'=>['auth']],function(){
     Route::post('/util_unpaid_sales_return/{id}',[App\Http\Controllers\UtilityController::class,'util_unpaid_sales_return'])->name('util_unpaid_sales_return');
     Route::get('/util_convert_invoice',[App\Http\Controllers\UtilityController::class,'util_convert_invoice'])->name('util_convert_invoice');
     Route::get('/util_convert_data',[App\Http\Controllers\UtilityController::class,'util_convert_data'])->name('util_convert_data');
+    Route::get('/utility_daybooks',[App\Http\Controllers\UtilityController::class,'utility_daybooks'])->name('util_daybooks.edit');
+    Route::post('/utility_update_daybook',[App\Http\Controllers\UtilityController::class,'utility_update_daybook'])->name('utility_update_daybook');
+    Route::get('/util_delete_daybook',[App\Http\Controllers\UtilityController::class,'util_delete_daybook'])->name('util_delete_daybook');
 
     // project
     Route::resource('/project', App\Http\Controllers\ProjectController::class);

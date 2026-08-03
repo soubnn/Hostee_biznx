@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\Daybook;
 use App\Models\DaybookBalance;
+use App\Models\DaybookSummary;
 use App\Models\DirectSales;
 use App\Models\Invoice;
 use App\Models\Purchase;
@@ -132,7 +133,7 @@ class UtilityController extends Controller
         $maxDiscount = round($maxDiscount, 2);
 
         $this->validate($request, [
-            "discount" => 'nullable|lte:' . $maxDiscount
+            "discount" => 'nullable|numeric|min:0|lte:' . $maxDiscount
         ]);
 
         if ($sales->discount) {
@@ -141,10 +142,11 @@ class UtilityController extends Controller
             $oldAmount = (float)$sales->grand_total;
         }
         $newBalance = $currentBalance - $oldAmount;
-        if ($request->discount) {
-            $data['discount'] = $request->discount;
-            $new_blance_amount = (float)$sales->grand_total - $request->discount;
-            if( $new_blance_amount == $paidAmount ){
+
+        if ($request->has('discount') && $request->discount !== null) {
+            $data['discount'] = (float)$request->discount;
+            $new_blance_amount = (float)$sales->grand_total - (float)$data['discount'];
+            if ($new_blance_amount <= $paidAmount) {
                 $data['payment_status'] = 'paid';
             }
         }
@@ -182,9 +184,21 @@ class UtilityController extends Controller
         } else {
             $oldBalance = (float) $salesDetails->grand_total;
         }
-        $data['unit_price'] = $request->unit_price;
-        $data['gst_percent'] = $request->gst_percent;
-        $data['sales_price'] = $request->sales_price;
+
+        $unitPrice = (float)$request->unit_price;
+        $qty = (float)($request->product_quantity ?? $salesItem->product_quantity);
+        $gstPercent = (float)$request->gst_percent;
+        $taxable = $unitPrice * $qty;
+        $tax = ($taxable * $gstPercent) / 100;
+        $salesPrice = round($taxable + $tax, 2);
+
+        if ($request->has('product_id')) {
+            $data['product_id'] = $request->product_id;
+        }
+        $data['unit_price'] = $unitPrice;
+        $data['product_quantity'] = $qty;
+        $data['gst_percent'] = $gstPercent;
+        $data['sales_price'] = $salesPrice;
         $data['serial_number'] = strtoupper($request->serial_number);
         $updateItemStatus = $salesItem->fill($data)->save();
         if ($updateItemStatus) {
@@ -219,8 +233,6 @@ class UtilityController extends Controller
         $id = $request->id;
         $salesItem = SalesItems::findOrFail($id);
         $salesDetails = DirectSales::findOrFail($salesItem->sales_id);
-        $product = $salesItem->product_id;
-        $product_qty = $salesItem->product_quantity;
         $customer = Customer::findOrFail($salesDetails->customer_id);
         $currentBalance = $customer->balance;
         if ($salesDetails->discount) {
@@ -230,16 +242,14 @@ class UtilityController extends Controller
         }
         $status = DB::table('sales_items')->delete($salesItem->id);
         if ($status) {
-            $itemsCount = DB::table('sales_items')->where('sales_id',$salesDetails->id)->count();
-            if($itemsCount == 0)
-            {
+            $itemsCount = DB::table('sales_items')->where('sales_id', $salesDetails->id)->count();
+            if ($itemsCount == 0) {
                 $data1['grand_total'] = 0;
                 $data1['discount'] = 0;
                 $data1['print_status'] = 'cancelled';
                 $data1['payment_status'] = 'cancelled';
-            }
-            else
-            {
+                $newBalance = 0;
+            } else {
                 $totalAmount = DB::table('sales_items')->where('sales_id', $salesDetails->id)->sum('sales_price');
                 $data1['grand_total'] = round($totalAmount, 2);
                 if ($salesDetails->discount) {
@@ -255,9 +265,8 @@ class UtilityController extends Controller
                 $updateBalanceStatus = $customer->fill($data2)->save();
                 if ($updateBalanceStatus) {
                     Toastr::success('Item Deleted Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
-                    if($itemsCount == 0)
-                    {
-                        return redirect()->route('utility_sales');
+                    if ($itemsCount == 0) {
+                        return redirect()->route('util_sales.edit');
                     }
                 } else {
                     Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
@@ -273,12 +282,10 @@ class UtilityController extends Controller
 
     public function util_new_sales_item(Request $request)
     {
-        $product_id = $request->product_id;
-        $stockDetails = stock::where('product_id', $product_id)->first();
-        $maxQty = $stockDetails->product_qty;
-
         $this->validate($request, [
-            "product_quantity" => 'required|lte:' . $maxQty
+            "product_quantity" => 'required|numeric|min:0.01',
+            "unit_price"       => 'required|numeric',
+            "product_id"       => 'required'
         ]);
 
         $sales = DirectSales::findOrFail($request->sales_id);
@@ -289,12 +296,19 @@ class UtilityController extends Controller
         } else {
             $oldAmount = (float)$sales->grand_total;
         }
-        $newBalance = $currentBalance - $oldAmount;
+
+        $unitPrice = (float)$request->unit_price;
+        $qty = (float)$request->product_quantity;
+        $gstPercent = (float)$request->gst_percent;
+        $taxable = $unitPrice * $qty;
+        $tax = ($taxable * $gstPercent) / 100;
+        $salesPrice = round($taxable + $tax, 2);
+
         $data['product_id'] = $request->product_id;
-        $data['product_quantity'] = $request->product_quantity;
-        $data['unit_price'] = $request->unit_price;
-        $data['gst_percent'] = $request->gst_percent;
-        $data['sales_price'] = $request->sales_price;
+        $data['product_quantity'] = $qty;
+        $data['unit_price'] = $unitPrice;
+        $data['gst_percent'] = $gstPercent;
+        $data['sales_price'] = $salesPrice;
         $data['sales_id'] = $request->sales_id;
         $data['serial_number'] = strtoupper($request->serial_number);
         $updateItemStatus = SalesItems::create($data);
@@ -396,8 +410,37 @@ class UtilityController extends Controller
     //sales edit
     public function utility_sales()
     {
-        $sales = DirectSales::whereIn('payment_status',['not_paid','partial'])->orderBy('id','DESC')->get();
-        return view('utility.sales',compact('sales'));
+        $year = request('year', date('Y'));
+        $sales = DB::table('direct_sales')
+            ->leftJoin('customers', 'customers.id', '=', 'direct_sales.customer_id')
+            ->leftJoin('sales_items', 'sales_items.sales_id', '=', 'direct_sales.id')
+            ->select(
+                'direct_sales.id',
+                'direct_sales.customer_id',
+                'direct_sales.invoice_number',
+                'direct_sales.sales_date',
+                'direct_sales.grand_total',
+                'direct_sales.discount',
+                'direct_sales.payment_status',
+                'customers.name as customer_name',
+                DB::raw('COUNT(sales_items.id) as item_count')
+            )
+            ->whereIn('direct_sales.payment_status', ['not_paid', 'partial'])
+            ->whereYear('direct_sales.sales_date', $year)
+            ->groupBy(
+                'direct_sales.id',
+                'direct_sales.customer_id',
+                'direct_sales.invoice_number',
+                'direct_sales.sales_date',
+                'direct_sales.grand_total',
+                'direct_sales.discount',
+                'direct_sales.payment_status',
+                'customers.name'
+            )
+            ->orderBy('direct_sales.id', 'DESC')
+            ->paginate(250);
+
+        return view('utility.sales', compact('sales', 'year'));
     }
     public function util_sales_details($id)
     {
@@ -412,8 +455,37 @@ class UtilityController extends Controller
 
     //sales cancel
     function utility_sales_cancel(){
-        $sales = DirectSales::where('payment_status','paid')->orderBy('id','DESC')->get();
-        return view('utility.sales_cancel',compact('sales'));
+        $year = request('year', date('Y'));
+        $sales = DB::table('direct_sales')
+            ->leftJoin('customers', 'customers.id', '=', 'direct_sales.customer_id')
+            ->leftJoin('sales_items', 'sales_items.sales_id', '=', 'direct_sales.id')
+            ->select(
+                'direct_sales.id',
+                'direct_sales.customer_id',
+                'direct_sales.invoice_number',
+                'direct_sales.sales_date',
+                'direct_sales.grand_total',
+                'direct_sales.discount',
+                'direct_sales.payment_status',
+                'customers.name as customer_name',
+                DB::raw('COUNT(sales_items.id) as item_count')
+            )
+            ->where('direct_sales.payment_status', 'paid')
+            ->whereYear('direct_sales.sales_date', $year)
+            ->groupBy(
+                'direct_sales.id',
+                'direct_sales.customer_id',
+                'direct_sales.invoice_number',
+                'direct_sales.sales_date',
+                'direct_sales.grand_total',
+                'direct_sales.discount',
+                'direct_sales.payment_status',
+                'customers.name'
+            )
+            ->orderBy('direct_sales.id', 'DESC')
+            ->paginate(250);
+
+        return view('utility.sales_cancel', compact('sales', 'year'));
     }
     public function util_sales_details_cancel($id)
     {
@@ -502,6 +574,12 @@ class UtilityController extends Controller
 
             $sale_items = SalesItems::where('sales_id', $id)->get();
             $status = SalesItems::where('sales_id', $id)->delete();
+
+            $customer = Customer::find($sale->customer_id);
+            if ($customer) {
+                $customer->balance = round($customer->balance - $grand_total, 2);
+                $customer->save();
+            }
 
             if ($status) {
                 Toastr::success('Sales Cancelled', 'success', ["positionClass" => "toast-bottom-right"]);
@@ -909,5 +987,218 @@ class UtilityController extends Controller
 
         $pdf = Pdf::loadView('utility.purchases.debit_note',compact('invoice_details'))->setPaper('a4', 'portrait');
         return $pdf->stream('Hostee - Debit Note.pdf',array("Attachment"=>false));
+    }
+
+    // Daybook Utility
+    public function utility_daybooks(Request $request)
+    {
+        $report_date = $request->input('date', date('Y-m-d'));
+        $report_date = Carbon::parse($report_date)->format('Y-m-d');
+
+        $sales = DirectSales::where('sales_date', $report_date)->get();
+        $daybook_summary = DaybookSummary::where('date', $report_date)->first();
+        if ($daybook_summary) {
+            $status = 'not_empty';
+        } else {
+            $status = 'empty';
+        }
+
+        $prev_date_details = DB::table('daybook_summaries')
+            ->where('date', '<', $report_date)
+            ->orderBy('date', 'DESC')
+            ->first();
+
+        if ($prev_date_details) {
+            $prev_date = $prev_date_details->date;
+            $prev_closing_balance = DaybookBalance::where('date', $prev_date)->first();
+        } else {
+            $prev_closing_balance = DaybookBalance::orderBy('date', 'ASC')->first();
+        }
+
+        $cur_closing_balance = DaybookBalance::where('date', $report_date)->first();
+
+        $get_expense = Daybook::where('date', $report_date)->where('type', 'Expense')->get();
+        $get_income = Daybook::where('date', $report_date)->where('type', 'Income')->get();
+        $get_transfer = Daybook::where('date', $report_date)->where('type', 'Transfer')->get();
+
+        $total_expense = Daybook::where('date', $report_date)->where('type', 'Expense')->sum('amount');
+        $total_income = Daybook::where('date', $report_date)->where('type', 'Income')->sum('amount');
+
+        $expenses = DB::table('expenses')->get();
+        $incomes = DB::table('incomes')->get();
+
+        return view('utility.daybooks', compact(
+            'report_date',
+            'daybook_summary',
+            'prev_closing_balance',
+            'cur_closing_balance',
+            'get_expense',
+            'get_income',
+            'get_transfer',
+            'total_expense',
+            'total_income',
+            'status',
+            'sales',
+            'expenses',
+            'incomes'
+        ));
+    }
+
+    private function calculateEntryDiff($type, $account, $amount)
+    {
+        $cash = 0;
+        $acc = 0;
+        $led = 0;
+        $amt = (float)$amount;
+
+        if ($type == 'Income') {
+            if ($account == 'CASH') {
+                $cash = $amt;
+            } elseif ($account == 'ACCOUNT') {
+                $acc = $amt;
+            } elseif ($account == 'LEDGER') {
+                $led = $amt;
+            }
+        } elseif ($type == 'Expense') {
+            if ($account == 'CASH') {
+                $cash = -$amt;
+            } elseif ($account == 'ACCOUNT') {
+                $acc = -$amt;
+            } elseif ($account == 'LEDGER') {
+                $led = -$amt;
+            }
+        }
+        return ['cash' => $cash, 'account' => $acc, 'ledger' => $led];
+    }
+
+    private function adjustDaybookBalances($targetDate, $cashDelta, $accountDelta, $ledgerDelta)
+    {
+        if ($cashDelta == 0 && $accountDelta == 0 && $ledgerDelta == 0) {
+            return;
+        }
+
+        // 1. Update DaybookBalance for target date and all future dates
+        $balances = DaybookBalance::where('date', '>=', $targetDate)->get();
+        foreach ($balances as $bal) {
+            if ($cashDelta != 0) {
+                $bal->cash_balance = (float)$bal->cash_balance + $cashDelta;
+            }
+            if ($accountDelta != 0) {
+                $bal->account_balance = (float)$bal->account_balance + $accountDelta;
+            }
+            if ($ledgerDelta != 0) {
+                $bal->ledger_balance = (float)$bal->ledger_balance + $ledgerDelta;
+            }
+            $bal->save();
+        }
+
+        // 2. Update DaybookSummary for target date and all future dates
+        $summaries = DaybookSummary::where('date', '>=', $targetDate)->get();
+        foreach ($summaries as $sum) {
+            if ($sum->date == $targetDate) {
+                if ($cashDelta != 0) {
+                    $sum->closing_cash = (float)$sum->closing_cash + $cashDelta;
+                }
+                if ($accountDelta != 0) {
+                    $sum->closing_account = (float)$sum->closing_account + $accountDelta;
+                }
+                if ($ledgerDelta != 0) {
+                    $sum->closing_ledger = (float)$sum->closing_ledger + $ledgerDelta;
+                }
+            } else {
+                if ($cashDelta != 0) {
+                    $sum->opening_cash = (float)$sum->opening_cash + $cashDelta;
+                    $sum->closing_cash = (float)$sum->closing_cash + $cashDelta;
+                }
+                if ($accountDelta != 0) {
+                    $sum->opening_account = (float)$sum->opening_account + $accountDelta;
+                    $sum->closing_account = (float)$sum->closing_account + $accountDelta;
+                }
+                if ($ledgerDelta != 0) {
+                    $sum->opening_ledger = (float)$sum->opening_ledger + $ledgerDelta;
+                    $sum->closing_ledger = (float)$sum->closing_ledger + $ledgerDelta;
+                }
+            }
+            $sum->save();
+        }
+    }
+
+    public function utility_update_daybook(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'date' => 'required|date',
+            'amount' => 'required|numeric|min:0',
+            'type' => 'required'
+        ]);
+
+        $daybook = Daybook::findOrFail($request->id);
+
+        $oldDiff = $this->calculateEntryDiff($daybook->type, $daybook->accounts, $daybook->amount);
+        $oldDate = Carbon::parse($daybook->date)->format('Y-m-d');
+
+        $daybook->date = $request->date;
+        $daybook->type = $request->type;
+        $daybook->amount = $request->amount;
+        $daybook->accounts = $request->accounts;
+        if ($request->has('description')) {
+            $daybook->description = $request->description;
+        }
+        if ($request->has('job')) {
+            $daybook->job = $request->job;
+        }
+
+        if ($request->type == 'Expense') {
+            $daybook->expense_id = $request->expense_id;
+            $daybook->income_id = null;
+        } elseif ($request->type == 'Income') {
+            $daybook->income_id = $request->income_id;
+            $daybook->expense_id = null;
+        }
+
+        $saved = $daybook->save();
+
+        if ($saved) {
+            $newDiff = $this->calculateEntryDiff($daybook->type, $daybook->accounts, $daybook->amount);
+            $newDate = Carbon::parse($daybook->date)->format('Y-m-d');
+
+            $cashDelta = $newDiff['cash'] - $oldDiff['cash'];
+            $accountDelta = $newDiff['account'] - $oldDiff['account'];
+            $ledgerDelta = $newDiff['ledger'] - $oldDiff['ledger'];
+
+            $targetDate = min($oldDate, $newDate);
+            $this->adjustDaybookBalances($targetDate, $cashDelta, $accountDelta, $ledgerDelta);
+
+            Toastr::success('Daybook Entry Updated Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
+        } else {
+            Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
+        }
+
+        return redirect()->back();
+    }
+
+    public function util_delete_daybook(Request $request)
+    {
+        $id = $request->id;
+        $daybook = Daybook::findOrFail($id);
+
+        $oldDiff = $this->calculateEntryDiff($daybook->type, $daybook->accounts, $daybook->amount);
+        $oldDate = Carbon::parse($daybook->date)->format('Y-m-d');
+
+        $deleted = $daybook->delete();
+
+        if ($deleted) {
+            $cashDelta = -$oldDiff['cash'];
+            $accountDelta = -$oldDiff['account'];
+            $ledgerDelta = -$oldDiff['ledger'];
+
+            $this->adjustDaybookBalances($oldDate, $cashDelta, $accountDelta, $ledgerDelta);
+
+            Toastr::success('Daybook Entry Deleted Successfully...', 'success', ["positionClass" => 'toast-bottom-right']);
+        } else {
+            Toastr::error('Please try again...', 'error', ["positionClass" => 'toast-bottom-right']);
+        }
+
+        return redirect()->back();
     }
 }

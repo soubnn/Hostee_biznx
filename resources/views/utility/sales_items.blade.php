@@ -202,20 +202,26 @@
                                                                         <input type="hidden" name="id" value="{{ $item->id }}">
                                                                         <div class="row">
                                                                             <div class="col-md-6 mb-3">
-                                                                                <label>Product</label>
-                                                                                @php
-                                                                                    $productDetails = DB::table('products')->where('id',$item->product_id)->first();
-                                                                                @endphp
-                                                                                <input value="{{ $productDetails->product_name }}" readonly class="form-control">
-                                                                            </div>
+                                                                                 <label>Product</label>
+                                                                                 @php
+                                                                                     $allProducts = DB::table('products')->get();
+                                                                                 @endphp
+                                                                                 <select name="product_id" class="form-control select2" style="width: 100%" data-dropdown-parent="#purchase{{ $item->id }}" onchange="addCustomProduct(this.value,{{ $row }})">
+                                                                                     <option disabled>Select Product</option>
+                                                                                     @foreach ($allProducts as $prod)
+                                                                                         <option value="{{ $prod->id }}" {{ old('product_id', $item->product_id) == $prod->id ? 'selected' : '' }}>
+                                                                                             {{ $prod->product_name }}
+                                                                                         </option>
+                                                                                     @endforeach
+                                                                                 </select>
+                                                                             </div>
                                                                             <div class="col-md-6 mb-3">
                                                                                 <label>Serial / Description</label>
                                                                                 <input name="serial_number" value="{{ $item->serial_number }}" class="form-control" style="text-transform: uppercase">
                                                                             </div>
                                                                             <div class="col-md-6 mb-3">
                                                                                 <label>Quantity</label>
-                                                                                <input type="number" step="0.01" name="product_quantity" id="qty_{{ $row }}" value="{{ $item->product_quantity }}" class="form-control" onchange="calculateTaxable({{ $row }})" onkeyup="calculateTaxable({{ $row }})" readonly>
-                                                                                <h6 class="text-danger">Editing Quantity is disabled due to stock restrictions</h6>
+                                                                                <input type="number" step="0.01" name="product_quantity" id="qty_{{ $row }}" value="{{ $item->product_quantity }}" class="form-control" onchange="calculateTaxable({{ $row }})" onkeyup="calculateTaxable({{ $row }})">
                                                                             </div>
                                                                             <div class="col-md-6 mb-3">
                                                                                 <label>Unit Price</label>
@@ -331,20 +337,12 @@
                                                     @php
                                                         $row = $row + 50;
                                                     @endphp
-                                                    @if(sizeof($sales)>0)
-                                                    <input type="hidden" name="id" value="{{ $item->id }}">
-                                                    @endif
+                                                    <input type="hidden" value="{{ $salesDetails->id }}" name="sales_id">
                                                     <div class="row">
                                                         <div class="col-md-6 mb-3">
                                                             <label>Product</label>
                                                             @php
-                                                                $inStockProducts = DB::table('stocks')->where('product_qty','>',0)->get();
-                                                                $products = array();
-                                                                foreach($inStockProducts as $stockProducts)
-                                                                {
-                                                                    $product = DB::table('products')->where('id',$stockProducts->product_id)->first();
-                                                                    array_push($products,$product);
-                                                                }
+                                                                $products = DB::table('products')->get();
                                                             @endphp
                                                             <select name="product_id" class="form-control select2" data-dropdown-parent="#newItemModal" style="width: 100%" onchange="addCustomProduct(this.value,{{ $row }})">
                                                                 <option selected disabled>Select Product</option>
@@ -355,11 +353,11 @@
                                                         </div>
                                                         <div class="col-md-6 mb-3">
                                                             <label>Serial / Description</label>
-                                                            <input name="serial_number" value="{{ $item->serial_number }}" class="form-control" style="text-transform: uppercase">
+                                                            <input name="serial_number" value="" class="form-control" style="text-transform: uppercase">
                                                         </div>
                                                         <div class="col-md-6 mb-3">
                                                             <label>Quantity</label>
-                                                            <input type="number" step="0.01" name="product_quantity" id="qty_{{ $row }}" value="" class="form-control" onchange="calculateTaxable({{ $row }})" onkeyup="calculateTaxable({{ $row }})">
+                                                            <input type="number" step="0.01" name="product_quantity" id="qty_{{ $row }}" value="1" class="form-control" onchange="calculateTaxable({{ $row }})" onkeyup="calculateTaxable({{ $row }})">
                                                         </div>
                                                         <div class="col-md-6 mb-3">
                                                             <label>Unit Price</label>
@@ -398,9 +396,6 @@
                                                             document.getElementById("newItemForm").submit();
                                                         }
                                                     </script>
-                                                    @if(sizeof($sales)>0)
-                                                    <input type="hidden" value="{{ $item->sales_id }}" name="sales_id">
-                                                    @endif
                                                     <div class="row">
                                                         <div class="col-lg-12 mt-3">
                                                             <button type="submit" class="btn btn-primary" id="newItemAddButton" onclick="submitNewItemForm()">Update Changes</button>

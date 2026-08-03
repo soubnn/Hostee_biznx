@@ -137,6 +137,15 @@
                                     <li><a href="{{ route('utility.sale_return.index') }}" key="t-task-list">Returned Sales</a></li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                                    <i class="bx bx-book-open"></i>
+                                    <span key="t-tasks">Daybook</span>
+                                </a>
+                                <ul class="sub-menu" aria-expanded="false">
+                                    <li><a href="{{ route('util_daybooks.edit') }}" key="t-task-list">Daybook Edit</a></li>
+                                </ul>
+                            </li>
                             {{-- <li>
                                 <a href="{{ route('util_convert_data') }}" class="waves-effect">
                                     <i class="bx bx-data"></i>
